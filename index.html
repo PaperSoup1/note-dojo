@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-hWd6wW3GvaJbKc6ab8qU/cCZRqT0JA8CKQTcxPZ1RIk='; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Note Dojo</title>
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
@@ -9,17 +10,14 @@
 <meta name="apple-mobile-web-app-title" content="Note Dojo">
 <link rel="apple-touch-icon" href="data:image/png;base64,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">
 <link rel="icon" type="image/png" href="data:image/png;base64,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">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
 <style>
 /* VOICE everyday practice tool: calm, exact, encouraging
    IDEA a teacher's flashcard on engraved manuscript paper, sitting above a real keyboard with its red key-slip felt
    PICTURE the staff card with one whole note, large; the keyboard band below answers it
    COLOUR paper white, ebony ink, felt red, highlighter yellow for hints, green right, vermilion wrong
-   TYPE Fraunces for note names and titles, Figtree for the interface
+   TYPE the device's own serif (New York on Apple) for note names and titles, its system sans for the interface
    LAYOUT laptop: card left, answers right, keyboard band full width at the bottom; phone: prompt, card, answers, keyboard */
-:root{color-scheme:light dark;--bg:light-dark(#ffffff,#111113);--ink:light-dark(#141416,#efebe3);--mute:light-dark(#5c5e65,#a6a49e);--rule:light-dark(#e3e1dc,#2c2c31);--panel:light-dark(#f5f4f1,#1b1b1f);--paper:light-dark(#ffffff,#17171a);--felt:#a3162b;--hl:#ffd23f;--ok:light-dark(#0d8749,#45d38c);--bad:light-dark(#d2361b,#ff6f55);--blue:light-dark(#1d58d8,#7aa5ff);--amber:light-dark(#c78800,#f0bd3c);--ivory:#fbf8f1;--ebony:#161619}
+:root{--serif:ui-serif,"New York","Iowan Old Style",Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color-scheme:light dark;--bg:light-dark(#ffffff,#111113);--ink:light-dark(#141416,#efebe3);--mute:light-dark(#5c5e65,#a6a49e);--rule:light-dark(#e3e1dc,#2c2c31);--panel:light-dark(#f5f4f1,#1b1b1f);--paper:light-dark(#ffffff,#17171a);--felt:#a3162b;--hl:#ffd23f;--ok:light-dark(#0d8749,#45d38c);--bad:light-dark(#d2361b,#ff6f55);--blue:light-dark(#1d58d8,#7aa5ff);--amber:light-dark(#c78800,#f0bd3c);--ivory:#fbf8f1;--ebony:#161619}
 @supports not (color:light-dark(#000,#fff)){:root{--bg:#fff;--ink:#141416;--mute:#5c5e65;--rule:#e3e1dc;--panel:#f5f4f1;--paper:#fff;--ok:#0d8749;--bad:#d2361b;--blue:#1d58d8;--amber:#c78800}}
 :root[data-theme=light]{color-scheme:light}
 :root[data-theme=dark]{color-scheme:dark}
@@ -29,12 +27,12 @@ html,body{height:100%}
 html{touch-action:manipulation;-webkit-text-size-adjust:100%}
 @supports (height:100dvh){body{height:100dvh}}
 #kbs,.letters,.accs,.acts,.seg,.tabs,.chip,.lms,.tricks,.staff{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Figtree,system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column;overflow:hidden;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans);display:flex;flex-direction:column;overflow:hidden;-webkit-tap-highlight-color:transparent}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 h1,h2,h3,h4{margin:0}
 .top{flex:none;display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--rule)}
-.brand{font:700 23px/1 Fraunces,Georgia,serif;letter-spacing:-.02em;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.brand{font:700 23px/1 var(--serif);letter-spacing:-.02em;white-space:nowrap;display:flex;align-items:center;gap:8px}
 .brand svg{width:22px;height:22px}
 .tabs{display:flex;gap:2px;background:var(--panel);border-radius:11px;padding:3px;margin-left:8px}
 .tabs button{border:0;background:none;padding:6px 14px;border-radius:8px;font-weight:600;font-size:15px;color:var(--mute);min-height:36px}
@@ -72,10 +70,10 @@ main{flex:1;overflow:auto;overscroll-behavior:contain}
 .staff .ldg{stroke:currentColor;stroke-width:1.15}
 .staff path{fill:currentColor}
 .staff .mc{stroke:var(--mute);stroke-width:.8;stroke-dasharray:2 3}
-.staff .nlab{font:700 9px Figtree,sans-serif;fill:currentColor;text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:3px}
-.staff .tl{font:600 9px Figtree,sans-serif;fill:var(--mute);text-anchor:middle}
+.staff .nlab{font:700 9px var(--sans);fill:currentColor;text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:3px}
+.staff .tl{font:600 9px var(--sans);fill:var(--mute);text-anchor:middle}
 .staff .tl.cur{fill:var(--ink)}
-.staff .lad{font:500 7px Figtree,sans-serif;fill:var(--mute);text-anchor:middle}
+.staff .lad{font:500 7px var(--sans);fill:var(--mute);text-anchor:middle}
 .staff .lad.ln{font-weight:700;fill:var(--ink)}
 .n-ok{color:var(--ok)}
 .n-bad{color:var(--bad)}
@@ -96,11 +94,11 @@ main{flex:1;overflow:auto;overscroll-behavior:contain}
 .fb.bad .ic{background:var(--bad)}
 .fb.info .ic{background:var(--ink);color:var(--bg)}
 .fb .t{color:var(--mute);font-weight:500;white-space:nowrap}
-.promptbox h1{font:700 clamp(28px,3.3vw,40px)/1.06 Fraunces,Georgia,serif;letter-spacing:-.02em;text-wrap:balance}
+.promptbox h1{font:700 clamp(28px,3.3vw,40px)/1.06 var(--serif);letter-spacing:-.02em;text-wrap:balance}
 .promptbox p{margin:6px 0 0;color:var(--mute);font-size:15px}
 .tname{color:var(--blue);white-space:nowrap}
 .letters{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
-.letters button{height:58px;border:1px solid var(--rule);background:var(--bg);border-radius:12px;font:700 23px/1 Fraunces,Georgia,serif;box-shadow:0 3px 0 var(--rule);padding:0}
+.letters button{height:58px;border:1px solid var(--rule);background:var(--bg);border-radius:12px;font:700 23px/1 var(--serif);box-shadow:0 3px 0 var(--rule);padding:0}
 .letters button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--rule)}
 .letters button.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
 .letters button.bad{background:color-mix(in srgb,var(--bad) 12%,var(--bg));border-color:var(--bad);color:var(--bad)}
@@ -122,7 +120,7 @@ mark{background:var(--hl);color:#141416;border-radius:3px;padding:0 3px}
 .stats{display:flex;gap:6px 18px;flex-wrap:wrap;font-size:14px;color:var(--mute);margin-top:14px}
 .stats b{color:var(--ink);font-variant-numeric:tabular-nums}
 .keys{font-size:13px;color:var(--mute);margin-top:10px}
-kbd{font:600 12px Figtree,sans-serif;border:1px solid var(--rule);border-bottom-width:2px;border-radius:5px;padding:0 5px}
+kbd{font:600 12px var(--sans);border:1px solid var(--rule);border-bottom-width:2px;border-radius:5px;padding:0 5px}
 .kbband{flex:none;background:var(--ebony);padding-bottom:env(safe-area-inset-bottom,0px)}
 .felt{height:7px;background:var(--felt);box-shadow:inset 0 -2px 0 rgb(0 0 0/.28)}
 #kbs{height:clamp(88px,19vh,190px);overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:#555 transparent}
@@ -130,7 +128,7 @@ kbd{font:600 12px Figtree,sans-serif;border:1px solid var(--rule);border-bottom-
 #kb svg{display:block}
 .kw{fill:var(--ivory);stroke:#c8c2b5;stroke-width:1}
 .kb{fill:var(--ebony);stroke:#000;stroke-width:1}
-.kl{font:600 11px Figtree,sans-serif;fill:#77705f;text-anchor:middle;pointer-events:none}
+.kl{font:600 11px var(--sans);fill:#77705f;text-anchor:middle;pointer-events:none}
 .kl.c{fill:#2a2824}
 .kmc{fill:var(--felt);pointer-events:none}
 g[data-m]{cursor:pointer}
@@ -146,11 +144,11 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
 @keyframes glow{to{opacity:.6}}
 .learn{display:grid;gap:18px 30px;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:start}
 #gstaff{max-height:min(58vh,540px);cursor:pointer}
-.mini{border:1px solid var(--rule);background:var(--bg);border-radius:9px;min-height:34px;padding:0 10px;font-size:13px;font-weight:600}
+.mini{border:1px solid var(--rule);background:var(--bg);border-radius:9px;min-height:40px;padding:0 10px;font-size:13px;font-weight:600}
 .mini.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .lnote{background:var(--panel);border-radius:16px;padding:16px 18px}
-.lbig{font:700 clamp(52px,7vw,72px)/1 Fraunces,Georgia,serif;letter-spacing:-.02em;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-.lbig small{font:600 15px/1.3 Figtree,sans-serif;color:var(--mute);letter-spacing:0}
+.lbig{font:700 clamp(52px,7vw,72px)/1 var(--serif);letter-spacing:-.02em;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.lbig small{font:600 15px/1.3 var(--sans);color:var(--mute);letter-spacing:0}
 .lnote dl{margin:12px 0 0;display:grid;grid-template-columns:max-content minmax(0,1fr);gap:7px 14px;font-size:15px}
 .lnote dt{color:var(--mute);font-weight:600}
 .lnote dd{margin:0}
@@ -164,9 +162,9 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
 .lms button{border:1px solid var(--rule);background:var(--bg);border-radius:999px;min-height:40px;padding:0 12px;font-size:14px;font-weight:600}
 .lms button i{font-style:normal;color:var(--mute);font-weight:500;margin-left:4px}
 .pnums{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:12px 18px;margin:6px 0 18px}
-.pnum b{display:block;font:700 clamp(30px,4vw,42px)/1.05 Fraunces,Georgia,serif;font-variant-numeric:tabular-nums}
+.pnum b{display:block;font:700 clamp(30px,4vw,42px)/1.05 var(--serif);font-variant-numeric:tabular-nums}
 .pnum span{color:var(--mute);font-size:14px}
-.ptitle{font:700 clamp(30px,3.4vw,40px)/1.06 Fraunces,Georgia,serif;letter-spacing:-.02em}
+.ptitle{font:700 clamp(30px,3.4vw,40px)/1.06 var(--serif);letter-spacing:-.02em}
 .pstaves{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .pstaves .staff{cursor:pointer;padding:0 4px 6px}
 .m-u{color:color-mix(in srgb,var(--mute) 40%,transparent)}
@@ -184,35 +182,54 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
 .wl span{border:1px solid var(--rule);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
 .ov{position:fixed;inset:0;z-index:30;background:rgb(10 10 12/.48);display:flex;align-items:center;justify-content:center;padding:16px}
 .modal{background:var(--bg);color:var(--ink);border-radius:20px;max-width:520px;width:100%;max-height:calc(100% - 8px);overflow:auto;padding:22px 22px 24px;box-shadow:0 20px 60px -20px rgb(0 0 0/.5)}
-.modal h2{font:700 30px/1.08 Fraunces,Georgia,serif;letter-spacing:-.02em}
+.modal h2{font:700 30px/1.08 var(--serif);letter-spacing:-.02em}
 .modal .lead{color:var(--mute);margin:8px 0 4px}
 .ov.side{justify-content:flex-end;align-items:stretch;padding:0}
 .ov.side .modal{max-width:430px;border-radius:0;max-height:none;height:100%}
 .mhead{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .grp{margin:18px 0 0}
 .grp h4{font-size:14px;color:var(--mute);margin-bottom:8px;font-weight:600}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips button{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--rule);background:var(--bg);font-weight:600;font-size:14px}
-.chips button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sheet{display:flex;flex-direction:column;padding:0;overflow:hidden}
+.sheet .mhead{flex:none;position:relative;padding:14px 18px;border-bottom:1px solid var(--rule)}
+.sheet .mhead h2{font:700 22px/1.1 var(--serif)}
+.grab{display:none}
+.sbody{flex:1;position:relative;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 18px calc(28px + env(safe-area-inset-bottom,0px))}
+.sbody h3{font-size:13px;font-weight:700;color:var(--mute);margin:20px 0 2px}
+.sbody .grp{margin:14px 0 0}
+.sbody .grp h4{font-size:15px;font-weight:600;color:var(--ink);margin:0 0 8px}
+.seg2{display:grid;grid-template-columns:repeat(var(--c,2),minmax(0,1fr));gap:6px}
+.seg2 button{min-height:46px;border:1px solid var(--rule);background:var(--bg);border-radius:12px;font-weight:600;font-size:15px;line-height:1.15;padding:6px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center}
+.seg2 button small{font-size:12px;font-weight:500;color:var(--mute)}
+.seg2 button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg2 button.on small{color:color-mix(in srgb,var(--bg) 72%,transparent)}
+.inrow .btn{flex:none}
+@keyframes sheetIn{from{transform:translateX(36px);opacity:0}}
+@keyframes sheetUp{from{transform:translateY(48px);opacity:0}}
+.ov.side .modal{animation:sheetIn .22s ease-out}
 .inrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule)}
 .inrow p{margin:2px 0 0;font-size:14px;color:var(--mute)}
 .inrow p.err{color:var(--bad)}
 .sens{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--mute);padding:12px 0}
+.sens span{flex:none}
 .sens input{flex:1;accent-color:var(--felt);min-height:30px}
+.sens.vol{padding:0 0 4px}
+.vol output{flex:none;min-width:3.2em;text-align:right;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
 .fnote{font-size:14px;color:var(--mute);background:var(--panel);border-radius:12px;padding:10px 12px;margin-top:12px}
 .pick{display:block;width:100%;text-align:left;border:1px solid var(--rule);background:var(--bg);border-radius:14px;padding:14px 16px;margin-top:10px}
-.pick:hover{border-color:var(--ink)}
+@media(hover:hover){.pick:hover{border-color:var(--ink)}}
 .pick b{display:block;font-size:17px}
 .pick span{color:var(--mute);font-size:14px;line-height:1.4;display:block}
 .snums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
-.snums b{display:block;font:700 34px/1 Fraunces,Georgia,serif;font-variant-numeric:tabular-nums}
+.snums b{display:block;font:700 34px/1 var(--serif);font-variant-numeric:tabular-nums}
 .snums span{font-size:13px;color:var(--mute)}
 .toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);z-index:40;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;max-width:min(92vw,520px);box-shadow:0 10px 30px -10px rgb(0 0 0/.5)}
 @media(min-width:861px){#v-practice.on{min-height:100%;display:flex;align-items:center}#v-practice .wrap{width:100%}}
 @media(max-width:860px){.prac{grid-template-rows:none;grid-template-columns:minmax(0,1fr);grid-template-areas:"bar" "prompt" "card" "answer" "how";gap:12px}.promptbox{align-self:auto}.learn{grid-template-columns:minmax(0,1fr)}.pstaves,.prow{grid-template-columns:minmax(0,1fr)}.wrap{padding-top:14px}.keys{display:none}}
-@media(max-width:640px){.tabs{order:5;width:100%;margin-left:0}.tabs button{flex:1}.brand{font-size:21px}.chip{max-width:190px}.seg button{padding:0 10px;font-size:14px}.ov.side{align-items:flex-end}.ov.side .modal{height:auto;max-height:90%;border-radius:20px 20px 0 0}.letters button{height:52px;font-size:21px}.snums b{font-size:28px}}
+@media(max-width:640px){.tabs{order:5;width:100%;margin-left:0}.tabs button{flex:1}.brand{font-size:21px}.chip{max-width:190px}.seg button{padding:0 10px;font-size:14px}.ov.side{align-items:flex-end}.ov.side .modal{height:auto;max-height:min(88%,820px);border-radius:20px 20px 0 0;animation-name:sheetUp}.grab{display:block;position:absolute;top:6px;left:50%;width:38px;height:5px;margin-left:-19px;border-radius:3px;background:var(--rule)}.sheet .mhead{padding-top:20px}.letters button{height:52px;font-size:21px}.snums b{font-size:28px}}
 @media(max-height:560px){#kbs{height:72px}#staff{max-height:52vh}}
-@media(prefers-reduced-motion:reduce){.n-new{animation:none}g.hint .kw,g.hint .kb{animation:none}.lvl i{transition:none}}
+/* phone turned sideways (say, on the music stand): card on the left, the rest on the right, so the note never hides behind the keys */
+@media(max-height:500px) and (min-width:600px){.wrap{padding-top:10px;padding-bottom:14px}.prac{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);grid-template-rows:auto auto auto 1fr;grid-template-areas:"card bar" "card prompt" "card answer" "card how";gap:8px 18px}.promptbox{align-self:auto}.promptbox h1{font-size:24px}.promptbox p{font-size:13px;margin-top:2px}.sum{display:none}.letters button{height:46px;font-size:20px}.acts{margin-top:8px}.fb{min-height:40px;padding-bottom:10px}.cardwrap,.learn>div:first-child{position:sticky;top:10px;z-index:1}.learn{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}.learn .cardtop>span:first-child{display:none}.learn .cardtop{justify-content:flex-end;padding-top:8px}#gstaff{max-height:max(140px,calc(100dvh - 225px))}.lbig{font-size:44px}.pstaves,.prow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.ov.side .modal{animation:none}.n-new{animation:none}g.hint .kw,g.hint .kb{animation:none}.lvl i{transition:none}}
 </style>
 </head>
 <body>
@@ -302,16 +319,20 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
 <footer class="kbband" id="kbband"><div class="felt"></div><div id="kbs"><div id="kb"></div></div></footer>
 
 <div class="ov side" id="ovSet" hidden>
-  <div class="modal" role="dialog" aria-label="Settings">
-    <div class="mhead"><h2>Settings</h2><button class="btn" id="setClose">Done</button></div>
-    <div class="grp" id="inputGrp">
-      <h4>Your piano</h4>
-      <div class="inrow"><div><b>Digital piano (MIDI)</b><p id="midiSt">Not connected</p></div><button class="btn" id="midiBtn">Connect</button></div>
-      <div class="inrow"><div><b>Microphone</b><p id="micSt">Off — for acoustic pianos</p></div><button class="btn" id="micBtn">Turn on</button></div>
-      <label class="sens" for="sens">Mic sensitivity <input type="range" id="sens" min="0.5" max="3" step="0.1"></label>
-      <p class="fnote" id="frameNote" hidden></p>
+  <div class="modal sheet" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+    <div class="mhead"><span class="grab" aria-hidden="true"></span><h2 id="setTitle">Settings</h2><button class="btn primary" id="setClose">Done</button></div>
+    <div class="sbody" id="setBody">
+      <section id="inputGrp">
+        <h3>Your piano</h3>
+        <div class="inrow" id="midiRow"><div><b>Digital piano (MIDI)</b><p id="midiSt">Not connected</p></div><button class="btn" id="midiBtn">Connect</button></div>
+        <div class="inrow"><div><b>Microphone</b><p id="micSt">Off. Use this for an acoustic piano.</p></div><button class="btn" id="micBtn">Turn on</button></div>
+        <label class="sens" for="sens"><span>Mic sensitivity</span><input type="range" id="sens" min="0.5" max="3" step="0.1"></label>
+        <p class="fnote" id="midiNote" hidden>Digital piano? The microphone hears it too. Plugging in a MIDI cable needs Chrome or Edge on a computer.</p>
+        <p class="fnote" id="frameNote" hidden></p>
+      </section>
+      <div id="optGroups"></div>
+      <div class="grp" id="volGrp"><h4 id="lbl-vol">Volume</h4><div class="sens vol"><input type="range" id="vol" min="0" max="100" step="5" aria-labelledby="lbl-vol"><output id="volOut" aria-hidden="true"></output></div></div>
     </div>
-    <div id="optGroups"></div>
   </div>
 </div>
 
@@ -488,23 +509,27 @@ const CLEF = {
 };
 const RANGES = { landmarks: { list: 1, t: [28,32,35,38,42], b: [14,18,21,24,28] }, staff: { t: [30,38], b: [18,26] }, near: { t: [28,40], b: [16,28] }, far: { t: [24,44], b: [12,32] } };
 const OPTS = [
-  ['mode', 'Mode', [['play','Play the key'], ['name','Name it'], ['place','Place it on the staff'], ['line','Sight-read a line']]],
-  ['clefs', 'Staff', [['t','Treble (right hand)'], ['b','Bass (left hand)'], ['both','Both']]],
-  ['range', 'Which notes', [['landmarks','Landmarks only'], ['staff','On the staff'], ['near','+ 1 ledger line'], ['far','+ 3 ledger lines']]],
-  ['focus', 'Lines or spaces', [['all','Both'], ['lines','Lines only'], ['spaces','Spaces only']]],
-  ['acc', 'Sharps and flats', [[false,'Off'], [true,'Mix some in']]],
-  ['round', 'Cards per round', [[10,'10'], [20,'20'], [30,'30'], [0,'Endless']]],
-  ['auto', 'After a right answer', [[true,'Go straight on'], [false,'Wait for me']]],
-  ['labels', 'Key labels', [['none','None'], ['c','C keys'], ['all','All white keys']]],
-  ['sound', 'Sound when tapping', [[true,'On'], [false,'Off']]]
+  ['mode', 'Mode', [['play', 'Play it', 'find the key'], ['name', 'Name it', 'say the letter'], ['place', 'Place it', 'put it on the staff'], ['line', 'Sight-read', '5 notes in a row']]],
+  ['clefs', 'Staff', [['t', 'Treble', 'right hand'], ['b', 'Bass', 'left hand'], ['both', 'Both']]],
+  ['range', 'Which notes', [['landmarks', 'Landmarks', '9 anchor notes'], ['staff', 'On the staff'], ['near', '+ 1 ledger line'], ['far', '+ 3 ledger lines']]],
+  ['focus', 'Lines or spaces', [['all', 'Both'], ['lines', 'Lines only'], ['spaces', 'Spaces only']]],
+  ['acc', 'Sharps and flats', [[false, 'Off'], [true, 'Mix some in']]],
+  ['round', 'Cards per round', [[10, '10'], [20, '20'], [30, '30'], [0, 'Endless']]],
+  ['auto', 'After a right answer', [[true, 'Go straight on'], [false, 'Wait for me']]],
+  ['labels', 'Key labels', [['none', 'None'], ['c', 'C keys'], ['all', 'All white']]],
+  ['sound', 'Sound when tapping', [[true, 'On'], [false, 'Off']]]
 ];
+const SECTIONS = [['Practice', ['mode', 'clefs', 'range', 'focus', 'acc', 'round', 'auto']], ['Display and sound', ['labels', 'sound']]];
 const LABEL = { t: 'Treble', b: 'Bass', both: 'Treble + bass', landmarks: 'landmarks', staff: 'on the staff', near: '+ 1 ledger', far: '+ 3 ledgers' };
-const DEF = { mode: 'play', clefs: 'both', range: 'staff', focus: 'all', acc: false, round: 20, auto: true, labels: 'c', sound: true, input: null, sens: 1.2, names: false };
+const DEF = { mode: 'play', clefs: 'both', range: 'staff', focus: 'all', acc: false, round: 20, auto: true, labels: 'c', sound: true, vol: 75, input: null, sens: 1.2, names: false };
 const LS = 'noteDojo.v1';
 let cfg = { ...DEF }, stats = {}, days = {};
 try { const j = JSON.parse(localStorage.getItem(LS) || 'null'); if (j) { cfg = { ...DEF, ...(j.cfg || {}) }; stats = j.stats || {}; days = j.days || {}; } } catch (e) {}
 for (const [k, , ch] of OPTS) if (!ch.some(c => c[0] === cfg[k])) cfg[k] = DEF[k];
+for (const k of Object.keys(stats)) { const v = stats[k]; if (!/^[tb]\d{1,2}$/.test(k) || !v || typeof v.n !== 'number' || typeof v.ok !== 'number' || typeof v.box !== 'number') delete stats[k]; }
+if (!days || typeof days !== 'object' || Array.isArray(days)) days = {};
 if (!(cfg.sens >= .5 && cfg.sens <= 3)) cfg.sens = DEF.sens;
+cfg.vol = Math.round(+cfg.vol); if (!(cfg.vol >= 0 && cfg.vol <= 100)) cfg.vol = DEF.vol;
 const save = () => { try { localStorage.setItem(LS, JSON.stringify({ cfg, stats, days })); } catch (e) {} };
 const dayKey = (d = new Date()) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 function dayStreak() { const d = new Date(); let n = 0; if (!days[dayKey(d)]) d.setDate(d.getDate() - 1); while (days[dayKey(d)]) { n++; d.setDate(d.getDate() - 1); } return n; }
@@ -662,6 +687,7 @@ function newCard() {
   $$('#letters button').forEach(b => b.className = '');
   if (!cont) setFb('', '');
   renderAll();
+  if (!cont && narrow() && view === 'practice' && $('#main').scrollTop > 0) $('#main').scrollTo({ top: 0, behavior: smooth() });
   if (view === 'practice') { if (cfg.mode === 'place') ensureVisible(card.midi); else if (!cont) centerKB(card.clef); }
 }
 function finish() { if (!card.counted) { card.counted = true; round.n++; } }
@@ -718,13 +744,25 @@ function reveal() {
     marks[card.midi] = 'hint'; ensureVisible(card.midi);
     setFb('info', `It's ${nm(card.d, card.acc)}${lm ? ' (' + lm[1] + ')' : ''}. ${cfg.mode === 'name' ? 'Tap ' + LET[card.d % 7] + accSym(card.acc) : 'Play the glowing key'} to lock it in.`);
   }
-  renderAll();
+  renderAll(); showHow();
 }
 function hint() {
   if (!card || card.done || card.hint >= 3) return;
   card.hint++;
   if (card.hint >= 3 && cfg.mode !== 'place') { marks[card.midi] = 'hint'; ensureVisible(card.midi); }
-  renderAll();
+  renderAll(); showHow();
+}
+// phones: the hint box sits under the card, often behind the keyboard. Scroll it up into view,
+// but never so far that its top leaves the screen. Only the practice area scrolls, never the page.
+function narrow() { return innerWidth <= 860 || innerHeight <= 500; }
+function smooth() { return matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'; }
+function showHow() {
+  if (!narrow() || view !== 'practice') return;
+  requestAnimationFrame(() => {
+    const mn = $('#main'), r = $('#how').getBoundingClientRect(), mr = mn.getBoundingClientRect();
+    const by = Math.min(r.bottom - mr.bottom + 12, r.top - mr.top - 8);
+    if (by > 4) mn.scrollBy({ top: by, behavior: smooth() });
+  });
 }
 
 /* answers */
@@ -900,8 +938,26 @@ function flashPress(m) { pressed.add(m); applyKeys(); setTimeout(() => { pressed
 let ac = null;
 function getAC() {
   if (!ac) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; try { ac = new A(); ac.onstatechange = () => renderInput(); } catch (e) { return null; } }
-  if (ac.state === 'suspended') ac.resume().then(renderInput, () => {});
+  if (ac.state !== 'running' && ac.state !== 'closed') ac.resume().then(renderInput, () => {});
+  napAudio();
   return ac;
+}
+// nothing playing and no mic: let the audio hardware sleep (saves battery); the next tap wakes it
+let acNap = 0;
+function napAudio(ms = 30000) { clearTimeout(acNap); acNap = setTimeout(() => { if (ac && !mic.on && ac.state === 'running') ac.suspend().catch(() => {}); }, ms); }
+// volume: the old fixed loudness is 30 on this scale. A soft limiter keeps loud overlapping notes from crackling.
+const VOL0 = 30;
+function outNode(a) {
+  if (a.__out) return a.__out;
+  const g = a.createGain(), pre = a.createGain(), ws = a.createWaveShaper(), N = 8193, c = new Float32Array(N);
+  for (let i = 0; i < N; i++) { const x = (i / (N - 1) * 2 - 1) * 4, ax = Math.abs(x); c[i] = Math.sign(x) * (ax <= .85 ? ax : .85 + .14 * Math.tanh((ax - .85) / .14)); }
+  ws.curve = c; ws.oversample = '2x'; pre.gain.value = .25; g.gain.value = cfg.vol / VOL0;
+  g.connect(pre); pre.connect(ws); ws.connect(a.destination);
+  return (a.__out = g);
+}
+function setVol() {
+  $('#volOut').textContent = cfg.vol + '%'; $('#vol').setAttribute('aria-valuetext', cfg.vol + '%');
+  if (ac && ac.__out) { const g = ac.__out.gain; try { g.cancelScheduledValues(ac.currentTime); g.setTargetAtTime(cfg.vol / VOL0, ac.currentTime, .015); } catch (e) { g.value = cfg.vol / VOL0; } }
 }
 function tone(m) {
   if (!cfg.sound) return; const a = getAC(); if (!a) return;
@@ -909,7 +965,7 @@ function tone(m) {
     const t = a.currentTime + .01, f = 440 * 2 ** ((m - 69) / 12), dur = Math.max(.6, 2.2 - (m - 40) * .025);
     const out = a.createGain(), lp = a.createBiquadFilter();
     out.gain.value = .2; lp.type = 'lowpass'; lp.frequency.value = Math.min(12000, f * 7);
-    out.connect(lp); lp.connect(a.destination);
+    out.connect(lp); lp.connect(outNode(a));
     [[1, 1], [2, .42], [3, .2], [4, .1], [5, .06]].forEach(([n, g]) => {
       const o = a.createOscillator(), v = a.createGain();
       o.frequency.value = f * n * (1 + .0005 * n * n);
@@ -966,22 +1022,38 @@ async function startMic2(auto) {
   listener.sens = cfg.sens;
   mic.on = true; cfg.input = 'mic'; save();
   clearInterval(micTimer);
+  mic.frames = 0; mic.sound = false; mic.paused = false;
   micTimer = setInterval(() => {
-    if (a.state !== 'running' || !listener) return;
+    if (document.hidden || a.state !== 'running' || !listener) return;
     if (bytes) { an.getByteTimeDomainData(bytes); for (let i = 0; i < bytes.length; i++) buf[i] = (bytes[i] - 128) / 128; } else an.getFloatTimeDomainData(buf);
+    // a working mic always has a little noise; exact zeros for 4 s means the audio graph never connected
+    if (!mic.sound) { for (let i = 0; i < buf.length; i += 32) if (buf[i] !== 0) { mic.sound = true; break; } if (!mic.sound && ++mic.frames > 120 && !micHealed) { micHealed = true; healMic(); return; } }
     listener.feed(buf, a.sampleRate, performance.now());
   }, 33);
   keepAwake();
   renderInput(); if (card) renderSide();
 }
+let micHealed = false;
+function healMic() { stopMic(true); try { if (ac) ac.close(); } catch (e) {} ac = null; startMic(true); }
 function stopMic(keep) {
   clearInterval(micTimer);
   if (micSrc) { try { micSrc.disconnect(); } catch (e) {} micSrc = null; }
   if (micStream) micStream.getTracks().forEach(t => { t.onended = null; t.stop(); });
   micStream = null; listener = null; mic.on = false; mic.heard = null;
   if (!keep && cfg.input === 'mic') { cfg.input = 'tap'; save(); }
+  if (!keep && wake && !midiS.on) { wake.release().catch(() => {}); wake = null; }
+  napAudio();
   renderInput(); if (card) renderSide();
 }
+const IDLE_MS = 10 * 60 * 1000; let lastAct = performance.now();
+const bump = () => { lastAct = performance.now(); };
+function checkIdle() {
+  if (performance.now() - lastAct < IDLE_MS) return;
+  if (mic.on) { stopMic(true); mic.paused = true; renderInput(); }
+  if (wake) { wake.release().catch(() => {}); wake = null; }
+}
+setInterval(checkIdle, 30000);
+function resumeIfPaused() { if (mic.paused) { mic.paused = false; startMic(true); } }
 // keep the screen on while practising (released automatically when the page is hidden)
 let wake = null, wakeBusy = false;
 async function keepAwake() {
@@ -1000,20 +1072,23 @@ function micLive(m, r) {
 function renderInput() {
   let txt = 'Tap mode', live = false;
   if (mic.on) { live = true; txt = ac && ac.state !== 'running' ? 'Mic: tap anywhere to start' : mic.heard ? 'Mic hears ' + mic.heard : 'Mic listening'; }
+  else if (mic.paused) txt = 'Mic paused · tap to resume';
   else if (midiS.names.length) { live = true; txt = 'MIDI · ' + midiS.names[0]; }
   else if (midiS.on) txt = 'MIDI · no piano found';
   $('#inTxt').textContent = txt; $('#inDot').classList.toggle('live', live); $('#lvl').hidden = !mic.on;
   const ms = $('#midiSt'); ms.className = midiS.err ? 'err' : '';
   ms.textContent = !hasMidi ? 'Not available in this browser. The microphone works with digital pianos too.' : midiS.err || (midiS.names.length ? 'Connected: ' + midiS.names.join(', ') : midiS.on ? 'Waiting for a piano. Plug it in and switch it on.' : 'Not connected');
   $('#midiBtn').textContent = midiS.on ? 'Rescan' : 'Connect'; $('#midiBtn').disabled = !hasMidi;
+  $('#midiRow').hidden = !hasMidi; $('#midiNote').hidden = hasMidi;
   const cs = $('#micSt'); cs.className = mic.err ? 'err' : '';
-  cs.textContent = mic.err || (mic.on ? 'Listening. Play one note at a time, pedal up.' : 'Off. Use this for an acoustic piano.');
+  cs.textContent = mic.err || (mic.on ? 'Listening. Play one note at a time, pedal up.' : mic.paused ? 'Paused after 10 quiet minutes to save battery. Tap anywhere to resume.' : 'Off. Use this for an acoustic piano.');
   $('#micBtn').textContent = mic.on ? 'Turn off' : 'Turn on';
   $('#sens').value = cfg.sens;
   $('#startNote').hidden = !inFrame;
   const fn = $('#frameNote'); fn.hidden = !inFrame; fn.textContent = 'Inside the Claude app, the mic and MIDI are blocked. Tapping works everywhere. To use your piano, open Note Dojo from its own web link in Safari or Chrome.';
 }
 function onKey(m, src) {
+  bump();
   if (src === 'mic' && view === 'practice' && (m < kbRange[0] - 12 || m > kbRange[1] + 12)) return;
   if (src !== 'midi') flashPress(m);
   if (view === 'learn') { learnAdd(m); ensureVisible(m); return; }
@@ -1113,7 +1188,17 @@ function closeOv(id) { $('#' + id).hidden = true; }
 let toastT = 0;
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 6500); }
 function renderSettings() {
-  $('#optGroups').innerHTML = OPTS.map(([k, label, ch]) => `<div class="grp"><h4>${label}</h4><div class="chips">${ch.map((c, i) => `<button data-k="${k}" data-i="${i}" class="${cfg[k] === c[0] ? 'on' : ''}">${c[1]}</button>`).join('')}</div></div>`).join('');
+  $('#optGroups').innerHTML = SECTIONS.map(([title, keys]) => `<h3>${title}</h3>` + keys.map(k => {
+    const [, label, ch] = OPTS.find(o => o[0] === k), cols = ch.length <= 3 ? ch.length : ch.every(c => c[1].length <= 7) ? 4 : 2;
+    return `<div class="grp"><h4 id="lbl-${k}">${label}</h4><div class="seg2" style="--c:${cols}" role="radiogroup" aria-labelledby="lbl-${k}">${ch.map((c, i) => `<button role="radio" aria-checked="${cfg[k] === c[0]}" data-k="${k}" data-i="${i}" class="${cfg[k] === c[0] ? 'on' : ''}">${c[1]}${c[2] ? `<small>${c[2]}</small>` : ''}</button>`).join('')}</div></div>`;
+  }).join('')).join('');
+}
+// open the sheet scrolled to a section; scroll only the sheet itself (scrollIntoView can shift the whole page on iOS)
+function openSettings(sel) {
+  openOv('ovSet'); $('#vol').value = cfg.vol; setVol();
+  const body = $('#setBody'), t = sel ? $(sel) : null;
+  body.scrollTop = t ? Math.max(0, t.offsetTop - 6) : 0;
+  try { $('#setClose').focus({ preventScroll: true }); } catch (e) {}
 }
 function setCfg(k, v) {
   cfg[k] = v; save(); renderSettings();
@@ -1148,25 +1233,33 @@ function nudge(dir) { if (!card || card.done || cfg.mode !== 'place') return; co
 $('#upBtn').onclick = () => nudge(1);
 $('#downBtn').onclick = () => nudge(-1);
 $('#hearBtn').onclick = () => { const s = cfg.sound; cfg.sound = true; tone(card.midi); cfg.sound = s; };
-$('#sumChip').onclick = () => { openOv('ovSet'); $('#optGroups').scrollIntoView({ block: 'start' }); };
-$('#gear').onclick = () => openOv('ovSet');
-$('#inChip').onclick = () => { openOv('ovSet'); $('#inputGrp').scrollIntoView({ block: 'start' }); };
+$('#sumChip').onclick = () => openSettings('#optGroups');
+$('#gear').onclick = () => openSettings();
+$('#inChip').onclick = () => openSettings('#inputGrp');
 $('#setClose').onclick = () => closeOv('ovSet');
 $$('.ov').forEach(o => o.addEventListener('click', e => { if (e.target === o && o.id !== 'ovStart') closeOv(o.id); }));
 $('#optGroups').addEventListener('click', e => { const b = e.target.closest('button[data-k]'); if (!b) return; const k = b.dataset.k, v = OPTS.find(o => o[0] === k)[2][+b.dataset.i][0]; setCfg(k, v); });
 $('#midiBtn').onclick = () => { getAC(); if (midiS.on && midiS.acc) { bindMidi(); if (!midiS.names.length) toast('Still no piano found. Check the cable and that the piano is on.'); } else startMidi(false); };
-$('#micBtn').onclick = () => { getAC(); mic.on ? stopMic() : startMic(false); };
+$('#micBtn').onclick = () => { getAC(); mic.paused = false; mic.on ? stopMic() : startMic(false); };
 $('#sens').oninput = e => { cfg.sens = +e.target.value; if (listener) listener.sens = cfg.sens; save(); };
+$('#vol').value = cfg.vol; setVol();
+$('#vol').oninput = e => { cfg.vol = Math.round(+e.target.value); setVol(); save(); };
+// let go of the slider: play a note at the new level (even if key sounds are off)
+$('#vol').onchange = () => { const s = cfg.sound; cfg.sound = true; tone(67); cfg.sound = s; };
 $$('.pick').forEach(b => b.onclick = () => { const k = b.dataset.in; getAC(); closeOv('ovStart'); cfg.input = 'tap'; save(); if (k === 'midi') startMidi(false); else if (k === 'mic') startMic(false); renderSide(); });
 $('#sAgain').onclick = () => { closeOv('ovSum'); newRound(); };
 $('#tabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) go(b.dataset.v); });
 window.addEventListener('hashchange', () => setView(location.hash.slice(1)));
 $('#kb').addEventListener('click', e => { const g = e.target.closest('g[data-m]'); if (!g) return; const m = +g.dataset.m; tone(m); onKey(m, 'tap'); });
-document.addEventListener('pointerdown', () => { if (ac && ac.state !== 'running' && ac.state !== 'closed') ac.resume().then(renderInput, () => {}); keepAwake(); }, true);
+// any touch: count as activity, wake paused audio (iOS only honours some of these events, so try each)
+const wakeAudio = () => { if (ac && ac.state !== 'running' && ac.state !== 'closed') { ac.resume().then(renderInput, () => {}); napAudio(); } };
+document.addEventListener('pointerdown', () => { bump(); resumeIfPaused(); wakeAudio(); if (mic.on || midiS.on) keepAwake(); }, true);
+document.addEventListener('touchend', wakeAudio, true);
+document.addEventListener('click', wakeAudio, true);
 // coming back to the app: wake the audio, and restart the mic if the system stopped it
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState !== 'visible') return;
-  if (ac && ac.state !== 'running' && ac.state !== 'closed') ac.resume().then(renderInput, () => {});
+  if (document.visibilityState !== 'visible') { if (!mic.on) napAudio(0); return; }
+  if (mic.on) wakeAudio();
   setTimeout(() => { const t = micStream && micStream.getAudioTracks()[0]; if (mic.on && (!t || t.readyState === 'ended' || t.muted)) { stopMic(true); startMic(true); } }, 800);
 });
 // place mode on the staff
@@ -1189,6 +1282,7 @@ $('#resetBtn').onclick = () => { $('#resetAsk').hidden = false; $('#resetBtn').h
 $('#resetNo').onclick = () => { $('#resetAsk').hidden = true; $('#resetBtn').hidden = false; };
 $('#resetYes').onclick = () => { stats = {}; days = {}; save(); psel = null; $('#pdetail').textContent = 'Progress cleared.'; $('#resetAsk').hidden = true; $('#resetBtn').hidden = false; renderProgress(); };
 document.addEventListener('keydown', e => {
+  bump(); resumeIfPaused();
   if (e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.key === 'Escape') { if (!$('#ovSet').hidden) closeOv('ovSet'); return; }
   if (overlayOpen() || view !== 'practice' || !card) return;
@@ -1217,7 +1311,7 @@ if (!hasMidi) {
 if (!cfg.input) openOv('ovStart');
 else if (cfg.input === 'midi') startMidi(true);
 else if (cfg.input === 'mic') startMic(true);
-window.__dojo = { mic: () => ({ on: mic.on, err: mic.err, ctx: ac && ac.state }), force: f => { forced = { acc: 0, ...f }; newCard(); }, onKey, get card() { return card; }, get cfg() { return cfg; }, answerLetter, setCfg, next, reveal, hint, checkPlace, stats: () => stats, spell, natMidi, nm };
+window.__dojo = { idle: () => { lastAct = -1e9; checkIdle(); }, get ac() { return ac; }, tone, outNode, mic: () => ({ on: mic.on, paused: !!mic.paused, err: mic.err, ctx: ac && ac.state, healed: micHealed }), force: f => { forced = { acc: 0, ...f }; newCard(); }, onKey, get card() { return card; }, get cfg() { return cfg; }, answerLetter, setCfg, next, reveal, hint, checkPlace, stats: () => stats, spell, natMidi, nm };
 }
 </script>
 </body>
