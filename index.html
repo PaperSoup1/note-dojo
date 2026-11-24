@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Note Dojo</title>
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111113" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-title" content="Note Dojo">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday practice tool: calm, exact, encouraging
+   IDEA a teacher's flashcard on engraved manuscript paper, sitting above a real keyboard with its red key-slip felt
+   PICTURE the staff card with one whole note, large; the keyboard band below answers it
+   COLOUR paper white, ebony ink, felt red, highlighter yellow for hints, green right, vermilion wrong
+   TYPE Fraunces for note names and titles, Figtree for the interface
+   LAYOUT laptop: card left, answers right, keyboard band full width at the bottom; phone: prompt, card, answers, keyboard */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#111113);--ink:light-dark(#141416,#efebe3);--mute:light-dark(#5c5e65,#a6a49e);--rule:light-dark(#e3e1dc,#2c2c31);--panel:light-dark(#f5f4f1,#1b1b1f);--paper:light-dark(#ffffff,#17171a);--felt:#a3162b;--hl:#ffd23f;--ok:light-dark(#0d8749,#45d38c);--bad:light-dark(#d2361b,#ff6f55);--blue:light-dark(#1d58d8,#7aa5ff);--amber:light-dark(#c78800,#f0bd3c);--ivory:#fbf8f1;--ebony:#161619}
+@supports not (color:light-dark(#000,#fff)){:root{--bg:#fff;--ink:#141416;--mute:#5c5e65;--rule:#e3e1dc;--panel:#f5f4f1;--paper:#fff;--ok:#0d8749;--bad:#d2361b;--blue:#1d58d8;--amber:#c78800}}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+[hidden]{display:none!important}
+html,body{height:100%}
+html{touch-action:manipulation;-webkit-text-size-adjust:100%}
+@supports (height:100dvh){body{height:100dvh}}
+#kbs,.letters,.accs,.acts,.seg,.tabs,.chip,.lms,.tricks,.staff{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Figtree,system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column;overflow:hidden;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+h1,h2,h3,h4{margin:0}
+.top{flex:none;display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--rule)}
+.brand{font:700 23px/1 Fraunces,Georgia,serif;letter-spacing:-.02em;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.brand svg{width:22px;height:22px}
+.tabs{display:flex;gap:2px;background:var(--panel);border-radius:11px;padding:3px;margin-left:8px}
+.tabs button{border:0;background:none;padding:6px 14px;border-radius:8px;font-weight:600;font-size:15px;color:var(--mute);min-height:36px}
+.tabs button.on{background:var(--bg);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0/.14)}
+.spacer{flex:1}
+.chip{display:flex;align-items:center;gap:8px;border:1px solid var(--rule);background:var(--bg);border-radius:999px;padding:0 12px;font-size:14px;font-weight:600;min-height:38px;white-space:nowrap;max-width:270px}
+.chip span{overflow:hidden;text-overflow:ellipsis}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--mute);flex:none;opacity:.6}
+.dot.live{background:var(--ok);opacity:1}
+.lvl{width:30px;height:6px;border-radius:3px;background:var(--rule);overflow:hidden;flex:none}
+.lvl i{display:block;height:100%;width:0;background:var(--ok);transition:width .06s linear}
+.icon{border:1px solid var(--rule);background:var(--bg);border-radius:50%;width:38px;height:38px;display:grid;place-items:center;flex:none;padding:0}
+.icon svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8}
+main{flex:1;overflow:auto;overscroll-behavior:contain}
+.view{display:none}
+.view.on{display:block}
+.wrap{max-width:1240px;margin:0 auto;padding:18px max(16px,3vw) 26px}
+.prac{display:grid;gap:14px 30px;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:auto auto 1fr;grid-template-areas:"bar prompt" "card answer" "card how";align-items:start}
+.bar{grid-area:bar;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.cardwrap{grid-area:card}
+.promptbox{grid-area:prompt;align-self:end}
+.answer{grid-area:answer}
+.howbox{grid-area:how}
+.seg{display:flex;background:var(--panel);border-radius:11px;padding:3px;gap:2px}
+.seg button{border:0;background:none;border-radius:8px;padding:0 14px;min-height:38px;font-weight:600;font-size:15px;color:var(--mute)}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.sum{border:1px dashed var(--rule);background:none;border-radius:10px;min-height:38px;padding:0 12px;font-size:14px;font-weight:600;color:var(--mute)}
+.card{background:var(--paper);border:1px solid var(--rule);border-radius:18px;box-shadow:0 1px 0 var(--rule),0 14px 34px -22px rgb(0 0 0/.3);overflow:hidden}
+.cardtop{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px 0;font-size:14px;color:var(--mute);font-weight:600;flex-wrap:wrap}
+.cardtop b{color:var(--ink)}
+.staff{display:block;width:100%;height:auto;color:var(--ink);user-select:none;-webkit-user-select:none}
+#staff{max-height:min(46vh,430px)}
+#staff.placing{touch-action:none;cursor:ns-resize}
+.staff .sl{stroke:currentColor;stroke-width:1;opacity:.8}
+.staff .ldg{stroke:currentColor;stroke-width:1.15}
+.staff path{fill:currentColor}
+.staff .mc{stroke:var(--mute);stroke-width:.8;stroke-dasharray:2 3}
+.staff .nlab{font:700 9px Figtree,sans-serif;fill:currentColor;text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:3px}
+.staff .tl{font:600 9px Figtree,sans-serif;fill:var(--mute);text-anchor:middle}
+.staff .tl.cur{fill:var(--ink)}
+.staff .lad{font:500 7px Figtree,sans-serif;fill:var(--mute);text-anchor:middle}
+.staff .lad.ln{font-weight:700;fill:var(--ink)}
+.n-ok{color:var(--ok)}
+.n-bad{color:var(--bad)}
+.n-pend{color:var(--blue)}
+.n-ghost{color:var(--mute);opacity:.5}
+.n-tgt{color:var(--ok);opacity:.4}
+.n-old{opacity:.38}
+.n-fix{color:var(--amber)}
+.staff .curband{fill:var(--blue);opacity:.09}
+.n-new{animation:pop .3s ease-out}
+@keyframes pop{from{opacity:0;transform:translateX(10px)}}
+.fb{min-height:54px;padding:2px 16px 14px;display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;line-height:1.3}
+.fb.ok{color:var(--ok)}
+.fb.bad{color:var(--bad)}
+.fb.info{color:var(--ink)}
+.fb .ic{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:16px}
+.fb.ok .ic{background:var(--ok)}
+.fb.bad .ic{background:var(--bad)}
+.fb.info .ic{background:var(--ink);color:var(--bg)}
+.fb .t{color:var(--mute);font-weight:500;white-space:nowrap}
+.promptbox h1{font:700 clamp(28px,3.3vw,40px)/1.06 Fraunces,Georgia,serif;letter-spacing:-.02em;text-wrap:balance}
+.promptbox p{margin:6px 0 0;color:var(--mute);font-size:15px}
+.tname{color:var(--blue);white-space:nowrap}
+.letters{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.letters button{height:58px;border:1px solid var(--rule);background:var(--bg);border-radius:12px;font:700 23px/1 Fraunces,Georgia,serif;box-shadow:0 3px 0 var(--rule);padding:0}
+.letters button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--rule)}
+.letters button.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
+.letters button.bad{background:color-mix(in srgb,var(--bad) 12%,var(--bg));border-color:var(--bad);color:var(--bad)}
+.accs{display:flex;gap:6px;margin-top:6px}
+.accs button{flex:1;min-height:44px;border:1px solid var(--rule);background:var(--bg);border-radius:12px;font-weight:600}
+.accs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{min-height:44px;padding:0 16px;border-radius:12px;border:1px solid var(--rule);background:var(--bg);font-weight:600;font-size:15px;white-space:nowrap}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.warn{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,var(--rule))}
+.btn:disabled{opacity:.4;cursor:default}
+.how{background:var(--panel);border-radius:14px;padding:14px 16px;font-size:15px}
+.how h3{font-size:16px;margin-bottom:8px}
+.how p{margin:0;color:var(--mute)}
+.how dl{margin:0;display:grid;grid-template-columns:max-content minmax(0,1fr);gap:7px 14px}
+.how dt{color:var(--mute);font-weight:600}
+.how dd{margin:0}
+mark{background:var(--hl);color:#141416;border-radius:3px;padding:0 3px}
+.stats{display:flex;gap:6px 18px;flex-wrap:wrap;font-size:14px;color:var(--mute);margin-top:14px}
+.stats b{color:var(--ink);font-variant-numeric:tabular-nums}
+.keys{font-size:13px;color:var(--mute);margin-top:10px}
+kbd{font:600 12px Figtree,sans-serif;border:1px solid var(--rule);border-bottom-width:2px;border-radius:5px;padding:0 5px}
+.kbband{flex:none;background:var(--ebony);padding-bottom:env(safe-area-inset-bottom,0px)}
+.felt{height:7px;background:var(--felt);box-shadow:inset 0 -2px 0 rgb(0 0 0/.28)}
+#kbs{height:clamp(88px,19vh,190px);overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:#555 transparent}
+#kb{height:100%;margin:0 auto}
+#kb svg{display:block}
+.kw{fill:var(--ivory);stroke:#c8c2b5;stroke-width:1}
+.kb{fill:var(--ebony);stroke:#000;stroke-width:1}
+.kl{font:600 11px Figtree,sans-serif;fill:#77705f;text-anchor:middle;pointer-events:none}
+.kl.c{fill:#2a2824}
+.kmc{fill:var(--felt);pointer-events:none}
+g[data-m]{cursor:pointer}
+g.on .kw{fill:#c6d8ff}
+g.on .kb{fill:#2b58c8}
+g.tgt .kw{fill:#c6d8ff}
+g.tgt .kb{fill:#2b58c8}
+g.ok .kw{fill:#8edbb2}
+g.ok .kb{fill:#0d8749}
+g.bad .kw{fill:#ffb3a3}
+g.bad .kb{fill:#c4321a}
+g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alternate}
+@keyframes glow{to{opacity:.6}}
+.learn{display:grid;gap:18px 30px;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:start}
+#gstaff{max-height:min(58vh,540px);cursor:pointer}
+.mini{border:1px solid var(--rule);background:var(--bg);border-radius:9px;min-height:34px;padding:0 10px;font-size:13px;font-weight:600}
+.mini.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.lnote{background:var(--panel);border-radius:16px;padding:16px 18px}
+.lbig{font:700 clamp(52px,7vw,72px)/1 Fraunces,Georgia,serif;letter-spacing:-.02em;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.lbig small{font:600 15px/1.3 Figtree,sans-serif;color:var(--mute);letter-spacing:0}
+.lnote dl{margin:12px 0 0;display:grid;grid-template-columns:max-content minmax(0,1fr);gap:7px 14px;font-size:15px}
+.lnote dt{color:var(--mute);font-weight:600}
+.lnote dd{margin:0}
+.lnote p{margin:0;color:var(--mute)}
+.side h2{font-size:16px;margin:20px 0 8px}
+.tricks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.trick{text-align:left;border:1px solid var(--rule);background:var(--bg);border-radius:12px;padding:10px 12px;min-height:44px}
+.trick b{display:block;font-size:14px}
+.trick span{font-size:14px;color:var(--mute);line-height:1.35;display:block}
+.lms{display:flex;flex-wrap:wrap;gap:6px}
+.lms button{border:1px solid var(--rule);background:var(--bg);border-radius:999px;min-height:40px;padding:0 12px;font-size:14px;font-weight:600}
+.lms button i{font-style:normal;color:var(--mute);font-weight:500;margin-left:4px}
+.pnums{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:12px 18px;margin:6px 0 18px}
+.pnum b{display:block;font:700 clamp(30px,4vw,42px)/1.05 Fraunces,Georgia,serif;font-variant-numeric:tabular-nums}
+.pnum span{color:var(--mute);font-size:14px}
+.ptitle{font:700 clamp(30px,3.4vw,40px)/1.06 Fraunces,Georgia,serif;letter-spacing:-.02em}
+.pstaves{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.pstaves .staff{cursor:pointer;padding:0 4px 6px}
+.m-u{color:color-mix(in srgb,var(--mute) 40%,transparent)}
+.m-w{color:var(--bad)}
+.m-l{color:var(--amber)}
+.m-g{color:color-mix(in srgb,var(--ok) 55%,var(--amber))}
+.m-m{color:var(--ok)}
+.m-sel{filter:drop-shadow(0 0 3px var(--blue))}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px;color:var(--mute);margin:12px 0}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:6px;background:currentColor}
+.pdetail{background:var(--panel);border-radius:14px;padding:12px 16px;font-size:15px;margin-top:4px}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:18px}
+.prow h2{font-size:16px;margin-bottom:8px}
+.wl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.wl span{border:1px solid var(--rule);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.ov{position:fixed;inset:0;z-index:30;background:rgb(10 10 12/.48);display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:var(--bg);color:var(--ink);border-radius:20px;max-width:520px;width:100%;max-height:calc(100% - 8px);overflow:auto;padding:22px 22px 24px;box-shadow:0 20px 60px -20px rgb(0 0 0/.5)}
+.modal h2{font:700 30px/1.08 Fraunces,Georgia,serif;letter-spacing:-.02em}
+.modal .lead{color:var(--mute);margin:8px 0 4px}
+.ov.side{justify-content:flex-end;align-items:stretch;padding:0}
+.ov.side .modal{max-width:430px;border-radius:0;max-height:none;height:100%}
+.mhead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.grp{margin:18px 0 0}
+.grp h4{font-size:14px;color:var(--mute);margin-bottom:8px;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--rule);background:var(--bg);font-weight:600;font-size:14px}
+.chips button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.inrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule)}
+.inrow p{margin:2px 0 0;font-size:14px;color:var(--mute)}
+.inrow p.err{color:var(--bad)}
+.sens{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--mute);padding:12px 0}
+.sens input{flex:1;accent-color:var(--felt);min-height:30px}
+.fnote{font-size:14px;color:var(--mute);background:var(--panel);border-radius:12px;padding:10px 12px;margin-top:12px}
+.pick{display:block;width:100%;text-align:left;border:1px solid var(--rule);background:var(--bg);border-radius:14px;padding:14px 16px;margin-top:10px}
+.pick:hover{border-color:var(--ink)}
+.pick b{display:block;font-size:17px}
+.pick span{color:var(--mute);font-size:14px;line-height:1.4;display:block}
+.snums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+.snums b{display:block;font:700 34px/1 Fraunces,Georgia,serif;font-variant-numeric:tabular-nums}
+.snums span{font-size:13px;color:var(--mute)}
+.toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);z-index:40;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;max-width:min(92vw,520px);box-shadow:0 10px 30px -10px rgb(0 0 0/.5)}
+@media(min-width:861px){#v-practice.on{min-height:100%;display:flex;align-items:center}#v-practice .wrap{width:100%}}
+@media(max-width:860px){.prac{grid-template-rows:none;grid-template-columns:minmax(0,1fr);grid-template-areas:"bar" "prompt" "card" "answer" "how";gap:12px}.promptbox{align-self:auto}.learn{grid-template-columns:minmax(0,1fr)}.pstaves,.prow{grid-template-columns:minmax(0,1fr)}.wrap{padding-top:14px}.keys{display:none}}
+@media(max-width:640px){.tabs{order:5;width:100%;margin-left:0}.tabs button{flex:1}.brand{font-size:21px}.chip{max-width:190px}.seg button{padding:0 10px;font-size:14px}.ov.side{align-items:flex-end}.ov.side .modal{height:auto;max-height:90%;border-radius:20px 20px 0 0}.letters button{height:52px;font-size:21px}.snums b{font-size:28px}}
+@media(max-height:560px){#kbs{height:72px}#staff{max-height:52vh}}
+@media(prefers-reduced-motion:reduce){.n-new{animation:none}g.hint .kw,g.hint .kb{animation:none}.lvl i{transition:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="var(--ink)"/><rect x="4" y="5" width="16" height="2.4" fill="var(--felt)"/><rect x="4.5" y="8" width="3.6" height="11" rx=".6" fill="var(--ivory)"/><rect x="8.6" y="8" width="3.6" height="11" rx=".6" fill="var(--ivory)"/><rect x="12.7" y="8" width="3.6" height="11" rx=".6" fill="var(--ivory)"/><rect x="16.8" y="8" width="2.7" height="11" rx=".6" fill="var(--ivory)"/><rect x="7.2" y="8" width="2.2" height="6.5" fill="var(--ebony)"/><rect x="11.3" y="8" width="2.2" height="6.5" fill="var(--ebony)"/></svg>Note Dojo</div>
+  <nav class="tabs" id="tabs" aria-label="Views">
+    <button data-v="practice">Practice</button><button data-v="learn">Learn</button><button data-v="progress">Progress</button>
+  </nav>
+  <div class="spacer"></div>
+  <button class="chip" id="inChip" aria-label="Input"><i class="dot" id="inDot"></i><span id="inTxt">Tap mode</span><i class="lvl" id="lvl" hidden><i id="lvlBar"></i></i></button>
+  <button class="icon" id="gear" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg></button>
+</header>
+
+<main id="main">
+  <section class="view" id="v-practice">
+    <div class="wrap prac">
+      <div class="bar">
+        <div class="seg" id="modeSeg"><button data-mode="play">Play it</button><button data-mode="name">Name it</button><button data-mode="place">Place it</button><button data-mode="line">Sight-read</button></div>
+        <button class="sum" id="sumChip"></button>
+      </div>
+      <div class="promptbox">
+        <h1 id="prompt">Play this note</h1>
+        <p id="promptSub"></p>
+      </div>
+      <div class="cardwrap">
+        <div class="card">
+          <div class="cardtop"><span id="clefTag"></span><span id="cnt"></span></div>
+          <svg class="staff" id="staff" viewBox="0 0 260 150" role="img" aria-label="Note on the staff"></svg>
+          <div class="fb" id="fb"></div>
+        </div>
+      </div>
+      <div class="answer">
+        <div class="letters" id="letters"></div>
+        <div class="accs" id="accs"><button data-a="-1">♭ flat</button><button data-a="1">♯ sharp</button></div>
+        <div class="acts">
+          <button class="btn" id="upBtn" hidden aria-label="Move note up">▲</button><button class="btn" id="downBtn" hidden aria-label="Move note down">▼</button><button class="btn primary" id="checkBtn" hidden>Check</button>
+          <button class="btn" id="hintBtn">Hint</button>
+          <button class="btn" id="revealBtn">Show answer</button>
+          <button class="btn" id="hearBtn" hidden>Hear it</button>
+          <button class="btn primary" id="nextBtn" hidden>Next</button>
+        </div>
+      </div>
+      <div class="howbox">
+        <div class="how" id="how"></div>
+        <div class="stats" id="stats"></div>
+        <div class="keys" id="keysHelp"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="v-learn">
+    <div class="wrap learn">
+      <div>
+        <div class="card">
+          <div class="cardtop"><span>Play any key, tap one below, or tap a line or space</span><span style="display:flex;gap:6px"><button class="mini" id="namesTgl">Show names</button><button class="mini" id="clearBtn">Clear</button></span></div>
+          <svg class="staff" id="gstaff" viewBox="0 52 360 250" role="img" aria-label="Grand staff"></svg>
+        </div>
+      </div>
+      <div class="side">
+        <div class="lnote" id="lnote"></div>
+        <h2>Memory tricks</h2>
+        <div class="tricks" id="tricks"></div>
+        <h2>Landmark notes</h2>
+        <div class="lms" id="lms"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="v-progress">
+    <div class="wrap">
+      <h1 class="ptitle" id="ptitle">Your note map</h1>
+      <div class="pnums" id="pnums"></div>
+      <div class="pstaves">
+        <div class="card"><div class="cardtop"><span>Treble clef · right hand</span></div><svg class="staff" id="ptreble" viewBox="0 0 366 150"></svg></div>
+        <div class="card"><div class="cardtop"><span>Bass clef · left hand</span></div><svg class="staff" id="pbass" viewBox="0 0 366 150"></svg></div>
+      </div>
+      <div class="legend"><span class="m-u"><i></i><span style="color:var(--mute)">Not seen yet</span></span><span class="m-w"><i></i><span style="color:var(--mute)">Shaky</span></span><span class="m-l"><i></i><span style="color:var(--mute)">Learning</span></span><span class="m-g"><i></i><span style="color:var(--mute)">Good</span></span><span class="m-m"><i></i><span style="color:var(--mute)">Mastered</span></span></div>
+      <div class="pdetail" id="pdetail">Tap any note above to see how you're doing on it.</div>
+      <div class="prow">
+        <div><h2>Needs work</h2><div class="wl" id="weakList"></div><button class="btn primary" id="drillBtn">Drill these</button></div>
+        <div><h2>Start over</h2><p style="margin:0 0 10px;color:var(--mute);font-size:15px">Clears every note's history on this device.</p><button class="btn warn" id="resetBtn">Reset progress</button><span id="resetAsk" hidden> <button class="btn warn" id="resetYes">Yes, clear it</button> <button class="btn" id="resetNo">Keep it</button></span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="kbband" id="kbband"><div class="felt"></div><div id="kbs"><div id="kb"></div></div></footer>
+
+<div class="ov side" id="ovSet" hidden>
+  <div class="modal" role="dialog" aria-label="Settings">
+    <div class="mhead"><h2>Settings</h2><button class="btn" id="setClose">Done</button></div>
+    <div class="grp" id="inputGrp">
+      <h4>Your piano</h4>
+      <div class="inrow"><div><b>Digital piano (MIDI)</b><p id="midiSt">Not connected</p></div><button class="btn" id="midiBtn">Connect</button></div>
+      <div class="inrow"><div><b>Microphone</b><p id="micSt">Off — for acoustic pianos</p></div><button class="btn" id="micBtn">Turn on</button></div>
+      <label class="sens" for="sens">Mic sensitivity <input type="range" id="sens" min="0.5" max="3" step="0.1"></label>
+      <p class="fnote" id="frameNote" hidden></p>
+    </div>
+    <div id="optGroups"></div>
+  </div>
+</div>
+
+<div class="ov" id="ovStart" hidden>
+  <div class="modal" role="dialog" aria-label="Welcome">
+    <h2>How will you answer?</h2>
+    <p class="lead">You'll see a note on the staff and find it on your piano. Hints show you where it sits, a memory trick, and the key.</p>
+    <button class="pick" data-in="midi"><b>Digital piano</b><span>Connected to this computer by USB or Bluetooth MIDI. Works in Chrome or Edge.</span></button>
+    <button class="pick" data-in="mic"><b>Acoustic piano</b><span>I'll listen through the microphone. Play one note at a time, pedal up.</span></button>
+    <p class="fnote" id="startNote" hidden>Inside the Claude app, the mic and MIDI are blocked, so tapping is the safe choice here. To use your piano, open Note Dojo from its own web link in Safari or Chrome.</p>
+    <button class="pick" data-in="tap"><b>Just tap</b><span>Use the keys on screen and the letter buttons.</span></button>
+    <p class="lead" style="font-size:14px">You can switch any time from the chip in the top bar.</p>
+  </div>
+</div>
+
+<div class="ov" id="ovSum" hidden>
+  <div class="modal" role="dialog" aria-label="Round summary">
+    <h2 id="sTitle">Round done</h2>
+    <div class="snums" id="snums"></div>
+    <div id="smiss"></div>
+    <div class="acts"><button class="btn" id="sDrill">Drill the missed ones</button><button class="btn primary" id="sAgain">Next round</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+{
+const GL = /* music glyphs: Bravura (SIL Open Font License 1.1) */ {"gClef":"M376 415l25 -145c3 -18 3 -18 29 -18c147 0 241 -113 241 -241c0 -113 -67 -198 -168 -238c-14 -6 -15 -5 -13 -17c11 -62 29 -157 29 -214c0 -170 -130 -200 -197 -200c-151 0 -190 98 -190 163c0 62 40 115 107 115c61 0 96 -47 96 -102c0 -58 -36 -85 -67 -94 c-23 -7 -32 -10 -32 -17c0 -13 26 -29 80 -29c59 0 159 18 159 166c0 47 -15 134 -27 201c-2 12 -4 11 -15 9c-20 -4 -46 -6 -69 -6c-245 0 -364 165 -364 339c0 202 153 345 297 464c12 10 11 12 9 24c-7 41 -14 106 -14 164c0 104 24 229 98 311c20 22 51 48 65 48 c11 0 37 -28 52 -50c41 -60 65 -146 65 -233c0 -153 -82 -280 -190 -381c-6 -6 -8 -7 -6 -19zM470 943c-61 0 -133 -96 -133 -252c0 -32 2 -66 6 -92c2 -13 6 -14 13 -8c79 69 174 159 174 270c0 55 -27 82 -60 82zM361 262l-21 128c-2 11 -4 12 -14 4 c-47 -38 -93 -75 -153 -142c-83 -94 -93 -173 -93 -232c0 -139 113 -236 288 -236c20 0 40 2 56 5c15 3 16 3 14 14l-50 298c-2 11 -4 12 -20 8c-61 -17 -100 -60 -100 -117c0 -46 30 -89 72 -107c7 -3 15 -6 15 -13c0 -6 -4 -11 -12 -11c-7 0 -19 3 -27 6 c-68 23 -115 87 -115 177c0 85 57 164 145 194c18 6 18 5 15 24zM430 103l49 -285c2 -12 4 -12 16 -6c56 28 94 79 94 142c0 88 -67 156 -148 163c-12 1 -13 -2 -11 -14z","fClef":"M252 262c173 0 279 -116 279 -290c0 -304 -260 -482 -506 -602c-6 -3 -12 -5 -17 -5c-9 0 -13 6 -13 12c0 8 6 13 15 18c233 133 371 289 371 568c0 157 -46 261 -152 261c-102 0 -162 -73 -162 -113c0 -10 3 -18 16 -18s23 7 50 7c49 0 96 -40 96 -104 c0 -62 -43 -106 -106 -106c-81 0 -123 69 -123 149c0 96 78 223 252 223zM629 180c31 0 55 -24 55 -55s-24 -55 -55 -55s-55 24 -55 55s24 55 55 55zM630 -71c31 0 54 -23 54 -54s-23 -54 -54 -54s-54 23 -54 54s23 54 54 54z","whole":"M216 125c93 0 206 -52 206 -123c0 -70 -52 -127 -216 -127c-149 0 -206 60 -206 127c0 68 83 123 216 123zM111 63c-2 -8 -3 -16 -3 -24c0 -32 15 -66 35 -89c21 -28 58 -52 94 -52c10 0 21 1 31 4c33 8 46 36 46 67c0 60 -55 134 -124 134c-31 0 -68 -5 -79 -40z","sharp":"M237 118l-26 -10c-8 -3 -13 -22 -13 -29v-93c0 -12 7 -18 13 -18l26 10c2 1 3 1 5 1c4 0 7 -3 7 -8v-71c0 -6 -5 -14 -12 -17c0 0 -21 -8 -28 -11s-11 -15 -11 -23v-142c0 -6 -6 -11 -17 -11c-7 0 -13 5 -13 11v125c0 6 -5 18 -14 18l-2 -1h-1l-61 -25 c-5 -2 -10 -9 -10 -22v-139c0 -6 -7 -11 -17 -11c-7 0 -13 5 -13 11v123c0 5 -5 16 -12 16c-1 0 -2 0 -3 -1c-9 -3 -23 -9 -24 -9l-2 -1c-6 0 -9 3 -9 9v71c0 6 5 14 12 16c0 0 21 9 27 11c6 3 11 12 11 23v99c0 8 -6 18 -14 18l-1 -1c-8 -4 -23 -10 -24 -10l-2 -1 c-6 0 -9 3 -9 9v71c0 6 5 14 12 16c0 0 20 8 26 11s12 13 12 27v135c0 6 6 11 16 11c7 0 14 -5 14 -11v-120c0 -8 3 -20 12 -20c17 4 51 18 63 25c9 6 12 19 13 29v130c0 6 6 11 16 11c8 0 14 -5 14 -11v-122c0 -8 7 -13 14 -13c5 1 25 9 25 9c2 1 3 1 5 1c4 0 7 -3 7 -8 v-71c0 -6 -5 -14 -12 -17zM168 -45c2 9 4 37 4 64s-2 52 -4 57c-2 4 -8 6 -15 6c-25 0 -71 -21 -73 -38c-2 -8 -3 -43 -3 -74c0 -24 1 -46 3 -50c1 -3 6 -5 12 -5c23 0 70 20 76 40z","flat":"M12 -170c-8 10 -12 581 -12 581c1 18 17 28 31 28c10 0 19 -6 19 -17c0 -20 -6 -260 -7 -282c0 -7 4 -14 11 -17c2 -1 3 -1 5 -1c5 0 16 9 22 14c14 9 38 17 55 17c46 -3 90 -39 90 -96c0 -46 -31 -107 -120 -169c-25 -17 -49 -44 -79 -61c0 0 -3 -2 -6 -2s-6 1 -9 5z M47 -81c0 -5 2 -15 11 -15c3 0 6 1 10 3c43 27 89 81 89 135c0 25 -12 58 -41 58c-23 0 -63 -29 -70 -49c-1 -4 -2 -16 -2 -32c0 -40 3 -100 3 -100z","natural":"M141 181l15 5c1 1 3 1 4 1c4 0 8 -3 8 -8v-502c0 -7 -6 -12 -12 -12h-13c-7 0 -12 5 -12 12v149c0 8 -7 11 -17 11c-29 0 -85 -24 -99 -30c-1 -1 -3 -1 -4 -1l-2 -1c-6 0 -9 3 -9 9v515c0 7 5 12 12 12h13c6 0 12 -5 12 -12v-167c0 -4 4 -5 10 -5c26 0 90 23 90 23 c1 0 2 1 4 1zM37 39v-103c0 -4 5 -6 12 -6c25 0 82 23 82 41v103c0 4 -3 5 -9 5c-24 0 -85 -26 -85 -40z"};
+/* ---- pitch detection (YIN) + piano note-event logic ---- */
+function yinPitch(buf, sr, opts) {
+  const o = opts || {};
+  const minF = o.minF || 45, maxF = o.maxF || 4300, th = o.th || 0.2;
+  const N = buf.length;
+  const tauMax = Math.min(Math.floor(sr / minF), N >> 1);
+  const tauMin = Math.max(2, Math.floor(sr / maxF));
+  const W = Math.min(N - tauMax, 2048);
+  const cm = new Float32Array(tauMax + 2);
+  cm[0] = 1;
+  let run = 0, found = -1, last = tauMax;
+  for (let t = 1; t <= tauMax; t++) {
+    let d = 0;
+    for (let i = 0; i < W; i++) { const v = buf[i] - buf[i + t]; d += v * v; }
+    run += d;
+    cm[t] = run > 0 ? d * t / run : 1;
+    if (found < 0 && t > tauMin + 1 && cm[t - 1] < th && cm[t] >= cm[t - 1]) { found = t - 1; last = t; break; }
+  }
+  let tau = found;
+  if (tau < 0) {
+    let best = 1, bi = -1;
+    for (let t = tauMin + 1; t < tauMax; t++) if (cm[t] < best && cm[t] <= cm[t - 1] && cm[t] <= cm[t + 1]) { best = cm[t]; bi = t; }
+    if (bi < 0 || best > 0.4) return null;
+    // prefer a shorter period (octave up) when it is nearly as good
+    for (const div of [3, 2]) {
+      const c = Math.round(bi / div);
+      if (c <= tauMin + 2) continue;
+      let lb = 1, li = -1;
+      for (let t = c - 2; t <= c + 2; t++) if (t > tauMin && t < tauMax && cm[t] < lb) { lb = cm[t]; li = t; }
+      if (li > 0 && lb < best + 0.08) { bi = li; best = lb; break; }
+    }
+    tau = bi;
+  }
+  if (tau <= tauMin || tau >= Math.min(tauMax, last)) return null;
+  const a = cm[tau - 1], b = cm[tau], c = cm[tau + 1];
+  const den = a + c - 2 * b;
+  const tr = den > 0 ? tau + (a - c) / (2 * den) : tau;
+  return { f: sr / tr, conf: 1 - b };
+}
+
+function freqToMidi(f) { return 69 + 12 * Math.log2(f / 440); }
+
+function rmsOf(buf) { let s = 0; for (let i = 0; i < buf.length; i++) s += buf[i] * buf[i]; return Math.sqrt(s / buf.length); }
+
+/* Turns a stream of analysis frames (~30 per second) into discrete "key pressed" events.
+   Path 1: a fresh attack (energy jump) followed by 3 frames of the same pitch.
+   Path 2 (legato): the pitch moves to a new, strong, steady note without a clear energy jump. */
+function makeNoteListener(onNote, onLive) {
+  const st = { hist: [], onsetAt: -1, emitted: true, rmsHist: [], lowHist: [], hfHist: [], hfLow: [], floor: 0.002, muteUntil: 0, sens: 1, ratio: 1.2,
+    lastLive: null, liveHist: [], preMidi: null, preR: 0, runMidi: null, runStrong: 0, runR0: 0, runPk: 0, lastEmit: null, lastEmitAt: -1e9, recent: [] };
+  const harm = d => d === 12 || d === 19 || d === 24;
+  function emit(m, now) {
+    st.lastEmit = m; st.lastEmitAt = now;
+    st.recent.push([m, now]); if (st.recent.length > 8) st.recent.shift();
+    if (now >= st.muteUntil) onNote(m);
+  }
+  st.feed = function (buf, sr, now) {
+    const r = rmsOf(buf);
+    const rh = st.rmsHist; rh.push(r); if (rh.length > 6) rh.shift();
+    // noise floor = quietest frame over the last ~3 s, so a noisy room raises the gate
+    const lh = st.lowHist; lh.push(r); if (lh.length > 90) lh.shift();
+    let mn = Infinity; for (let i = 0; i < lh.length; i++) if (lh[i] < mn) mn = lh[i];
+    st.floor = mn;
+    const gate = Math.max(0.005, st.floor * 2) / st.sens;
+    const n = rh.length, prev = n >= 4 ? Math.min(rh[n - 2], rh[n - 3], rh[n - 4]) : n >= 2 ? rh[n - 2] : 0;
+    // brightness of just the newest ~30 ms: a hammer strike adds fresh high partials even when
+    // the overall level barely changes (one note handing over to another of the same loudness)
+    const seg = Math.min(buf.length - 1, Math.round(sr * 0.03));
+    let e = 0; for (let i = buf.length - seg; i < buf.length; i++) { const dv = buf[i] - buf[i - 1]; e += dv * dv; }
+    const hf = Math.sqrt(e / seg), hh = st.hfHist; hh.push(hf); if (hh.length > 6) hh.shift();
+    const hl = st.hfLow; hl.push(hf); if (hl.length > 90) hl.shift();
+    let hmn = Infinity; for (let i = 0; i < hl.length; i++) if (hl[i] < hmn) hmn = hl[i];
+    const m2 = hh.length, hprev = m2 >= 4 ? Math.min(hh[m2 - 2], hh[m2 - 3], hh[m2 - 4]) : m2 >= 2 ? hh[m2 - 2] : 0;
+    const bright = hf > hprev * 1.8 && hf > hmn * 4 / st.sens;
+    if (r > gate && (r > prev * st.ratio + gate * 0.15 || bright)) {
+      // a new attack; while one is still settling, the rising energy of the same attack must not restart it
+      if (st.emitted) { st.onsetAt = now; st.emitted = false; st.hist = []; st.preMidi = st.liveHist.slice(-4).reverse().find(x => x !== null) ?? null; st.preR = prev; }
+      else if (now - st.onsetAt > 300) { st.onsetAt = now; st.hist = []; }
+    }
+    let midi = null, f = null, conf = 0;
+    if (r > gate * 0.6) {
+      const p = yinPitch(buf, sr);
+      if (p && p.conf > 0.72) { const m = freqToMidi(p.f), k = Math.round(m); if (Math.abs(m - k) < 0.42 && k >= 21 && k <= 108) { midi = k; f = p.f; conf = p.conf; } }
+    }
+    const strong = midi !== null && conf > 0.85 && r > gate * 1.5;
+    if (midi !== null && midi === st.runMidi) { st.runStrong = strong ? st.runStrong + 1 : 0; if (r > st.runPk) st.runPk = r; }
+    else { st.runMidi = midi; st.runStrong = strong ? 1 : 0; st.runR0 = n >= 2 ? rh[n - 2] : 0; st.runPk = r; }
+    st.lastLive = midi; st.liveHist.push(midi); if (st.liveHist.length > 6) st.liveHist.shift();
+    if (onLive) onLive(midi, r, f);
+    if (!st.emitted && st.onsetAt >= 0) {
+      if (now - st.onsetAt > 600) st.emitted = true;
+      else {
+        st.hist.push(midi);
+        const h = st.hist, k = h.length;
+        if (k >= 3 && midi !== null && h[k - 2] === midi && h[k - 3] === midi) {
+          st.emitted = true;
+          // same pitch as the note already ringing, with only a small bump: the old note is
+          // still sounding over a softer new one, so this is not a new key press
+          const rS = Math.max(rh[n - 1], n > 1 ? rh[n - 2] : 0, n > 2 ? rh[n - 3] : 0);
+          const ringing = (midi === st.preMidi || midi === st.lastEmit) && rS < Math.max(st.preR, gate * 0.5) * 1.8;
+          const dup = midi === st.lastEmit && now - st.lastEmitAt < 400;
+          if (!ringing && !dup) emit(midi, now);
+        }
+        return;
+      }
+    }
+    if (st.runStrong >= 4 && st.runMidi !== st.lastEmit) {
+      const m = st.runMidi;
+      const echo = st.lastEmit !== null && harm(Math.abs(m - st.lastEmit));
+      const again = st.recent.some(([x, t]) => x === m && now - t < 1500);
+      // a new legato note adds energy; an older note re-emerging as others fade does not
+      const rose = st.runPk > st.runR0 * 1.05;
+      if (!echo && !again && rose) emit(m, now);
+    }
+  };
+  return st;
+}
+
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const LET = ['C','D','E','F','G','A','B'], SEMI = [0,2,4,5,7,9,11];
+const oct = d => Math.floor(d / 7);
+const natMidi = d => 12 * (oct(d) + 1) + SEMI[d % 7];
+const accSym = a => a > 0 ? '♯' : a < 0 ? '♭' : '';
+const nm = (d, a = 0) => LET[d % 7] + accSym(a) + oct(d);
+const isWhite = m => SEMI.includes(((m % 12) + 12) % 12);
+const ord = n => n + (n === 1 ? 'st' : n === 2 ? 'nd' : n === 3 ? 'rd' : 'th');
+const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+function spell(m, pref) {
+  const pc = m % 12, o = Math.floor(m / 12) - 1, i = SEMI.indexOf(pc);
+  if (i >= 0) return { d: o * 7 + i, acc: 0 };
+  if (pref < 0) return { d: o * 7 + SEMI.indexOf(pc + 1), acc: -1 };
+  return { d: o * 7 + SEMI.indexOf(pc - 1), acc: 1 };
+}
+const inFrame = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
+const FRAME_TIP = ' To use your piano, open Note Dojo from its own web link (Safari on iPhone and iPad, Chrome on a computer).';
+const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+const hasMidi = !!navigator.requestMIDIAccess;
+const MIC_DENIED = isIOS ? 'The mic is blocked for this site. In Safari, open the page menu (aA) › Website Settings › Microphone › Allow, then reload.' : 'Mic permission was denied. Allow it from the address bar, then try again.';
+
+const CLEF = {
+  t: { name: 'Treble', hand: 'right hand', bottom: 30, mnL: ['Every','Good','Boy','Does','Fine'], mnS: ['F','A','C','E'],
+    lm: [[28, 'Middle C', 'its own ledger line just below the treble staff'], [32, 'Treble G', 'the 2nd line. The treble clef is a fancy G, and its curl wraps around this line', 1], [35, 'Treble C', 'the 3rd space, right in the middle of the staff'], [38, 'Top-line F', 'the top line of the treble staff'], [42, 'High C', '2 ledger lines above the treble staff']] },
+  b: { name: 'Bass', hand: 'left hand', bottom: 18, mnL: ['Good','Boys','Do','Fine','Always'], mnS: ['All','Cows','Eat','Grass'],
+    lm: [[14, 'Low C', '2 ledger lines below the bass staff'], [18, 'Bottom-line G', 'the bottom line of the bass staff'], [21, 'Bass C', 'the 2nd space of the bass staff'], [24, 'Bass F', 'the 4th line. The bass clef is an old F, and its two dots hug this line', 1], [28, 'Middle C', 'its own ledger line just above the bass staff']] }
+};
+const RANGES = { landmarks: { list: 1, t: [28,32,35,38,42], b: [14,18,21,24,28] }, staff: { t: [30,38], b: [18,26] }, near: { t: [28,40], b: [16,28] }, far: { t: [24,44], b: [12,32] } };
+const OPTS = [
+  ['mode', 'Mode', [['play','Play the key'], ['name','Name it'], ['place','Place it on the staff'], ['line','Sight-read a line']]],
+  ['clefs', 'Staff', [['t','Treble (right hand)'], ['b','Bass (left hand)'], ['both','Both']]],
+  ['range', 'Which notes', [['landmarks','Landmarks only'], ['staff','On the staff'], ['near','+ 1 ledger line'], ['far','+ 3 ledger lines']]],
+  ['focus', 'Lines or spaces', [['all','Both'], ['lines','Lines only'], ['spaces','Spaces only']]],
+  ['acc', 'Sharps and flats', [[false,'Off'], [true,'Mix some in']]],
+  ['round', 'Cards per round', [[10,'10'], [20,'20'], [30,'30'], [0,'Endless']]],
+  ['auto', 'After a right answer', [[true,'Go straight on'], [false,'Wait for me']]],
+  ['labels', 'Key labels', [['none','None'], ['c','C keys'], ['all','All white keys']]],
+  ['sound', 'Sound when tapping', [[true,'On'], [false,'Off']]]
+];
+const LABEL = { t: 'Treble', b: 'Bass', both: 'Treble + bass', landmarks: 'landmarks', staff: 'on the staff', near: '+ 1 ledger', far: '+ 3 ledgers' };
+const DEF = { mode: 'play', clefs: 'both', range: 'staff', focus: 'all', acc: false, round: 20, auto: true, labels: 'c', sound: true, input: null, sens: 1.2, names: false };
+const LS = 'noteDojo.v1';
+let cfg = { ...DEF }, stats = {}, days = {};
+try { const j = JSON.parse(localStorage.getItem(LS) || 'null'); if (j) { cfg = { ...DEF, ...(j.cfg || {}) }; stats = j.stats || {}; days = j.days || {}; } } catch (e) {}
+for (const [k, , ch] of OPTS) if (!ch.some(c => c[0] === cfg[k])) cfg[k] = DEF[k];
+if (!(cfg.sens >= .5 && cfg.sens <= 3)) cfg.sens = DEF.sens;
+const save = () => { try { localStorage.setItem(LS, JSON.stringify({ cfg, stats, days })); } catch (e) {} };
+const dayKey = (d = new Date()) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+function dayStreak() { const d = new Date(); let n = 0; if (!days[dayKey(d)]) d.setDate(d.getDate() - 1); while (days[dayKey(d)]) { n++; d.setDate(d.getDate() - 1); } return n; }
+
+/* ---------- drawing ---------- */
+const K = .04, HW = 8.44, CW = 260, YB = 95, GW = 360;
+const f2 = v => +v.toFixed(2);
+const glyph = (n, x, y) => `<path d="${GL[n]}" transform="translate(${f2(x)} ${f2(y)}) scale(${K} ${-K})"/>`;
+const ledger = (x, y, w = 13) => `<line class="ldg" x1="${f2(x - w)}" x2="${f2(x + w)}" y1="${y}" y2="${y}"/>`;
+const yS = c => d => YB - (d - CLEF[c].bottom) * 5;
+const GTB = 140, GBB = 230, yT = d => GTB - (d - 30) * 5, yB = d => GBB - (d - 18) * 5;
+const lines = (x1, x2, ys) => ys.map(y => `<line class="sl" x1="${x1}" x2="${x2}" y1="${y}" y2="${y}"/>`).join('');
+function ledS(c, d, x, w) {
+  const b = CLEF[c].bottom, off = d - b, y = yS(c); let s = '';
+  if (off <= -2) for (let o = -2; o >= off; o -= 2) s += ledger(x, y(b + o), w);
+  if (off >= 10) for (let o = 10; o <= off; o += 2) s += ledger(x, y(b + o), w);
+  return s;
+}
+function ledgersFor(bottom, yf, d, x, w) {
+  const off = d - bottom; let s = '';
+  if (off <= -2) for (let o = -2; o >= off; o -= 2) s += ledger(x, yf(bottom + o), w);
+  if (off >= 10) for (let o = 10; o <= off; o += 2) s += ledger(x, yf(bottom + o), w);
+  return s;
+}
+function head(x, y, acc, cls, led, label, attrs = '') {
+  let s = `<g class="${cls}" ${attrs}>${led}`;
+  if (acc) s += glyph(acc > 0 ? 'sharp' : 'flat', x - HW - (acc > 0 ? 13.5 : 12.5), y);
+  s += glyph('whole', x - HW, y);
+  if (label) { const ly = y - 13 < 12 ? y + 20 : y - 13; s += `<text class="nlab" x="${x}" y="${ly}">${label}</text>`; }
+  return s + '</g>';
+}
+function single(c, notes, W = CW) {
+  const y = yS(c);
+  let s = lines(3, W - 3, [0, 1, 2, 3, 4].map(i => YB - i * 10));
+  s += c === 't' ? glyph('gClef', 9, y(32)) : glyph('fClef', 9, y(24));
+  for (const n of notes) s += head(n.x, y(n.d), n.acc || 0, n.cls || '', ledS(c, n.d, n.x, n.w), n.label, n.attrs);
+  return s;
+}
+function svgY(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; const m = svg.getScreenCTM(); return m ? p.matrixTransform(m.inverse()).y : 0; }
+
+/* ---------- note descriptions ---------- */
+const KPOS = ['just left of the group of 2 black keys', 'between the 2 black keys', 'just right of the group of 2 black keys', 'just left of the group of 3 black keys', 'between the 1st and 2nd of the 3 black keys', 'between the 2nd and 3rd of the 3 black keys', 'just right of the group of 3 black keys'];
+function octText(d) {
+  const k = oct(d) - 4;
+  if (d === 28) return 'It is middle C itself: the C closest to the middle of the keyboard';
+  return k === 0 ? 'in the octave that starts at middle C' : k === 1 ? 'in the next octave up from middle C' : k > 1 ? `${k} octaves up from middle C` : k === -1 ? 'in the octave just below middle C' : `${-k} octaves below middle C`;
+}
+function keyText(d, acc) {
+  const L = LET[d % 7];
+  const base = acc ? `${L}${accSym(acc)} is the black key just ${acc > 0 ? 'right' : 'left'} of ${L} (${L} sits ${KPOS[d % 7]})` : `${L} sits ${KPOS[d % 7]}`;
+  return d === 28 && !acc ? base + '. ' + octText(d) + '.' : base + ', ' + octText(d) + '.';
+}
+function posText(c, d) {
+  const C = CLEF[c], off = d - C.bottom, st = C.name.toLowerCase() + ' staff';
+  if (off >= 0 && off <= 8) return off % 2 === 0 ? `the ${ord(off / 2 + 1)} line of the ${st}, counting up from the bottom` : `the ${ord((off + 1) / 2)} space of the ${st}`;
+  if (off === -1) return `the space just below the ${st}`;
+  if (off === 9) return `the space just above the ${st}`;
+  if (off < 0) { const n = Math.floor(-off / 2); return off % 2 === 0 ? `on the ${ord(n)} ledger line below the ${st}` : `hanging just under the ${ord(n)} ledger line below the ${st}`; }
+  const n = Math.floor((off - 8) / 2);
+  return off % 2 === 0 ? `on the ${ord(n)} ledger line above the ${st}` : `sitting just on top of the ${ord(n)} ledger line above the ${st}`;
+}
+function trickHTML(c, d) {
+  const C = CLEF[c], off = d - C.bottom;
+  if (off < 0 || off > 8) return null;
+  const line = off % 2 === 0, w = line ? C.mnL : C.mnS, i = line ? off / 2 : (off - 1) / 2;
+  const ph = w.map((x, k) => k === i ? `<mark>${x}</mark>` : x).join(' ');
+  return `${C.name} ${line ? 'lines' : 'spaces'}, bottom to top: ${ph}${!line && c === 't' ? ' (spells FACE)' : ''}`;
+}
+function lmFor(c, d) { return CLEF[c].lm.find(l => l[0] === d); }
+function lmText(c, d) {
+  const ex = lmFor(c, d);
+  if (ex) return `<b>${ex[1]}</b> is ${ex[2]}.`;
+  let best = null;
+  for (const l of CLEF[c].lm) { const k = Math.abs(l[0] - d); if (!best || k < best.k || (k === best.k && l[3])) best = { l, k }; }
+  const st = d - best.l[0], n = Math.abs(st), seq = [];
+  for (let i = 0; i <= n; i++) seq.push(LET[(best.l[0] + Math.sign(st) * i) % 7]);
+  return `Start at <b>${best.l[1]}</b> (${nm(best.l[0])}) and count ${plural(n, 'step')} ${st > 0 ? 'up' : 'down'}: ${seq.join(' → ')}. Each step goes line, space, line…`;
+}
+const accRow = a => a > 0 ? '♯ sharp: play the black key just to the right' : '♭ flat: play the black key just to the left';
+
+/* ---------- state ---------- */
+let view = 'practice', card = null, round = null, streak = 0, cardNo = 0, recent = [], drill = null, advT = 0, accMod = 0, lastResolve = 0;
+let marks = {}; const pressed = new Set();
+
+function poolList() {
+  if (drill && drill.length) return drill.map(id => ({ clef: id[0], d: +id.slice(1) }));
+  const clefs = cfg.clefs === 'both' ? ['t', 'b'] : [cfg.clefs], R = RANGES[cfg.range], out = [];
+  for (const c of clefs) {
+    const ds = R.list ? R[c].slice() : []; if (!R.list) for (let d = R[c][0]; d <= R[c][1]; d++) ds.push(d);
+    let f = ds;
+    if (cfg.focus !== 'all') f = ds.filter(d => ((d - CLEF[c].bottom) % 2 === 0) === (cfg.focus === 'lines'));
+    (f.length ? f : ds).forEach(d => out.push({ clef: c, d }));
+  }
+  return out;
+}
+let forced = null;
+function wpick(items, ws) {
+  let tot = 0; for (const w of ws) tot += w;
+  let r = Math.random() * tot, q = null;
+  for (let i = 0; i < items.length; i++) { if (ws[i] <= 0) continue; q = items[i]; r -= ws[i]; if (r <= 0) break; }
+  return q || items[items.length - 1];
+}
+function noteWeight(p) { const s = stats[p.clef + p.d]; let x = !s || !s.n ? 3 : [6, 4, 2.5, 1.6, 1, .6][Math.min(5, Math.floor(s.box))]; if (s && s.t > 4000) x *= 1.4; return x; }
+function pick() {
+  if (forced) { const f = forced; forced = null; return f; }
+  const pool = poolList(), last = recent[recent.length - 1];
+  const p = wpick(pool, pool.map(q => { const id = q.clef + q.d; let x = noteWeight(q); if (id === last && pool.length > 1) x = 0; else if (recent.includes(id)) x *= .35; return x; }));
+  let acc = 0;
+  if (cfg.acc && (cfg.mode === 'play' || cfg.mode === 'name') && Math.random() < .35) {
+    const L = p.d % 7, o = [];
+    if ([0, 1, 3, 4, 5].includes(L)) o.push(1);
+    if ([1, 2, 4, 5, 6].includes(L)) o.push(-1);
+    acc = o[Math.floor(Math.random() * o.length)];
+  }
+  return { ...p, acc };
+}
+let line = null;
+function makeLine() {
+  const first = pick(), pool = poolList().filter(p => p.clef === first.clef), notes = [{ d: first.d, st: '' }];
+  while (notes.length < 5) {
+    const pd = notes[notes.length - 1].d;
+    const q = wpick(pool, pool.map(p => { if (p.d === pd && pool.length > 1) return 0; const g = Math.abs(p.d - pd); return noteWeight(p) * (g <= 2 ? 2.2 : g <= 4 ? 1.4 : .6); }));
+    notes.push({ d: q.d, st: '' });
+  }
+  return { clef: first.clef, notes, idx: 0 };
+}
+function record(ok, hinted) {
+  const id = card.clef + card.d, ms = performance.now() - card.t0;
+  const s = stats[id] || (stats[id] = { n: 0, ok: 0, box: 0, t: 0 });
+  s.n++;
+  if (ok) { s.ok++; s.t = s.t ? Math.round(s.t * .7 + ms * .3) : Math.round(ms); }
+  if (ok && !hinted) s.box = Math.min(5, s.box + (ms < 5000 ? 1 : .5));
+  else if (!ok) s.box = Math.max(0, s.box - 2);
+  round.res++;
+  const dk = dayKey(); days[dk] = (days[dk] || 0) + 1;
+  if (ok && !hinted) { round.clean++; round.times.push(ms); streak++; round.best = Math.max(round.best, streak); } else { streak = 0; if (!ok) round.missed.add(id); }
+  save();
+}
+function newRound() {
+  round = { n: 0, res: 0, clean: 0, times: [], best: 0, missed: new Set() }; streak = 0; line = null; pendingNext = false;
+  if (view === 'practice') { const r = poolRange(); if (r[0] !== kbRange[0] || r[1] !== kbRange[1]) { kbRange = r; buildKB(); } }
+  newCard();
+}
+function newCard() {
+  clearTimeout(advT);
+  let p, cont = false;
+  if (cfg.mode === 'line') {
+    if (line && line.idx < line.notes.length - 1) { line.idx++; cont = true; } else line = makeLine();
+    p = { clef: line.clef, d: line.notes[line.idx].d, acc: 0 };
+  } else { line = null; p = pick(); }
+  card = { ...p, midi: natMidi(p.d) + p.acc, t0: performance.now(), tries: 0, hint: 0, done: false, rec: false, counted: false, revealed: false, pend: null, hover: null, pendBad: false, ghost: null, fresh: true };
+  cardNo++; recent.push(p.clef + p.d); if (recent.length > 3) recent.shift();
+  marks = {}; accMod = 0;
+  if (cfg.mode === 'place') marks[card.midi] = 'tgt';
+  $$('#letters button').forEach(b => b.className = '');
+  if (!cont) setFb('', '');
+  renderAll();
+  if (view === 'practice') { if (cfg.mode === 'place') ensureVisible(card.midi); else if (!cont) centerKB(card.clef); }
+}
+function finish() { if (!card.counted) { card.counted = true; round.n++; } }
+let pendingNext = false;
+function next() {
+  clearTimeout(advT);
+  if (view !== 'practice') { pendingNext = true; return; }
+  if (card && !card.done && !card.rec) { record(false, true); }
+  if (card) finish();
+  if (cfg.round && round.n >= cfg.round) { showSummary(); return; }
+  newCard();
+}
+function setFb(kind, html) {
+  const el = $('#fb'); el.className = 'fb ' + kind;
+  const ic = kind === 'ok' ? '✓' : kind === 'bad' ? '✕' : kind === 'info' ? 'i' : '';
+  el.innerHTML = kind ? `<span class="ic" aria-hidden="true">${ic}</span><span>${html}</span>` : '';
+}
+function correct(m) {
+  const ms = performance.now() - card.t0, clean = card.tries === 0 && card.hint === 0 && !card.revealed;
+  if (!card.rec) { card.rec = true; record(true, card.hint > 0); }
+  card.done = true; lastResolve = performance.now(); finish();
+  marks = { [card.midi]: 'ok' };
+  if (m != null && m !== card.midi) marks[m] = 'ok';
+  const lm = lmFor(card.clef, card.d), name = nm(card.d, cfg.mode === 'place' ? 0 : card.acc);
+  setFb('ok', `${name}${lm ? ' · ' + lm[1] : ''} <span class="t">${(ms / 1000).toFixed(1)} s</span>`);
+  if (cfg.mode === 'line' && line) {
+    line.notes[line.idx].st = clean ? 'ok' : 'fix';
+    if (line.idx < line.notes.length - 1 && !(cfg.round && round.n >= cfg.round)) { const k = card.midi; next(); flashMark(k, 'ok'); return; }
+    renderAll();
+    if (cfg.auto) advT = setTimeout(next, 800);
+    return;
+  }
+  renderAll();
+  if (cfg.auto && clean) advT = setTimeout(next, 900);
+}
+function wrong(msg, ghost) {
+  card.tries++;
+  if (!card.rec) { card.rec = true; record(false, false); }
+  card.hint = Math.max(card.hint, Math.min(3, card.tries));
+  if (card.hint >= 3 && cfg.mode !== 'place') { marks[card.midi] = 'hint'; ensureVisible(card.midi); }
+  card.ghost = ghost || null;
+  setFb('bad', msg);
+  renderAll();
+}
+function reveal() {
+  if (!card || card.done || card.revealed) return;
+  if (!card.rec) { card.rec = true; record(false, false); }
+  card.revealed = true; card.hint = 3;
+  const lm = lmFor(card.clef, card.d);
+  if (cfg.mode === 'place') {
+    card.pend = card.d; card.pendBad = false; card.done = true; finish();
+    setFb('info', `Here's ${nm(card.d)}: ${posText(card.clef, card.d)}.`);
+  } else {
+    marks[card.midi] = 'hint'; ensureVisible(card.midi);
+    setFb('info', `It's ${nm(card.d, card.acc)}${lm ? ' (' + lm[1] + ')' : ''}. ${cfg.mode === 'name' ? 'Tap ' + LET[card.d % 7] + accSym(card.acc) : 'Play the glowing key'} to lock it in.`);
+  }
+  renderAll();
+}
+function hint() {
+  if (!card || card.done || card.hint >= 3) return;
+  card.hint++;
+  if (card.hint >= 3 && cfg.mode !== 'place') { marks[card.midi] = 'hint'; ensureVisible(card.midi); }
+  renderAll();
+}
+
+/* answers */
+function answerKey(m, src) {
+  if (!card || overlayOpen()) return;
+  if (card.done) {
+    const waiting = !(cfg.auto && card.tries === 0 && card.hint === 0 && !card.revealed);
+    if (src !== 'tap' && waiting && performance.now() - lastResolve > 450) next();
+    return;
+  }
+  if (cfg.mode === 'place') return;
+  const target = card.midi;
+  if (cfg.mode === 'play' || cfg.mode === 'line') {
+    if (m === target) return correct(m);
+    const sp = spell(m, card.acc || 1), n = nm(sp.d, sp.acc);
+    let msg;
+    if ((m - target) % 12 === 0) { const k = Math.round((m - target) / 12); msg = `That's ${n}: right letter, but ${plural(Math.abs(k), 'octave')} too ${k > 0 ? 'high' : 'low'}.`; }
+    else if (!card.acc && !isWhite(m) && Math.abs(m - target) === 1) msg = `That's the black key just ${m > target ? 'right' : 'left'} of it. This note has no sharp or flat, so play the white key.`;
+    else if (sp.d === card.d) msg = card.acc ? `That's ${n}. The ${card.acc > 0 ? 'sharp' : 'flat'} sign means the black key just to the ${card.acc > 0 ? 'right' : 'left'}.` : `That's ${n}. No sharp or flat here, so play the white key.`;
+    else { const st = sp.d - card.d; msg = `That's ${n}: ${plural(Math.abs(st), 'step')} too ${st > 0 ? 'high' : 'low'}.`; }
+    const g = Math.abs(sp.d - card.d) <= 12 ? { d: sp.d, acc: sp.acc, label: 'yours' } : null;
+    flashMark(m, 'bad');
+    return wrong(msg, g);
+  }
+  if ((m - target) % 12 === 0) return correct(m);
+  const sp = spell(m, card.acc || 1);
+  flashMark(m, 'bad');
+  nameWrong(sp.d % 7, sp.acc);
+}
+function answerLetter(L, a) {
+  if (!card || card.done || cfg.mode !== 'name') return;
+  const btn = $(`#letters button[data-l="${L}"]`);
+  if (L === card.d % 7 && a === (cfg.acc ? card.acc : 0)) { btn && (btn.className = 'ok'); return correct(null); }
+  btn && (btn.className = 'bad');
+  nameWrong(L, a);
+}
+function nameWrong(L, a) {
+  const tL = card.d % 7; let diff = ((L - tL) % 7 + 7) % 7; if (diff > 3) diff -= 7;
+  let msg;
+  if (diff === 0) msg = card.acc ? `Right letter! Now look at the sign in front of the note.` : `Right letter, but this note has no sharp or flat.`;
+  else msg = `Not ${LET[L]}${accSym(a)}. ${LET[L]} would sit ${plural(Math.abs(diff), 'step')} ${diff > 0 ? 'higher' : 'lower'}.`;
+  wrong(msg, diff ? { d: card.d + diff, acc: 0, label: LET[L] } : null);
+}
+function checkPlace() {
+  if (!card || card.done || cfg.mode !== 'place' || card.pend == null) return;
+  if (card.pend === card.d) return correct(null);
+  const st = card.pend - card.d;
+  card.pendBad = true;
+  wrong(`That spot is ${nm(card.pend)}: ${plural(Math.abs(st), 'step')} too ${st > 0 ? 'high' : 'low'}.`, null);
+}
+
+/* ---------- render practice ---------- */
+function renderAll() { renderCard(); renderSide(); applyKeys(); }
+function renderCard() {
+  if (!card) return;
+  const items = [], NX = 140, place = cfg.mode === 'place', vb = cardVB();
+  let band = '', gx = 205;
+  if (cfg.mode === 'line' && line) {
+    const lx = i => 72 + i * 40;
+    line.notes.forEach((n, i) => items.push({ d: n.d, x: lx(i), cls: (n.st === 'ok' ? 'n-ok' : n.st === 'fix' ? 'n-fix' : i === line.idx ? 'n-pend' : '') + (card.fresh && line.idx === 0 ? ' n-new' : '') }));
+    band = `<rect class="curband" x="${lx(line.idx) - 15}" y="${vb[0] + 3}" width="30" height="${vb[1] - vb[0] - 6}" rx="8"/>`;
+    gx = lx(line.idx) + 20;
+  }
+  else if (!place) items.push({ d: card.d, acc: card.acc, x: NX, cls: (card.done ? 'n-ok ' : '') + (card.fresh ? 'n-new' : '') });
+  else {
+    if (card.hint >= 3 && !card.done) items.push({ d: card.d, x: NX, cls: 'n-tgt' });
+    if (card.pend != null) items.push({ d: card.pend, x: NX, cls: card.done ? 'n-ok' : card.pendBad ? 'n-bad' : 'n-pend' });
+    else if (card.hover != null) items.push({ d: card.hover, x: NX, cls: 'n-ghost' });
+  }
+  const b = CLEF[card.clef].bottom;
+  if (card.ghost && !card.done) items.push({ d: card.ghost.d, acc: cfg.mode === 'line' ? 0 : card.ghost.acc, x: gx, cls: 'n-bad', label: cfg.mode === 'line' ? '' : card.ghost.label, g: 1 });
+  card.fresh = false;
+  const st = $('#staff');
+  st.setAttribute('viewBox', `0 ${vb[0]} ${CW} ${vb[1] - vb[0]}`);
+  st.innerHTML = band + single(card.clef, items.filter(n => { const yy = YB - (n.d - b) * 5; return n.g ? yy > vb[0] + 7 && yy < vb[1] - 7 : true; }));
+  st.classList.toggle('placing', place && !card.done);
+  $('#clefTag').innerHTML = `<b>${CLEF[card.clef].name} clef</b> · ${CLEF[card.clef].hand}`;
+  $('#cnt').textContent = cfg.round ? `${Math.min(cfg.round, round.n + (card.counted ? 0 : 1))} / ${cfg.round}` : `Card ${round.n + (card.counted ? 0 : 1)}`;
+}
+function cardVB() {
+  let lo = -6, hi = 14;
+  if (cfg.mode !== 'place') { const o = poolList().map(p => p.d - CLEF[p.clef].bottom); lo = Math.min(...o); hi = Math.max(...o); }
+  return [Math.min(28, YB - hi * 5 - 24), Math.max(124, YB - lo * 5 + 24)];
+}
+function hasPiano() { return mic.on || midiS.names.length > 0; }
+function renderSide() {
+  const m = cfg.mode, place = m === 'place';
+  $$('#modeSeg button').forEach(b => b.classList.toggle('on', b.dataset.mode === m));
+  $('#sumChip').textContent = `${LABEL[cfg.clefs]} · ${LABEL[cfg.range]}${cfg.focus !== 'all' ? ' · ' + cfg.focus + ' only' : ''}${cfg.acc && (m === 'play' || m === 'name') ? ' · ♯♭' : ''}${drill ? ' · drill' : ''}`;
+  if (m === 'play') { $('#prompt').textContent = 'Play this note'; $('#promptSub').textContent = hasPiano() ? 'Find the exact key on your piano. The octave counts.' : 'Tap the exact key on the keyboard below. The octave counts.'; }
+  else if (m === 'name') { $('#prompt').textContent = 'Name this note'; $('#promptSub').textContent = (hasPiano() ? 'Tap the letter, or play it anywhere on your piano.' : 'Tap the letter, or any matching key below.') + (cfg.acc ? ' For a sharp or flat, tap the sign first, then the letter.' : ''); }
+  else if (m === 'line') { $('#prompt').textContent = 'Sight-read this line'; $('#promptSub').textContent = hasPiano() ? 'Play the notes left to right on your piano. The blue one is next.' : 'Tap the keys below, left to right. The blue note is next.'; }
+  else { $('#prompt').innerHTML = `Put <span class="tname">${nm(card.d)}</span> on the staff`; $('#promptSub').textContent = 'It\'s the blue key below. Tap the staff, drag to fine-tune, then Check.'; }
+  $('#letters').hidden = m !== 'name';
+  $('#accs').hidden = !(m === 'name' && cfg.acc);
+  $$('#accs button').forEach(b => b.classList.toggle('on', +b.dataset.a === accMod));
+  const fin = card.done || card.revealed;
+  $('#hintBtn').textContent = card.hint ? `Hint ${card.hint}/3` : 'Hint';
+  $('#hintBtn').disabled = card.done || card.hint >= 3;
+  $('#revealBtn').disabled = fin;
+  $('#revealBtn').hidden = card.done;
+  $('#hearBtn').hidden = !fin;
+  $('#checkBtn').hidden = !place || card.done;
+  $('#upBtn').hidden = $('#downBtn').hidden = !place || card.done;
+  $('#checkBtn').disabled = card.pend == null;
+  const lineEnd = m === 'line' && line && line.idx >= line.notes.length - 1;
+  $('#nextBtn').hidden = !fin || (card.done && (m === 'line' ? cfg.auto || !lineEnd : cfg.auto && card.tries === 0 && card.hint === 0 && !card.revealed));
+  renderHow();
+  const avg = round.times.length ? round.times.reduce((a, b) => a + b, 0) / round.times.length / 1000 : 0;
+  $('#stats').innerHTML = `<span>Streak <b>${streak}</b></span><span>First try <b>${round.res ? Math.round(round.clean / round.res * 100) + '%' : '–'}</b></span><span>Avg <b>${avg ? avg.toFixed(1) + ' s' : '–'}</b></span><span>Best streak <b>${round.best}</b></span>`;
+  $('#keysHelp').innerHTML = `<kbd>H</kbd> hint · <kbd>Enter</kbd> next${m === 'name' ? ' · <kbd>A</kbd>–<kbd>G</kbd> answer' : ''}${place ? ' · <kbd>↑</kbd><kbd>↓</kbd> move' : ''}`;
+}
+function renderHow() {
+  const el = $('#how'), lvl = card.done || card.revealed ? 9 : card.hint, c = card.clef, d = card.d, place = cfg.mode === 'place';
+  if (!lvl) { el.innerHTML = `<h3>Stuck?</h3><p>Tap Hint. Each tap shows a bit more: where it sits, a memory trick, then the key itself.</p>`; return; }
+  const rows = [], acc = place ? 0 : card.acc, off = d - CLEF[c].bottom, trick = trickHTML(c, d);
+  rows.push(['Where', place && lvl < 3 ? (off % 2 === 0 ? 'It sits on a line.' : 'It sits in a space.') : posText(c, d).replace(/^./, x => x.toUpperCase()) + '.']);
+  if (acc) rows.push(['Sign', accRow(acc)]);
+  if (lvl >= 2) { if (trick) rows.push(['Trick', trick]); rows.push(['Landmark', lmText(c, d)]); }
+  if (lvl >= 3 && (!place || lvl > 3)) rows.push(['Keyboard', keyText(d, acc)]);
+  const lm = lmFor(c, d);
+  el.innerHTML = (lvl > 3 ? `<h3>How to read ${nm(d, acc)}${lm ? ' · ' + lm[1] : ''}</h3>` : `<h3>Hint ${card.hint} of 3</h3>`) + '<dl>' + rows.map(r => `<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('') + '</dl>';
+}
+
+/* ---------- keyboard ---------- */
+let kbRange = [48, 84], kbLay = null;
+function poolRange() {
+  const ms = poolList().map(p => natMidi(p.d));
+  let lo = Math.min(...ms) - (cfg.acc ? 1 : 0), hi = Math.max(...ms) + (cfg.acc ? 1 : 0);
+  lo -= lo % 12; hi += (12 - hi % 12) % 12;
+  while (hi - lo < 24) { if ((hi - lo) % 24 === 0) hi += 12; else lo -= 12; }
+  return [Math.max(21, lo), Math.min(108, hi)];
+}
+function buildKB() {
+  const box = $('#kbs'), H = box.clientHeight, Wb = box.clientWidth;
+  if (!H || !Wb) return;
+  let [lo, hi] = kbRange; if (!isWhite(lo)) lo--; if (!isWhite(hi)) hi++;
+  const wh = []; for (let m = lo; m <= hi; m++) if (isWhite(m)) wh.push(m);
+  const kw = Math.max(view === 'learn' ? 24 : 26, Math.min(58, Wb / wh.length)), tot = Math.round(kw * wh.length);
+  const bw = kw * .58, bh = H * .62, wx = {};
+  wh.forEach((m, i) => wx[m] = i * kw);
+  let s = `<svg width="${tot}" height="${H}" viewBox="0 0 ${tot} ${H}" role="group" aria-label="Piano keyboard">`;
+  for (const m of wh) {
+    const x = wx[m], d = spell(m, 1).d, isC = m % 12 === 0;
+    let lab = '';
+    if (cfg.labels === 'all' || (cfg.labels === 'c' && isC)) lab = `<text class="kl${isC ? ' c' : ''}" x="${f2(x + kw / 2)}" y="${H - 9}">${isC ? nm(d) : LET[d % 7]}</text>`;
+    const mc = m === 60 ? `<circle class="kmc" cx="${f2(x + kw / 2)}" cy="${H - (lab ? 28 : 12)}" r="3.2"/>` : '';
+    s += `<g data-m="${m}"><rect class="kw" x="${f2(x + .5)}" y="-4" width="${f2(kw - 1)}" height="${H + 3}" rx="4"/>${lab}${mc}</g>`;
+  }
+  for (let m = lo + 1; m < hi; m++) if (!isWhite(m)) s += `<g data-m="${m}"><rect class="kb" x="${f2(wx[m - 1] + kw - bw / 2)}" y="-4" width="${f2(bw)}" height="${f2(bh)}" rx="2.5"/></g>`;
+  $('#kb').innerHTML = s + '</svg>';
+  $('#kb').style.width = tot + 'px';
+  kbLay = { wx, kw, lo, hi };
+  applyKeys();
+}
+function keyX(m) { if (!kbLay) return null; const w = isWhite(m) ? m : m - 1; const x = kbLay.wx[w]; return x == null ? null : x + (isWhite(m) ? kbLay.kw / 2 : kbLay.kw); }
+function ensureVisible(m) {
+  const x = keyX(m), box = $('#kbs'); if (x == null) return;
+  if (x < box.scrollLeft + 30 || x > box.scrollLeft + box.clientWidth - 30) box.scrollTo({ left: x - box.clientWidth / 2, behavior: 'smooth' });
+}
+function centerKB(c) {
+  const box = $('#kbs'); let t = 60;
+  if (view === 'practice') { const ms = poolList().filter(p => !c || p.clef === c).map(p => natMidi(p.d)); if (ms.length) t = Math.round((Math.min(...ms) + Math.max(...ms)) / 2); }
+  const x = keyX(t); if (x == null) return;
+  const left = Math.max(0, x - box.clientWidth / 2);
+  if (Math.abs(box.scrollLeft - left) > 4) box.scrollTo({ left, behavior: c ? 'smooth' : 'auto' });
+}
+function applyKeys() { const mk = view === 'practice' ? marks : {}; for (const g of $$('#kb g[data-m]')) { const m = +g.dataset.m; g.setAttribute('class', (mk[m] || '') + (pressed.has(m) ? ' on' : '')); } }
+function flashMark(m, cls) { marks[m] = cls; applyKeys(); setTimeout(() => { if (marks[m] === cls) { delete marks[m]; applyKeys(); } }, 800); }
+function flashPress(m) { pressed.add(m); applyKeys(); setTimeout(() => { pressed.delete(m); applyKeys(); }, 260); }
+
+/* ---------- sound ---------- */
+let ac = null;
+function getAC() {
+  if (!ac) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; try { ac = new A(); ac.onstatechange = () => renderInput(); } catch (e) { return null; } }
+  if (ac.state === 'suspended') ac.resume().then(renderInput, () => {});
+  return ac;
+}
+function tone(m) {
+  if (!cfg.sound) return; const a = getAC(); if (!a) return;
+  try {
+    const t = a.currentTime + .01, f = 440 * 2 ** ((m - 69) / 12), dur = Math.max(.6, 2.2 - (m - 40) * .025);
+    const out = a.createGain(), lp = a.createBiquadFilter();
+    out.gain.value = .2; lp.type = 'lowpass'; lp.frequency.value = Math.min(12000, f * 7);
+    out.connect(lp); lp.connect(a.destination);
+    [[1, 1], [2, .42], [3, .2], [4, .1], [5, .06]].forEach(([n, g]) => {
+      const o = a.createOscillator(), v = a.createGain();
+      o.frequency.value = f * n * (1 + .0005 * n * n);
+      v.gain.setValueAtTime(0, t); v.gain.linearRampToValueAtTime(g, t + .006); v.gain.exponentialRampToValueAtTime(.0005, t + dur / Math.sqrt(n));
+      o.connect(v); v.connect(out); o.start(t); o.stop(t + dur + .05);
+    });
+    if (listener) listener.muteUntil = performance.now() + dur * 900;
+  } catch (e) {}
+}
+
+/* ---------- inputs: MIDI + mic ---------- */
+const midiS = { on: false, acc: null, names: [], err: '' }, mic = { on: false, heard: null, at: 0, err: '' };
+let listener = null, micTimer = 0, micStream = null, micSrc = null;
+async function startMidi(auto) {
+  if (midiS.busy) return; midiS.busy = true;
+  try { await startMidi2(auto); } finally { midiS.busy = false; }
+}
+async function startMidi2(auto) {
+  midiS.err = '';
+  if (!navigator.requestMIDIAccess) { midiS.err = 'This browser can\'t connect to MIDI pianos. Use Chrome or Edge on a computer (Safari, iPhone and iPad don\'t support it).'; if (!auto) toast(midiS.err); renderInput(); return; }
+  try { midiS.acc = await navigator.requestMIDIAccess({ sysex: false }); }
+  catch (e) { midiS.err = inFrame ? 'MIDI is blocked inside this viewer.' + FRAME_TIP : 'MIDI permission was denied. Allow it from the address bar, then try again.'; if (!auto) toast(midiS.err); renderInput(); return; }
+  midiS.on = true; cfg.input = 'midi'; save();
+  midiS.acc.onstatechange = bindMidi; bindMidi();
+  if (!auto && !midiS.names.length) toast('Connected, but no piano found yet. Plug it in by USB (or pair Bluetooth MIDI) and switch it on.');
+}
+function bindMidi() {
+  midiS.names = [];
+  // virtual ports (Linux "Midi Through", macOS IAC bus) are not pianos, so they don't count as connected
+  midiS.acc.inputs.forEach(i => { i.onmidimessage = onMidi; if (i.state !== 'disconnected' && !/through|\biac\b/i.test(i.name || '')) midiS.names.push(i.name || 'MIDI device'); });
+  renderInput(); if (card) renderSide();
+}
+function onMidi(e) {
+  const [s, n, v] = e.data, c = s & 0xf0;
+  if (c === 0x90 && v > 0) { pressed.add(n); applyKeys(); onKey(n, 'midi'); }
+  else if (c === 0x80 || (c === 0x90 && v === 0)) { pressed.delete(n); applyKeys(); }
+}
+async function startMic(auto) {
+  if (mic.on || mic.busy) return; mic.busy = true;
+  try { await startMic2(auto); } finally { mic.busy = false; }
+}
+async function startMic2(auto) {
+  mic.err = '';
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { mic.err = 'No microphone access in this browser.' + (inFrame ? FRAME_TIP : ''); if (!auto) toast(mic.err); renderInput(); return; }
+  try { micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } }); }
+  catch (e) { const n = e && e.name; mic.err = n === 'NotFoundError' ? 'No microphone found.' : n === 'NotReadableError' || n === 'AbortError' ? 'The mic is busy in another app (a call or a recorder?). Close it and try again.' : inFrame ? 'The mic is blocked inside this viewer.' + FRAME_TIP : MIC_DENIED; if (!auto) toast(mic.err); renderInput(); return; }
+  const a = getAC(); if (!a) { mic.err = 'Audio is not available in this browser.'; renderInput(); return; }
+  if (a.state !== 'running') a.resume().then(renderInput, () => {});
+  micSrc = a.createMediaStreamSource(micStream); const an = a.createAnalyser(); an.fftSize = 4096; micSrc.connect(an);
+  const buf = new Float32Array(an.fftSize), bytes = typeof an.getFloatTimeDomainData === 'function' ? null : new Uint8Array(an.fftSize);
+  const tr = micStream.getAudioTracks()[0];
+  if (tr) tr.onended = () => { if (mic.on) { stopMic(true); mic.err = 'The microphone stopped (another app may have taken it). Tap Turn on to start it again.'; renderInput(); } };
+  listener = makeNoteListener(m => onKey(m, 'mic'), micLive);
+  listener.sens = cfg.sens;
+  mic.on = true; cfg.input = 'mic'; save();
+  clearInterval(micTimer);
+  micTimer = setInterval(() => {
+    if (a.state !== 'running' || !listener) return;
+    if (bytes) { an.getByteTimeDomainData(bytes); for (let i = 0; i < bytes.length; i++) buf[i] = (bytes[i] - 128) / 128; } else an.getFloatTimeDomainData(buf);
+    listener.feed(buf, a.sampleRate, performance.now());
+  }, 33);
+  keepAwake();
+  renderInput(); if (card) renderSide();
+}
+function stopMic(keep) {
+  clearInterval(micTimer);
+  if (micSrc) { try { micSrc.disconnect(); } catch (e) {} micSrc = null; }
+  if (micStream) micStream.getTracks().forEach(t => { t.onended = null; t.stop(); });
+  micStream = null; listener = null; mic.on = false; mic.heard = null;
+  if (!keep && cfg.input === 'mic') { cfg.input = 'tap'; save(); }
+  renderInput(); if (card) renderSide();
+}
+// keep the screen on while practising (released automatically when the page is hidden)
+let wake = null, wakeBusy = false;
+async function keepAwake() {
+  if (wake || wakeBusy || !navigator.wakeLock || document.visibilityState !== 'visible') return;
+  wakeBusy = true;
+  try { wake = await navigator.wakeLock.request('screen'); wake.addEventListener('release', () => { wake = null; }); } catch (e) { wake = null; }
+  wakeBusy = false;
+}
+function micLive(m, r) {
+  const w = Math.max(0, Math.min(100, (Math.log10(r + 1e-6) + 3.3) / 2.5 * 100));
+  $('#lvlBar').style.width = w + '%';
+  const now = performance.now();
+  if (m != null) { const h = nm(spell(m, 1).d, spell(m, 1).acc); mic.at = now; if (h !== mic.heard) { mic.heard = h; renderInput(); } }
+  else if (mic.heard && now - mic.at > 900) { mic.heard = null; renderInput(); }
+}
+function renderInput() {
+  let txt = 'Tap mode', live = false;
+  if (mic.on) { live = true; txt = ac && ac.state !== 'running' ? 'Mic: tap anywhere to start' : mic.heard ? 'Mic hears ' + mic.heard : 'Mic listening'; }
+  else if (midiS.names.length) { live = true; txt = 'MIDI · ' + midiS.names[0]; }
+  else if (midiS.on) txt = 'MIDI · no piano found';
+  $('#inTxt').textContent = txt; $('#inDot').classList.toggle('live', live); $('#lvl').hidden = !mic.on;
+  const ms = $('#midiSt'); ms.className = midiS.err ? 'err' : '';
+  ms.textContent = !hasMidi ? 'Not available in this browser. The microphone works with digital pianos too.' : midiS.err || (midiS.names.length ? 'Connected: ' + midiS.names.join(', ') : midiS.on ? 'Waiting for a piano. Plug it in and switch it on.' : 'Not connected');
+  $('#midiBtn').textContent = midiS.on ? 'Rescan' : 'Connect'; $('#midiBtn').disabled = !hasMidi;
+  const cs = $('#micSt'); cs.className = mic.err ? 'err' : '';
+  cs.textContent = mic.err || (mic.on ? 'Listening. Play one note at a time, pedal up.' : 'Off. Use this for an acoustic piano.');
+  $('#micBtn').textContent = mic.on ? 'Turn off' : 'Turn on';
+  $('#sens').value = cfg.sens;
+  $('#startNote').hidden = !inFrame;
+  const fn = $('#frameNote'); fn.hidden = !inFrame; fn.textContent = 'Inside the Claude app, the mic and MIDI are blocked. Tapping works everywhere. To use your piano, open Note Dojo from its own web link in Safari or Chrome.';
+}
+function onKey(m, src) {
+  if (src === 'mic' && view === 'practice' && (m < kbRange[0] - 12 || m > kbRange[1] + 12)) return;
+  if (src !== 'midi') flashPress(m);
+  if (view === 'learn') { learnAdd(m); ensureVisible(m); return; }
+  if (view === 'practice') { if (src !== 'tap') ensureVisible(m); answerKey(m, src); }
+}
+
+/* ---------- learn ---------- */
+let lnotes = [], lseq = 0;
+function learnAdd(m, sp, c) { sp = sp || spell(m, 1); lnotes.push({ d: sp.d, acc: sp.acc, m, c: c || (m >= 60 ? 't' : 'b') }); if (lnotes.length > 8) lnotes.shift(); renderLearn(); }
+const lad = (d, y) => `<text class="lad${d % 2 ? '' : ' ln'}" x="${d % 2 ? 64 : 52}" y="${y + 2.5}">${LET[d % 7]}${d === 28 ? '4' : ''}</text>`;
+function renderLearn() {
+  let s = lines(4, GW - 4, [30, 32, 34, 36, 38].map(yT)) + lines(4, GW - 4, [18, 20, 22, 24, 26].map(yB));
+  s += `<line class="sl" x1="4" x2="4" y1="${yT(38)}" y2="${yB(18)}" style="stroke-width:1.6"/>`;
+  s += glyph('gClef', 11, yT(32)) + glyph('fClef', 11, yB(24));
+  const x0 = cfg.names ? 92 : 78, step = (GW - 22 - x0) / 7;
+  if (cfg.names) { for (let d = 28; d <= 40; d++) s += lad(d, yT(d)); for (let d = 16; d <= 28; d++) s += lad(d, yB(d)); }
+  lnotes.forEach((n, i) => {
+    const x = x0 + i * step, t = n.c === 't', yf = t ? yT : yB, y = yf(n.d), cur = i === lnotes.length - 1;
+    if (y > 56 && y < 286) s += head(x, y, n.acc, (cur ? 'n-pend n-new' : 'n-old'), ledgersFor(t ? 30 : 18, yf, n.d, x), '');
+    s += `<text class="tl${cur ? ' cur' : ''}" x="${f2(x)}" y="297">${nm(n.d, n.acc)}</text>`;
+  });
+  $('#gstaff').innerHTML = s;
+  $('#namesTgl').classList.toggle('on', cfg.names);
+  $('#namesTgl').textContent = cfg.names ? 'Hide names' : 'Show names';
+  $('#lnote').innerHTML = learnInfo(lnotes[lnotes.length - 1]);
+}
+function learnInfo(n) {
+  if (!n) return `<div class="lbig">Try a key</div><p style="margin-top:8px">Press any key on your piano, or tap a key below or a line on the staff. You'll see where that note is written, its name, and how to find it again.</p>`;
+  const c = n.c || (n.d >= 28 ? 't' : 'b'), lm = lmFor(c, n.d);
+  const alt = n.acc ? spell(n.m, -n.acc) : null;
+  const rows = [];
+  rows.push(['Where', n.d === 28 ? 'On its own ledger line between the staves: just below the treble staff, or just above the bass staff.' : posText(c, n.d).replace(/^./, x => x.toUpperCase()) + ` (${CLEF[c].hand}).`]);
+  if (n.acc) rows.push(['Sign', n.acc > 0 ? '♯ sharp: the black key just right of ' + LET[n.d % 7] : '♭ flat: the black key just left of ' + LET[n.d % 7]]);
+  if (lm) rows.push(['Landmark', `<b>${lm[1]}</b> is ${lm[2]}.`]);
+  else rows.push(['Trick', trickHTML(c, n.d) || lmText(c, n.d)]);
+  if (lm && trickHTML(c, n.d)) rows.push(['Trick', trickHTML(c, n.d)]);
+  rows.push(['Keyboard', keyText(n.d, n.acc)]);
+  return `<div class="lbig">${nm(n.d, n.acc)}<small>${alt ? 'also called ' + nm(alt.d, alt.acc) + '<br>' : ''}${lm ? lm[1] : CLEF[c].name + ' clef'}</small></div><dl>${rows.map(r => `<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('')}</dl>`;
+}
+const TRICKS = [['Treble lines', 'Every Good Boy Does Fine', [30, 32, 34, 36, 38]], ['Treble spaces', 'F A C E spells FACE', [31, 33, 35, 37]], ['Bass lines', 'Good Boys Do Fine Always', [18, 20, 22, 24, 26]], ['Bass spaces', 'All Cows Eat Grass', [19, 21, 23, 25]]];
+const LMS = [[14, 'Low C'], [18, 'Bottom G'], [21, 'Bass C'], [24, 'Bass F'], [28, 'Middle C'], [32, 'Treble G'], [35, 'Treble C'], [38, 'Top F'], [42, 'High C']];
+function playSeq(ds) {
+  const id = ++lseq; lnotes = []; renderLearn();
+  ds.forEach((d, i) => setTimeout(() => { if (id !== lseq) return; const m = natMidi(d); learnAdd(m); tone(m); ensureVisible(m); }, i * 380));
+}
+
+/* ---------- progress ---------- */
+function mastery(s) { if (!s || !s.n) return 'u'; if (s.box >= 4) return 'm'; if (s.box >= 2) return 'g'; if (s.box < 1 && s.ok / s.n < .6) return 'w'; return 'l'; }
+let psel = null;
+function renderProgress() {
+  const draw = (c, el) => {
+    const R = RANGES.far[c], notes = [], hits = [];
+    for (let d = R[0], i = 0; d <= R[1]; d++, i++) {
+      const id = c + d, x = 52 + i * 15;
+      notes.push({ d, x, w: 9, cls: 'm-' + mastery(stats[id]) + (psel === id ? ' m-sel' : '') });
+      hits.push(`<rect x="${x - 7.5}" y="0" width="15" height="150" fill="transparent" data-id="${id}"/>`);
+    }
+    el.innerHTML = single(c, notes, 366) + hits.join('');
+  };
+  draw('t', $('#ptreble')); draw('b', $('#pbass'));
+  const all = Object.entries(stats).filter(([, s]) => s.n);
+  const n = all.reduce((a, [, s]) => a + s.n, 0), ok = all.reduce((a, [, s]) => a + s.ok, 0);
+  const mast = all.filter(([, s]) => s.box >= 4).length;
+  const tv = all.filter(([, s]) => s.t).map(([, s]) => s.t), avg = tv.length ? tv.reduce((a, b) => a + b, 0) / tv.length / 1000 : 0;
+  $('#ptitle').textContent = n ? `${mast} of 42 notes mastered` : 'Your note map';
+  const ds = dayStreak();
+  $('#pnums').innerHTML = [[n, 'cards answered'], [n ? Math.round(ok / n * 100) + '%' : '–', 'right on the first try'], [avg ? avg.toFixed(1) + ' s' : '–', 'average time to answer'], [ds, ds === 1 ? 'day in a row' : 'days in a row'], [days[dayKey()] || 0, 'cards today']].map(([v, l]) => `<div class="pnum"><b>${v}</b><span>${l}</span></div>`).join('');
+  const weak = all.filter(([, s]) => s.ok / s.n < .8 || s.t > 5000).sort((a, b) => (a[1].ok / a[1].n - b[1].ok / b[1].n) || (b[1].t - a[1].t)).slice(0, 8);
+  $('#weakList').innerHTML = weak.length ? weak.map(([id]) => `<span>${nm(+id.slice(1))} <span style="border:0;padding:0;color:var(--mute);font-weight:500">${CLEF[id[0]].name.toLowerCase()}</span></span>`).join('') : `<p style="margin:0;color:var(--mute)">${all.length ? 'Nothing shaky right now. Notes you miss or answer slowly show up here.' : 'Nothing yet. Practice a round and your shaky notes show up here.'}</p>`;
+  $('#drillBtn').hidden = !weak.length;
+  $('#drillBtn').onclick = () => { drill = weak.map(([id]) => id); go('practice'); newRound(); };
+}
+function pDetail(id) {
+  psel = id; renderProgress();
+  const s = stats[id], c = id[0], d = +id.slice(1), lm = lmFor(c, d);
+  $('#pdetail').innerHTML = `<b>${nm(d)}</b>${lm ? ' · ' + lm[1] : ''} in the ${CLEF[c].name.toLowerCase()} clef, ${posText(c, d)}. ` + (s && s.n ? `Seen ${plural(s.n, 'time')}, right first try ${Math.round(s.ok / s.n * 100)}%, ${s.t ? 'about ' + (s.t / 1000).toFixed(1) + ' s to answer, ' : ''}level ${Math.floor(s.box)} of 5.` : 'Not practiced yet.');
+}
+
+/* ---------- summary ---------- */
+function showSummary() {
+  clearTimeout(advT);
+  const pct = round.res ? Math.round(round.clean / round.res * 100) : 0, avg = round.times.length ? round.times.reduce((a, b) => a + b, 0) / round.times.length / 1000 : 0;
+  $('#sTitle').textContent = pct >= 90 ? 'Excellent round' : pct >= 70 ? 'Solid round' : 'Round done';
+  $('#snums').innerHTML = [[pct + '%', 'first try'], [avg ? avg.toFixed(1) + ' s' : '–', 'average time'], [round.best, 'best streak']].map(([v, l]) => `<div><b>${v}</b><span>${l}</span></div>`).join('');
+  const miss = [...round.missed];
+  $('#smiss').innerHTML = miss.length ? `<p style="margin:0 0 8px;color:var(--mute)">Missed or slipped on:</p><div class="wl">${miss.map(id => `<span>${nm(+id.slice(1))} · ${CLEF[id[0]].name.toLowerCase()}</span>`).join('')}</div>` : '<p style="margin:0;color:var(--mute)">No misses at all. Try a wider range in Settings.</p>';
+  $('#sDrill').hidden = !miss.length;
+  $('#sDrill').onclick = () => { drill = miss; closeOv('ovSum'); newRound(); };
+  drill = null;
+  openOv('ovSum');
+}
+
+/* ---------- overlays, settings, routing ---------- */
+const overlayOpen = () => $$('.ov').some(o => !o.hidden);
+function openOv(id) { $('#' + id).hidden = false; }
+function closeOv(id) { $('#' + id).hidden = true; }
+let toastT = 0;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 6500); }
+function renderSettings() {
+  $('#optGroups').innerHTML = OPTS.map(([k, label, ch]) => `<div class="grp"><h4>${label}</h4><div class="chips">${ch.map((c, i) => `<button data-k="${k}" data-i="${i}" class="${cfg[k] === c[0] ? 'on' : ''}">${c[1]}</button>`).join('')}</div></div>`).join('');
+}
+function setCfg(k, v) {
+  cfg[k] = v; save(); renderSettings();
+  if (['mode', 'clefs', 'range', 'focus', 'acc', 'round'].includes(k)) { drill = null; if (view === 'practice') { kbRange = poolRange(); buildKB(); } newRound(); }
+  else if (k === 'labels') buildKB();
+  else if (card) renderSide();
+}
+function go(v) { if (location.hash !== '#' + v) location.hash = v; else setView(v); }
+function setView(v) {
+  if (!['practice', 'learn', 'progress'].includes(v)) v = 'practice';
+  view = v; $('main').scrollTop = 0;
+  $$('.view').forEach(s => s.classList.toggle('on', s.id === 'v-' + v));
+  $$('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  $('#kbband').hidden = v === 'progress';
+  if (v === 'progress') { renderProgress(); return; }
+  kbRange = v === 'learn' ? [21, 108] : poolRange();
+  if (v === 'learn') renderLearn();
+  else if (pendingNext) { pendingNext = false; if (card && card.done) next(); }
+  requestAnimationFrame(() => { buildKB(); if (v === 'learn') centerKB(); else if (card && cfg.mode === 'place') ensureVisible(card.midi); else centerKB(card && card.clef); });
+}
+
+/* ---------- events ---------- */
+$('#letters').innerHTML = LET.map((l, i) => `<button data-l="${i}" aria-label="${l}">${l}</button>`).join('');
+$('#letters').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; answerLetter(+b.dataset.l, cfg.acc ? accMod : 0); accMod = 0; if (card) renderSide(); });
+$('#accs').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const a = +b.dataset.a; accMod = accMod === a ? 0 : a; renderSide(); });
+$('#modeSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b && b.dataset.mode !== cfg.mode) setCfg('mode', b.dataset.mode); });
+$('#hintBtn').onclick = hint;
+$('#revealBtn').onclick = reveal;
+$('#nextBtn').onclick = next;
+$('#checkBtn').onclick = checkPlace;
+function nudge(dir) { if (!card || card.done || cfg.mode !== 'place') return; const c = CLEF[card.clef]; const cur = card.pend == null ? c.bottom + 4 : card.pend + dir; card.pend = Math.max(c.bottom - 6, Math.min(c.bottom + 14, cur)); card.pendBad = false; renderCard(); renderSide(); }
+$('#upBtn').onclick = () => nudge(1);
+$('#downBtn').onclick = () => nudge(-1);
+$('#hearBtn').onclick = () => { const s = cfg.sound; cfg.sound = true; tone(card.midi); cfg.sound = s; };
+$('#sumChip').onclick = () => { openOv('ovSet'); $('#optGroups').scrollIntoView({ block: 'start' }); };
+$('#gear').onclick = () => openOv('ovSet');
+$('#inChip').onclick = () => { openOv('ovSet'); $('#inputGrp').scrollIntoView({ block: 'start' }); };
+$('#setClose').onclick = () => closeOv('ovSet');
+$$('.ov').forEach(o => o.addEventListener('click', e => { if (e.target === o && o.id !== 'ovStart') closeOv(o.id); }));
+$('#optGroups').addEventListener('click', e => { const b = e.target.closest('button[data-k]'); if (!b) return; const k = b.dataset.k, v = OPTS.find(o => o[0] === k)[2][+b.dataset.i][0]; setCfg(k, v); });
+$('#midiBtn').onclick = () => { getAC(); if (midiS.on && midiS.acc) { bindMidi(); if (!midiS.names.length) toast('Still no piano found. Check the cable and that the piano is on.'); } else startMidi(false); };
+$('#micBtn').onclick = () => { getAC(); mic.on ? stopMic() : startMic(false); };
+$('#sens').oninput = e => { cfg.sens = +e.target.value; if (listener) listener.sens = cfg.sens; save(); };
+$$('.pick').forEach(b => b.onclick = () => { const k = b.dataset.in; getAC(); closeOv('ovStart'); cfg.input = 'tap'; save(); if (k === 'midi') startMidi(false); else if (k === 'mic') startMic(false); renderSide(); });
+$('#sAgain').onclick = () => { closeOv('ovSum'); newRound(); };
+$('#tabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) go(b.dataset.v); });
+window.addEventListener('hashchange', () => setView(location.hash.slice(1)));
+$('#kb').addEventListener('click', e => { const g = e.target.closest('g[data-m]'); if (!g) return; const m = +g.dataset.m; tone(m); onKey(m, 'tap'); });
+document.addEventListener('pointerdown', () => { if (ac && ac.state !== 'running' && ac.state !== 'closed') ac.resume().then(renderInput, () => {}); keepAwake(); }, true);
+// coming back to the app: wake the audio, and restart the mic if the system stopped it
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  if (ac && ac.state !== 'running' && ac.state !== 'closed') ac.resume().then(renderInput, () => {});
+  setTimeout(() => { const t = micStream && micStream.getAudioTracks()[0]; if (mic.on && (!t || t.readyState === 'ended' || t.muted)) { stopMic(true); startMic(true); } }, 800);
+});
+// place mode on the staff
+let drag = false;
+const stEl = $('#staff');
+function placeAt(e) { const c = CLEF[card.clef], y = svgY(stEl, e); return Math.max(c.bottom - 6, Math.min(c.bottom + 14, c.bottom + Math.round((YB - y) / 5))); }
+stEl.addEventListener('pointerdown', e => { if (!card || cfg.mode !== 'place' || card.done || view !== 'practice') return; drag = true; try { stEl.setPointerCapture(e.pointerId); } catch (x) {} const d = placeAt(e); if (d !== card.pend) { card.pend = d; card.pendBad = false; card.ghost = null; renderCard(); renderSide(); } e.preventDefault(); });
+stEl.addEventListener('pointermove', e => { if (!card || cfg.mode !== 'place' || card.done) return; const d = placeAt(e); if (drag) { if (d !== card.pend) { card.pend = d; card.pendBad = false; renderCard(); } } else if (e.pointerType === 'mouse' && card.pend == null && d !== card.hover) { card.hover = d; renderCard(); } });
+stEl.addEventListener('pointerup', () => { drag = false; });
+stEl.addEventListener('pointerleave', () => { if (card && card.hover != null) { card.hover = null; renderCard(); } });
+$('#gstaff').addEventListener('click', e => { const y = svgY($('#gstaff'), e), t = y <= (GTB + yB(26)) / 2; const d = Math.max(10, Math.min(46, t ? 30 + Math.round((GTB - y) / 5) : 18 + Math.round((GBB - y) / 5))), m = natMidi(d); lseq++; tone(m); learnAdd(m, { d, acc: 0 }, t ? 't' : 'b'); ensureVisible(m); });
+$('#namesTgl').onclick = () => { cfg.names = !cfg.names; save(); renderLearn(); };
+$('#clearBtn').onclick = () => { lseq++; lnotes = []; renderLearn(); };
+$('#tricks').innerHTML = TRICKS.map((t, i) => `<button class="trick" data-i="${i}"><b>${t[0]}</b><span>${t[1]}</span></button>`).join('');
+$('#tricks').addEventListener('click', e => { const b = e.target.closest('button'); if (b) playSeq(TRICKS[+b.dataset.i][2]); });
+$('#lms').innerHTML = LMS.map(([d, l]) => `<button data-d="${d}">${l}<i>${nm(d)}</i></button>`).join('');
+$('#lms').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const d = +b.dataset.d, m = natMidi(d); lseq++; learnAdd(m); tone(m); ensureVisible(m); });
+[$('#ptreble'), $('#pbass')].forEach(el => el.addEventListener('click', e => { const r = e.target.closest('[data-id]'); if (r) pDetail(r.dataset.id); }));
+$('#resetBtn').onclick = () => { $('#resetAsk').hidden = false; $('#resetBtn').hidden = true; };
+$('#resetNo').onclick = () => { $('#resetAsk').hidden = true; $('#resetBtn').hidden = false; };
+$('#resetYes').onclick = () => { stats = {}; days = {}; save(); psel = null; $('#pdetail').textContent = 'Progress cleared.'; $('#resetAsk').hidden = true; $('#resetBtn').hidden = false; renderProgress(); };
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === 'Escape') { if (!$('#ovSet').hidden) closeOv('ovSet'); return; }
+  if (overlayOpen() || view !== 'practice' || !card) return;
+  const k = e.key.toLowerCase();
+  if (k === 'h') { hint(); e.preventDefault(); }
+  else if (e.key === 'Enter' || e.key === ' ') { if (e.target.tagName === 'BUTTON' && !e.target.closest('#letters')) return; e.preventDefault(); if (card.done || card.revealed) next(); else if (cfg.mode === 'place') checkPlace(); }
+  else if (cfg.mode === 'name' && 'cdefgab'.includes(k) && k.length === 1) { answerLetter(LET.indexOf(k.toUpperCase()), cfg.acc ? accMod : 0); accMod = 0; renderSide(); }
+  else if (cfg.mode === 'name' && cfg.acc && (e.key === '#' || e.key === '=')) { accMod = accMod === 1 ? 0 : 1; renderSide(); }
+  else if (cfg.mode === 'name' && cfg.acc && e.key === '-') { accMod = accMod === -1 ? 0 : -1; renderSide(); }
+  else if (cfg.mode === 'place' && !card.done && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) { e.preventDefault(); nudge(e.key === 'ArrowUp' ? 1 : -1); }
+});
+const kbObs = new ResizeObserver(() => { const w = $('#kbs').clientWidth + 'x' + $('#kbs').clientHeight; if (w !== kbObs.last) { kbObs.last = w; buildKB(); } });
+kbObs.observe($('#kbs'));
+
+/* ---------- boot ---------- */
+renderSettings();
+newRound();
+setView(location.hash.slice(1) || 'practice');
+renderInput();
+if (!hasMidi) {
+  $('.pick[data-in=midi]').hidden = true;
+  const mp = $('.pick[data-in=mic]');
+  mp.querySelector('b').textContent = 'My piano';
+  mp.querySelector('span').textContent = 'I\'ll listen through the microphone. Works with acoustic and digital pianos. Play one note at a time, pedal up.';
+}
+if (!cfg.input) openOv('ovStart');
+else if (cfg.input === 'midi') startMidi(true);
+else if (cfg.input === 'mic') startMic(true);
+window.__dojo = { mic: () => ({ on: mic.on, err: mic.err, ctx: ac && ac.state }), force: f => { forced = { acc: 0, ...f }; newCard(); }, onKey, get card() { return card; }, get cfg() { return cfg; }, answerLetter, setCfg, next, reveal, hint, checkPlace, stats: () => stats, spell, natMidi, nm };
+}
+</script>
+</body>
+</html>
