@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-hWd6wW3GvaJbKc6ab8qU/cCZRqT0JA8CKQTcxPZ1RIk='; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-VKnP0n/AKA/MbPx6FQM+W+67qcbNDgldeS/CBSh1Nfg='; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Note Dojo</title>
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
@@ -17,10 +17,8 @@
    COLOUR paper white, ebony ink, felt red, highlighter yellow for hints, green right, vermilion wrong
    TYPE the device's own serif (New York on Apple) for note names and titles, its system sans for the interface
    LAYOUT laptop: card left, answers right, keyboard band full width at the bottom; phone: prompt, card, answers, keyboard */
-:root{--serif:ui-serif,"New York","Iowan Old Style",Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color-scheme:light dark;--bg:light-dark(#ffffff,#111113);--ink:light-dark(#141416,#efebe3);--mute:light-dark(#5c5e65,#a6a49e);--rule:light-dark(#e3e1dc,#2c2c31);--panel:light-dark(#f5f4f1,#1b1b1f);--paper:light-dark(#ffffff,#17171a);--felt:#a3162b;--hl:#ffd23f;--ok:light-dark(#0d8749,#45d38c);--bad:light-dark(#d2361b,#ff6f55);--blue:light-dark(#1d58d8,#7aa5ff);--amber:light-dark(#c78800,#f0bd3c);--ivory:#fbf8f1;--ebony:#161619}
-@supports not (color:light-dark(#000,#fff)){:root{--bg:#fff;--ink:#141416;--mute:#5c5e65;--rule:#e3e1dc;--panel:#f5f4f1;--paper:#fff;--ok:#0d8749;--bad:#d2361b;--blue:#1d58d8;--amber:#c78800}}
-:root[data-theme=light]{color-scheme:light}
-:root[data-theme=dark]{color-scheme:dark}
+:root{--serif:ui-serif,"New York","Iowan Old Style",Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color-scheme:light dark;--bg:light-dark(#ffffff,#111113);--ink:light-dark(#141416,#efebe3);--mute:light-dark(#5c5e65,#a6a49e);--rule:light-dark(#e3e1dc,#2c2c31);--panel:light-dark(#f5f4f1,#1b1b1f);--paper:light-dark(#ffffff,#17171a);--felt:#a3162b;--hl:#ffd23f;--ok:light-dark(#0d8749,#45d38c);--bad:light-dark(#d2361b,#ff6f55);--blue:light-dark(#1d58d8,#7aa5ff);--amber:light-dark(#c78800,#f0bd3c);--ivory:#fbf8f1;--ebony:#161619;--elev:light-dark(#ffffff,#1d1d22);--edge:light-dark(transparent,#34343b)}
+@supports not (color:light-dark(#000,#fff)){:root{--elev:#fff;--edge:transparent;--bg:#fff;--ink:#141416;--mute:#5c5e65;--rule:#e3e1dc;--panel:#f5f4f1;--paper:#fff;--ok:#0d8749;--bad:#d2361b;--blue:#1d58d8;--amber:#c78800}}
 *{box-sizing:border-box;min-width:0}
 [hidden]{display:none!important}
 html,body{height:100%}
@@ -45,7 +43,7 @@ h1,h2,h3,h4{margin:0}
 .lvl{width:30px;height:6px;border-radius:3px;background:var(--rule);overflow:hidden;flex:none}
 .lvl i{display:block;height:100%;width:0;background:var(--ok);transition:width .06s linear}
 .icon{border:1px solid var(--rule);background:var(--bg);border-radius:50%;width:38px;height:38px;display:grid;place-items:center;flex:none;padding:0}
-.icon svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8}
+.icon svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round}
 main{flex:1;overflow:auto;overscroll-behavior:contain}
 .view{display:none}
 .view.on{display:block}
@@ -73,7 +71,7 @@ main{flex:1;overflow:auto;overscroll-behavior:contain}
 .staff .nlab{font:700 9px var(--sans);fill:currentColor;text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:3px}
 .staff .tl{font:600 9px var(--sans);fill:var(--mute);text-anchor:middle}
 .staff .tl.cur{fill:var(--ink)}
-.staff .lad{font:500 7px var(--sans);fill:var(--mute);text-anchor:middle}
+.staff .lad{font:500 8.5px var(--sans);fill:var(--mute);text-anchor:middle}
 .staff .lad.ln{font-weight:700;fill:var(--ink)}
 .n-ok{color:var(--ok)}
 .n-bad{color:var(--bad)}
@@ -141,7 +139,7 @@ g.ok .kb{fill:#0d8749}
 g.bad .kw{fill:#ffb3a3}
 g.bad .kb{fill:#c4321a}
 g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alternate}
-@keyframes glow{to{opacity:.6}}
+@keyframes glow{to{fill:#ffe892}}
 .learn{display:grid;gap:18px 30px;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:start}
 #gstaff{max-height:min(58vh,540px);cursor:pointer}
 .mini{border:1px solid var(--rule);background:var(--bg);border-radius:9px;min-height:40px;padding:0 10px;font-size:13px;font-weight:600}
@@ -155,7 +153,7 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
 .lnote p{margin:0;color:var(--mute)}
 .side h2{font-size:16px;margin:20px 0 8px}
 .tricks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.trick{text-align:left;border:1px solid var(--rule);background:var(--bg);border-radius:12px;padding:10px 12px;min-height:44px}
+.trick{text-align:left;border:1px solid var(--rule);background:var(--bg);border-radius:12px;padding:10px 12px;min-height:44px;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch}
 .trick b{display:block;font-size:14px}
 .trick span{font-size:14px;color:var(--mute);line-height:1.35;display:block}
 .lms{display:flex;flex-wrap:wrap;gap:6px}
@@ -181,9 +179,11 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
 .wl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .wl span{border:1px solid var(--rule);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
 .ov{position:fixed;inset:0;z-index:30;background:rgb(10 10 12/.48);display:flex;align-items:center;justify-content:center;padding:16px}
-.modal{background:var(--bg);color:var(--ink);border-radius:20px;max-width:520px;width:100%;max-height:calc(100% - 8px);overflow:auto;padding:22px 22px 24px;box-shadow:0 20px 60px -20px rgb(0 0 0/.5)}
+.modal{background:var(--elev);border:1px solid var(--edge);color:var(--ink);border-radius:20px;max-width:520px;width:100%;max-height:calc(100% - 8px);overflow:auto;padding:22px 22px 24px;box-shadow:0 20px 60px -20px rgb(0 0 0/.5)}
 .modal h2{font:700 30px/1.08 var(--serif);letter-spacing:-.02em}
 .modal .lead{color:var(--mute);margin:8px 0 4px}
+.modal .btn:not(.primary),.modal .seg2 button:not(.on),.modal .pick{background:transparent}
+.modal .fnote{background:color-mix(in srgb,var(--ink) 6%,transparent)}
 .ov.side{justify-content:flex-end;align-items:stretch;padding:0}
 .ov.side .modal{max-width:430px;border-radius:0;max-height:none;height:100%}
 .mhead{display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -240,7 +240,7 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
   </nav>
   <div class="spacer"></div>
   <button class="chip" id="inChip" aria-label="Input"><i class="dot" id="inDot"></i><span id="inTxt">Tap mode</span><i class="lvl" id="lvl" hidden><i id="lvlBar"></i></i></button>
-  <button class="icon" id="gear" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg></button>
+  <button class="icon" id="gear" aria-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.38 4.98L10.65 2.39 L13.35 2.39 L13.62 4.98A7.2 7.2 0 0 1 15.82 5.89L17.84 4.25 L19.75 6.16 L18.11 8.18A7.2 7.2 0 0 1 19.02 10.38L21.61 10.65 L21.61 13.35 L19.02 13.62A7.2 7.2 0 0 1 18.11 15.82L19.75 17.84 L17.84 19.75 L15.82 18.11A7.2 7.2 0 0 1 13.62 19.02L13.35 21.61 L10.65 21.61 L10.38 19.02A7.2 7.2 0 0 1 8.18 18.11L6.16 19.75 L4.25 17.84 L5.89 15.82A7.2 7.2 0 0 1 4.98 13.62L2.39 13.35 L2.39 10.65 L4.98 10.38A7.2 7.2 0 0 1 5.89 8.18L4.25 6.16 L6.16 4.25 L8.18 5.89A7.2 7.2 0 0 1 10.38 4.98Z"/><circle cx="12" cy="12" r="3"/></svg></button>
 </header>
 
 <main id="main">
@@ -354,6 +354,7 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
     <div class="snums" id="snums"></div>
     <div id="smiss"></div>
     <div class="acts"><button class="btn" id="sDrill">Drill the missed ones</button><button class="btn primary" id="sAgain">Next round</button></div>
+    <p class="lead" id="sPiano" hidden style="font-size:14px;margin:12px 0 0">Or play any note on your piano to keep going.</p>
   </div>
 </div>
 
@@ -687,7 +688,7 @@ function newCard() {
   $$('#letters button').forEach(b => b.className = '');
   if (!cont) setFb('', '');
   renderAll();
-  if (!cont && narrow() && view === 'practice' && $('#main').scrollTop > 0) $('#main').scrollTo({ top: 0, behavior: smooth() });
+  if (!cont && howScroll !== null) { if (view === 'practice') $('#main').scrollTo({ top: howScroll, behavior: smooth() }); howScroll = null; }
   if (view === 'practice') { if (cfg.mode === 'place') ensureVisible(card.midi); else if (!cont) centerKB(card.clef); }
 }
 function finish() { if (!card.counted) { card.counted = true; round.n++; } }
@@ -744,7 +745,9 @@ function reveal() {
     marks[card.midi] = 'hint'; ensureVisible(card.midi);
     setFb('info', `It's ${nm(card.d, card.acc)}${lm ? ' (' + lm[1] + ')' : ''}. ${cfg.mode === 'name' ? 'Tap ' + LET[card.d % 7] + accSym(card.acc) : 'Play the glowing key'} to lock it in.`);
   }
+  const fo = document.activeElement === $('#revealBtn');
   renderAll(); showHow();
+  if (fo) { const b = $('#nextBtn').hidden ? $('#hearBtn') : $('#nextBtn'); try { b.focus({ preventScroll: true }); } catch (e) {} }
 }
 function hint() {
   if (!card || card.done || card.hint >= 3) return;
@@ -756,12 +759,15 @@ function hint() {
 // but never so far that its top leaves the screen. Only the practice area scrolls, never the page.
 function narrow() { return innerWidth <= 860 || innerHeight <= 500; }
 function smooth() { return matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'; }
+let howScroll = null; // where the practice area was before a hint scrolled it
 function showHow() {
   if (!narrow() || view !== 'practice') return;
   requestAnimationFrame(() => {
     const mn = $('#main'), r = $('#how').getBoundingClientRect(), mr = mn.getBoundingClientRect();
-    const by = Math.min(r.bottom - mr.bottom + 12, r.top - mr.top - 8);
-    if (by > 4) mn.scrollBy({ top: by, behavior: smooth() });
+    // never push the staff off the top; with the phone sideways the card stays pinned, so keep the buttons in view instead
+    const keep = getComputedStyle($('.cardwrap')).position === 'sticky' ? $('.answer .acts') : $('#staff');
+    const by = Math.min(r.bottom - mr.bottom + 12, r.top - mr.top - 8, keep.getBoundingClientRect().top - mr.top - 4);
+    if (by > 4) { if (howScroll === null) howScroll = mn.scrollTop; mn.scrollBy({ top: by, behavior: smooth() }); }
   });
 }
 
@@ -861,9 +867,8 @@ function renderSide() {
   $$('#accs button').forEach(b => b.classList.toggle('on', +b.dataset.a === accMod));
   const fin = card.done || card.revealed;
   $('#hintBtn').textContent = card.hint ? `Hint ${card.hint}/3` : 'Hint';
-  $('#hintBtn').disabled = card.done || card.hint >= 3;
-  $('#revealBtn').disabled = fin;
-  $('#revealBtn').hidden = card.done;
+  $('#hintBtn').disabled = card.hint >= 3;
+  $('#hintBtn').hidden = $('#revealBtn').hidden = fin;
   $('#hearBtn').hidden = !fin;
   $('#checkBtn').hidden = !place || card.done;
   $('#upBtn').hidden = $('#downBtn').hidden = !place || card.done;
@@ -919,16 +924,23 @@ function buildKB() {
   applyKeys();
 }
 function keyX(m) { if (!kbLay) return null; const w = isWhite(m) ? m : m - 1; const x = kbLay.wx[w]; return x == null ? null : x + (isWhite(m) ? kbLay.kw / 2 : kbLay.kw); }
+let kbGoal = null, kbGoalT = 0;
+function kbTo(left, anim) {
+  const box = $('#kbs'); left = Math.max(0, Math.min(Math.round(left), box.scrollWidth - box.clientWidth));
+  kbGoal = left; clearTimeout(kbGoalT); kbGoalT = setTimeout(() => { kbGoal = null; }, 900);
+  box.scrollTo({ left, behavior: anim ? smooth() : 'auto' });
+}
+const kbLeft = () => kbGoal !== null ? kbGoal : $('#kbs').scrollLeft;
 function ensureVisible(m) {
-  const x = keyX(m), box = $('#kbs'); if (x == null) return;
-  if (x < box.scrollLeft + 30 || x > box.scrollLeft + box.clientWidth - 30) box.scrollTo({ left: x - box.clientWidth / 2, behavior: 'smooth' });
+  const x = keyX(m), box = $('#kbs'), sl = kbLeft(); if (x == null) return;
+  if (x < sl + 30 || x > sl + box.clientWidth - 30) kbTo(x - box.clientWidth / 2, true);
 }
 function centerKB(c) {
   const box = $('#kbs'); let t = 60;
   if (view === 'practice') { const ms = poolList().filter(p => !c || p.clef === c).map(p => natMidi(p.d)); if (ms.length) t = Math.round((Math.min(...ms) + Math.max(...ms)) / 2); }
   const x = keyX(t); if (x == null) return;
   const left = Math.max(0, x - box.clientWidth / 2);
-  if (Math.abs(box.scrollLeft - left) > 4) box.scrollTo({ left, behavior: c ? 'smooth' : 'auto' });
+  if (Math.abs(kbLeft() - left) > 4) kbTo(left, !!c);
 }
 function applyKeys() { const mk = view === 'practice' ? marks : {}; for (const g of $$('#kb g[data-m]')) { const m = +g.dataset.m; g.setAttribute('class', (mk[m] || '') + (pressed.has(m) ? ' on' : '')); } }
 function flashMark(m, cls) { marks[m] = cls; applyKeys(); setTimeout(() => { if (marks[m] === cls) { delete marks[m]; applyKeys(); } }, 800); }
@@ -1089,6 +1101,8 @@ function renderInput() {
 }
 function onKey(m, src) {
   bump();
+  // round summary open: a note played on the piano starts the next round (after a moment, so the last note's ring can't skip it)
+  if (!$('#ovSum').hidden) { if (src !== 'tap' && performance.now() - sumAt > 2500) { closeOv('ovSum'); newRound(); } return; }
   if (src === 'mic' && view === 'practice' && (m < kbRange[0] - 12 || m > kbRange[1] + 12)) return;
   if (src !== 'midi') flashPress(m);
   if (view === 'learn') { learnAdd(m); ensureVisible(m); return; }
@@ -1178,13 +1192,24 @@ function showSummary() {
   $('#sDrill').hidden = !miss.length;
   $('#sDrill').onclick = () => { drill = miss; closeOv('ovSum'); newRound(); };
   drill = null;
-  openOv('ovSum');
+  $('#sPiano').hidden = !hasPiano();
+  openOv('ovSum'); sumAt = performance.now();
+  try { $('#sAgain').focus({ preventScroll: true }); } catch (e) {}
 }
+let sumAt = 0;
 
 /* ---------- overlays, settings, routing ---------- */
 const overlayOpen = () => $$('.ov').some(o => !o.hidden);
-function openOv(id) { $('#' + id).hidden = false; }
-function closeOv(id) { $('#' + id).hidden = true; }
+const ovFrom = {};
+let kbUser = false; // last input came from the keyboard: then (and only then) hand focus back after a dialog
+document.addEventListener('keydown', () => { kbUser = true; }, true);
+document.addEventListener('pointerdown', () => { kbUser = false; }, true);
+function openOv(id) { if ($('#' + id).hidden) ovFrom[id] = document.activeElement; $('#' + id).hidden = false; }
+function closeOv(id) {
+  $('#' + id).hidden = true;
+  const el = ovFrom[id]; ovFrom[id] = null;
+  if (kbUser && el && el !== document.body && el.isConnected && !el.closest('[hidden]')) try { el.focus({ preventScroll: true }); } catch (e) {}
+}
 let toastT = 0;
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 6500); }
 function renderSettings() {
@@ -1209,7 +1234,7 @@ function setCfg(k, v) {
 function go(v) { if (location.hash !== '#' + v) location.hash = v; else setView(v); }
 function setView(v) {
   if (!['practice', 'learn', 'progress'].includes(v)) v = 'practice';
-  view = v; $('main').scrollTop = 0;
+  view = v; $('main').scrollTop = 0; howScroll = null;
   $$('.view').forEach(s => s.classList.toggle('on', s.id === 'v-' + v));
   $$('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
   $('#kbband').hidden = v === 'progress';
@@ -1260,6 +1285,7 @@ document.addEventListener('click', wakeAudio, true);
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState !== 'visible') { if (!mic.on) napAudio(0); return; }
   if (mic.on) wakeAudio();
+  if (mic.on || midiS.on) keepAwake();
   setTimeout(() => { const t = micStream && micStream.getAudioTracks()[0]; if (mic.on && (!t || t.readyState === 'ended' || t.muted)) { stopMic(true); startMic(true); } }, 800);
 });
 // place mode on the staff
@@ -1294,7 +1320,12 @@ document.addEventListener('keydown', e => {
   else if (cfg.mode === 'name' && cfg.acc && e.key === '-') { accMod = accMod === -1 ? 0 : -1; renderSide(); }
   else if (cfg.mode === 'place' && !card.done && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) { e.preventDefault(); nudge(e.key === 'ArrowUp' ? 1 : -1); }
 });
-const kbObs = new ResizeObserver(() => { const w = $('#kbs').clientWidth + 'x' + $('#kbs').clientHeight; if (w !== kbObs.last) { kbObs.last = w; buildKB(); } });
+// keyboard resized (e.g. the phone turned): rebuild it and bring the right notes back into view
+const kbObs = new ResizeObserver(() => {
+  const w = $('#kbs').clientWidth + 'x' + $('#kbs').clientHeight; if (w === kbObs.last) return;
+  const first = !kbObs.last; kbObs.last = w; buildKB(); if (first) return;
+  if (view === 'learn') centerKB(); else if (view === 'practice' && card) { if (cfg.mode === 'place' || card.hint >= 3) ensureVisible(card.midi); else centerKB(card.clef); }
+});
 kbObs.observe($('#kbs'));
 
 /* ---------- boot ---------- */
