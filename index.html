@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-lwGzAt42gYWjzJKmGsoHdAIjzUDsPEW7Jw1G/vf7m0A='; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-/zNpTrWE5ZnTjBvht5gBAWNXqSUrRWnl/CeO4DZA7sc='; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Note Dojo</title>
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
@@ -129,6 +129,15 @@ kbd{font:600 12px var(--sans);border:1px solid var(--rule);border-bottom-width:2
 .kl{font:600 11px var(--sans);fill:#77705f;text-anchor:middle;pointer-events:none}
 .kl.c{fill:#2a2824}
 .kmc{fill:var(--felt);pointer-events:none}
+.staff .fing{font:700 10.5px var(--sans);fill:currentColor;opacity:.8;text-anchor:middle}
+#kbFing{pointer-events:none}
+.kf circle{fill:#2a2824}
+.kf text{font:700 11px var(--sans);fill:#fff;text-anchor:middle}
+.kf.blk circle{fill:#f4efe4}
+.kf.blk text{fill:#161619}
+.kf.cur circle{fill:#2b58c8}
+.kf.cur text{fill:#fff}
+g.hasf .kmc,#kb.short g.hasf .kl{display:none}
 g[data-m]{cursor:pointer}
 g.on .kw{fill:#c6d8ff}
 g.on .kb{fill:#2b58c8}
@@ -539,11 +548,12 @@ const OPTS = [
   ['round', 'Cards per round', [[10, '10'], [20, '20'], [30, '30'], [0, 'Endless']]],
   ['auto', 'After a right answer', [[true, 'Go straight on'], [false, 'Wait for me']]],
   ['labels', 'Key labels', [['none', 'None'], ['c', 'C keys'], ['all', 'All white']]],
-  ['sound', 'Sound when tapping', [[true, 'On'], [false, 'Off']]]
+  ['sound', 'Sound when tapping', [[true, 'On'], [false, 'Off']]],
+  ['fing', 'Finger numbers', [['off', 'Off'], ['start', 'First note', '+ hand moves'], ['all', 'Every note']]]
 ];
-const SECTIONS = [['Practice', ['mode', 'clefs', 'range', 'focus', 'acc', 'round', 'auto']], ['Display and sound', ['labels', 'sound']]];
+const SECTIONS = [['Practice', ['mode', 'clefs', 'range', 'focus', 'acc', 'round', 'auto']], ['Display and sound', ['fing', 'labels', 'sound']]];
 const LABEL = { t: 'Treble', b: 'Bass', both: 'Treble + bass', landmarks: 'landmarks', staff: 'on the staff', near: '+ 1 ledger', far: '+ 3 ledgers' };
-const DEF = { mode: 'play', clefs: 'both', range: 'staff', focus: 'all', acc: false, round: 20, auto: true, labels: 'c', sound: true, vol: 75, input: null, sens: 1.2, names: false };
+const DEF = { mode: 'play', clefs: 'both', range: 'staff', focus: 'all', acc: false, round: 20, auto: true, labels: 'c', sound: true, fing: 'start', vol: 75, input: null, sens: 1.2, names: false };
 const LS = 'noteDojo.v1';
 let cfg = { ...DEF }, stats = {}, days = {};
 try { const j = JSON.parse(localStorage.getItem(LS) || 'null'); if (j) { cfg = { ...DEF, ...(j.cfg || {}) }; stats = j.stats || {}; days = j.days || {}; } } catch (e) {}
@@ -842,7 +852,7 @@ function checkPlace() {
 }
 
 /* ---------- render practice ---------- */
-function renderAll() { renderCard(); renderSide(); applyKeys(); }
+function renderAll() { renderCard(); renderSide(); kbFingers(); }
 function renderCard() {
   if (!card) return;
   const items = [], NX = 140, place = cfg.mode === 'place', vb = cardVB();
@@ -862,9 +872,15 @@ function renderCard() {
   const b = CLEF[card.clef].bottom;
   if (card.ghost && !card.done) items.push({ d: card.ghost.d, acc: cfg.mode === 'line' ? 0 : card.ghost.acc, x: gx, cls: 'n-bad', label: cfg.mode === 'line' ? '' : card.ghost.label, g: 1 });
   card.fresh = false;
+  let fs = '';
+  if (cfg.fing !== 'off') {
+    const t = card.clef === 't', put = (x, d, f) => { const y = YB - (d - b) * 5; fs += `<text class="fing" x="${x}" y="${t ? Math.min(y - 9, YB - 47) : Math.max(y + 15, YB + 14)}">${f}</text>`; };
+    if (cfg.mode === 'line' && line) { const lf = lineFingers(line.clef, line.notes.map(n => n.d)); line.notes.forEach((n, i) => { if (cfg.fing === 'all' || !i || lf[i].move) put(72 + i * 40, n.d, lf[i].f); }); }
+    else if (!place || card.done) put(NX, card.d, fingerOf(card.clef, card.d, homePos(card.clef, card.d)));
+  }
   const st = $('#staff');
   st.setAttribute('viewBox', `0 ${vb[0]} ${CW} ${vb[1] - vb[0]}`);
-  st.innerHTML = band + single(card.clef, items.filter(n => { const yy = YB - (n.d - b) * 5; return n.g ? yy > vb[0] + 7 && yy < vb[1] - 7 : true; }));
+  st.innerHTML = band + single(card.clef, items.filter(n => { const yy = YB - (n.d - b) * 5; return n.g ? yy > vb[0] + 7 && yy < vb[1] - 7 : true; })) + fs;
   st.classList.toggle('placing', place && !card.done);
   $('#clefTag').innerHTML = `<b>${CLEF[card.clef].name} clef</b> · ${CLEF[card.clef].hand}`;
   $('#cnt').textContent = cfg.round ? `${Math.min(cfg.round, round.n + (card.counted ? 0 : 1))} / ${cfg.round}` : `Card ${round.n + (card.counted ? 0 : 1)}`;
@@ -901,6 +917,62 @@ function renderSide() {
   $('#stats').innerHTML = `<span>Streak <b>${streak}</b></span><span>First try <b>${round.res ? Math.round(round.clean / round.res * 100) + '%' : '–'}</b></span><span>Avg <b>${avg ? avg.toFixed(1) + ' s' : '–'}</b></span><span>Best streak <b>${round.best}</b></span>`;
   $('#keysHelp').innerHTML = `<kbd>H</kbd> hint · <kbd>Enter</kbd> next${m === 'name' ? ' · <kbd>A</kbd>–<kbd>G</kbd> answer' : ''}${place ? ' · <kbd>↑</kbd><kbd>↓</kbd> move' : ''}`;
 }
+/* ---------- finger numbers ----------
+   A five-finger hand position covers 5 white keys from P. Right hand: thumb (1) on the lowest key;
+   left hand: pinky (5) on the lowest key. A single note gets the C or G position (the first ones beginner
+   books teach) nearest the hand's home: right thumb on middle C, left pinky on the C below it.
+   A sight-read line keeps one position while the notes fit and moves the hand only when it has to. */
+const HOME = { t: 28, b: 21 }, FNAME = ['', 'thumb', 'pointer finger', 'middle finger', 'ring finger', 'pinky'];
+const fingerOf = (c, d, P) => c === 't' ? d - P + 1 : P + 5 - d;
+function homePos(c, d) {
+  let best = null;
+  for (let P = d - 4; P <= d; P++) if (P % 7 === 0 || P % 7 === 4) { const k = Math.abs(P - HOME[c]); if (!best || k < best.k) best = { P, k }; }
+  return best.P;
+}
+function lineFingers(c, ds) {
+  let P = null;
+  return ds.map((d, i) => {
+    let move = false;
+    if (P === null || d < P || d > P + 4) {
+      let best = null;
+      for (let q = d - 4; q <= d; q++) {
+        let run = 0; while (i + run < ds.length && ds[i + run] >= q && ds[i + run] <= q + 4) run++;
+        const sc = run * 1000 + (q % 7 === 0 || q % 7 === 4 ? 100 : 0) - Math.abs(q - (P === null ? homePos(c, d) : P));
+        if (!best || sc > best.sc) best = { q, sc };
+      }
+      move = P !== null; P = best.q;
+    }
+    return { f: fingerOf(c, d, P), P, move };
+  });
+}
+function cardPos() { return cfg.mode === 'line' && line ? lineFingers(line.clef, line.notes.map(n => n.d))[line.idx].P : homePos(card.clef, card.d); }
+function fingText(c, d, P) {
+  const f = fingerOf(c, d, P);
+  return `<b>${f}</b> (${FNAME[f]}, ${c === 't' ? 'right' : 'left'} hand). Hand over ${nm(P)}–${nm(P + 4)}${d !== P ? `, ${c === 't' ? 'thumb' : 'pinky'} on ${nm(P)}` : ''}.`;
+}
+// after an answer (or in Learn): the whole hand position on the keyboard, numbered
+let fingKeys = new Set();
+function kbFingers() {
+  const g = $('#kbFing'); let c = null, d = 0, acc = 0, P = 0, s = '';
+  if (cfg.fing !== 'off') {
+    if (view === 'practice' && card && (card.done || card.revealed || card.hint >= 3)) { c = card.clef; d = card.d; acc = cfg.mode === 'place' ? 0 : card.acc || 0; P = cardPos(); }
+    else if (view === 'learn' && lnotes.length) { const l = lnotes[lnotes.length - 1]; c = l.c; d = l.d; acc = l.acc || 0; P = homePos(c, d); }
+  }
+  fingKeys = new Set();
+  if (c && g && kbLay) {
+    const { wx, kw, H, bh, lo, hi } = kbLay, short = H < 110, r = Math.min(9.5, kw * .34, (H - bh) / 2 - 2);
+    for (let q = P; q <= P + 4; q++) {
+      const m = natMidi(q) + (q === d ? acc : 0); if (m < lo || m > hi) continue;
+      const blk = !isWhite(m), x = blk ? wx[m - 1] + kw : wx[m] + kw / 2, y = blk ? bh - r - 4 : short ? bh + (H - bh) / 2 : bh + Math.max(14, (H - bh) * .3);
+      fingKeys.add(m);
+      s += `<g class="kf${blk ? ' blk' : ''}${q === d ? ' cur' : ''}"><circle cx="${f2(x)}" cy="${f2(y)}" r="${f2(r)}"/><text x="${f2(x)}" y="${f2(y + 3.9)}">${fingerOf(c, q, P)}</text></g>`;
+    }
+    $('#kb').classList.toggle('short', short);
+  }
+  if (g) g.innerHTML = s;
+  applyKeys();
+}
+
 function renderHow() {
   const el = $('#how'), lvl = card.done || card.revealed ? 9 : card.hint, c = card.clef, d = card.d, place = cfg.mode === 'place';
   if (!lvl) { el.innerHTML = `<h3>Stuck?</h3><p>Tap Hint. Each tap shows a bit more: where it sits, a memory trick, then the key itself.</p>`; return; }
@@ -909,6 +981,7 @@ function renderHow() {
   if (acc) rows.push(['Sign', accRow(acc)]);
   if (lvl >= 2) { if (trick) rows.push(['Trick', trick]); rows.push(['Landmark', lmText(c, d)]); }
   if (lvl >= 3 && (!place || lvl > 3)) rows.push(['Keyboard', keyText(d, acc)]);
+  if (cfg.fing !== 'off' && lvl >= 3 && (!place || lvl > 3)) rows.push(['Finger', fingText(c, d, cardPos())]);
   const lm = lmFor(c, d);
   el.innerHTML = (lvl > 3 ? `<h3>How to read ${nm(d, acc)}${lm ? ' · ' + lm[1] : ''}</h3>` : `<h3>Hint ${card.hint} of 3</h3>`) + '<dl>' + rows.map(r => `<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('') + '</dl>';
 }
@@ -939,10 +1012,10 @@ function buildKB() {
     s += `<g data-m="${m}"><rect class="kw" x="${f2(x + .5)}" y="-4" width="${f2(kw - 1)}" height="${H + 3}" rx="4"/>${lab}${mc}</g>`;
   }
   for (let m = lo + 1; m < hi; m++) if (!isWhite(m)) s += `<g data-m="${m}"><rect class="kb" x="${f2(wx[m - 1] + kw - bw / 2)}" y="-4" width="${f2(bw)}" height="${f2(bh)}" rx="2.5"/></g>`;
-  $('#kb').innerHTML = s + '</svg>';
+  $('#kb').innerHTML = s + '<g id="kbFing"></g></svg>';
   $('#kb').style.width = tot + 'px';
-  kbLay = { wx, kw, lo, hi };
-  applyKeys();
+  kbLay = { wx, kw, lo, hi, H, bh };
+  kbFingers();
 }
 function keyX(m) { if (!kbLay) return null; const w = isWhite(m) ? m : m - 1; const x = kbLay.wx[w]; return x == null ? null : x + (isWhite(m) ? kbLay.kw / 2 : kbLay.kw); }
 let kbGoal = null, kbGoalT = 0;
@@ -963,7 +1036,7 @@ function centerKB(c) {
   const left = Math.max(0, x - box.clientWidth / 2);
   if (Math.abs(kbLeft() - left) > 4) kbTo(left, !!c);
 }
-function applyKeys() { const mk = view === 'practice' ? marks : {}; for (const g of $$('#kb g[data-m]')) { const m = +g.dataset.m; g.setAttribute('class', (mk[m] || '') + (pressed.has(m) ? ' on' : '')); } }
+function applyKeys() { const mk = view === 'practice' ? marks : {}; for (const g of $$('#kb g[data-m]')) { const m = +g.dataset.m; g.setAttribute('class', (mk[m] || '') + (pressed.has(m) ? ' on' : '') + (fingKeys.has(m) ? ' hasf' : '')); } }
 function flashMark(m, cls) { marks[m] = cls; applyKeys(); setTimeout(() => { if (marks[m] === cls) { delete marks[m]; applyKeys(); } }, 800); }
 function flashPress(m) { pressed.add(m); applyKeys(); setTimeout(() => { pressed.delete(m); applyKeys(); }, 260); }
 
@@ -1149,6 +1222,7 @@ function renderLearn() {
   $('#namesTgl').classList.toggle('on', cfg.names);
   $('#namesTgl').textContent = cfg.names ? 'Hide names' : 'Show names';
   $('#lnote').innerHTML = learnInfo(lnotes[lnotes.length - 1]);
+  kbFingers();
 }
 function learnInfo(n) {
   if (!n) return `<div class="lbig">Try a key</div><p style="margin-top:8px">Press any key on your piano, or tap a key below or a line on the staff. You'll see where that note is written, its name, and how to find it again.</p>`;
@@ -1161,6 +1235,7 @@ function learnInfo(n) {
   else rows.push(['Trick', trickHTML(c, n.d) || lmText(c, n.d)]);
   if (lm && trickHTML(c, n.d)) rows.push(['Trick', trickHTML(c, n.d)]);
   rows.push(['Keyboard', keyText(n.d, n.acc)]);
+  if (cfg.fing !== 'off') rows.push(['Finger', fingText(c, n.d, homePos(c, n.d))]);
   return `<div class="lbig">${nm(n.d, n.acc)}<small>${alt ? 'also called ' + nm(alt.d, alt.acc) + '<br>' : ''}${lm ? lm[1] : CLEF[c].name + ' clef'}</small></div><dl>${rows.map(r => `<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('')}</dl>`;
 }
 const TRICKS = [['Treble lines', 'Every Good Boy Does Fine', [30, 32, 34, 36, 38]], ['Treble spaces', 'F A C E spells FACE', [31, 33, 35, 37]], ['Bass lines', 'Good Boys Do Fine Always', [18, 20, 22, 24, 26]], ['Bass spaces', 'All Cows Eat Grass', [19, 21, 23, 25]]];
@@ -1220,21 +1295,24 @@ function showSummary() {
 let sumAt = 0;
 
 /* ---------- save codes: all progress and settings as one short copy-paste code ---------- */
-// format 1, as bytes: 1 (format) · settings (2) · volume · mic sensitivity ×10 · which of the 42 notes have history (6) ·
-// for each of those: times seen, misses×11 + level×2, average ms · number of practice days, then
-// the first day (offset from 2026-01-01) and its cards, each later day as cards×2 + (gap>1) [+ gap−2] · CRC-16.
+// format 2, as bytes: 2 (format) · every setting, volume and mic sensitivity packed into one number (4) ·
+// which of the 42 notes have history (6) · for each of those: times seen, misses×11 + level×2, average ms ·
+// number of practice days, then the first day (offset from 2026-01-01) and its cards, each later day as
+// cards×2 + (gap>1) [+ gap−2] · CRC-16. Format 1 (v1.5) was the same except settings (2), volume, sensitivity×10.
 // Written in letters and digits only (base 62), so a double-tap selects all of it in Notes or Messages.
-const APP_VER = '1.5', B62 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', DAY0 = 20454;
+const APP_VER = '1.6', B62 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', DAY0 = 20454;
 const NOTE_IDS = ['t', 'b'].flatMap(c => { const r = RANGES.far[c], a = []; for (let d = r[0]; d <= r[1]; d++) a.push(c + d); return a; });
-const SAVE_OPTS = OPTS.map(o => [o[0], o[2].map(c => c[0])]).concat([['names', [false, true]]]);
+const SAVE_OPTS = OPTS.map(o => [o[0], o[2].map(c => c[0])]).concat([['names', [false, true]]]), SAVE_V1 = SAVE_OPTS.filter(o => o[0] !== 'fing');
 function crc16(B) { let c = 0xffff; for (const b of B) { c ^= b << 8; for (let k = 0; k < 8; k++) c = c & 0x8000 ? (c << 1 ^ 0x1021) & 0xffff : c << 1 & 0xffff; } return c; }
 const dayNum = k => { const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(k); return m ? Math.round(Date.UTC(+m[1], m[2] - 1, +m[3]) / 864e5) : null; };
 const dayStr = n => { const t = new Date(n * 864e5); return `${t.getUTCFullYear()}-${t.getUTCMonth() + 1}-${t.getUTCDate()}`; };
 function exportCode() {
-  const B = [1], put = x => { x = Math.max(0, Math.floor(x) || 0); while (x > 127) { B.push(x % 128 | 128); x = Math.floor(x / 128); } B.push(x); };
+  const B = [2], put = x => { x = Math.max(0, Math.floor(x) || 0); while (x > 127) { B.push(x % 128 | 128); x = Math.floor(x / 128); } B.push(x); };
   let o = 0, r = 1;
   for (const [k, ch] of SAVE_OPTS) { o += Math.max(0, ch.indexOf(cfg[k])) * r; r *= ch.length; }
-  B.push(o >> 8, o & 255, Math.round(cfg.vol), Math.round(cfg.sens * 10));
+  o += Math.min(100, Math.max(0, Math.round(cfg.vol))) * r; r *= 101;
+  o += Math.min(25, Math.max(0, Math.round(cfg.sens * 10) - 5)) * r;
+  B.push(Math.floor(o / 16777216), Math.floor(o / 65536) % 256, Math.floor(o / 256) % 256, o % 256);
   const have = NOTE_IDS.map(id => stats[id]), bm = [0, 0, 0, 0, 0, 0];
   have.forEach((v, j) => { if (v) bm[j >> 3] |= 1 << (j & 7); }); B.push(...bm);
   for (const v of have) if (v) { put(v.n); put(Math.max(0, v.n - v.ok) * 11 + Math.min(10, Math.max(0, Math.round(v.box * 2)))); put(v.t); }
@@ -1254,12 +1332,13 @@ function readCode(str) {
   let v = 0n; for (const ch of str) v = v * 62n + BigInt(B62.indexOf(ch));
   const B = []; while (v) { B.unshift(Number(v & 255n)); v >>= 8n; }
   const n = B.length - 2;
-  if (n < 11 || B[0] !== 1 || crc16(B.slice(0, n)) !== (B[n] << 8 | B[n + 1])) return null;
+  if (n < 11 || (B[0] !== 1 && B[0] !== 2) || crc16(B.slice(0, n)) !== (B[n] << 8 | B[n + 1])) return null;
   let i = 11; const get = () => { let x = 0, m = 1, b; do { if (i >= n || m > 2 ** 42) throw 0; b = B[i++]; x += (b & 127) * m; m *= 128; } while (b & 128); return x; };
   try {
-    const c = {}; let o = B[1] << 8 | B[2];
-    for (const [k, ch] of SAVE_OPTS) { c[k] = ch[o % ch.length]; o = Math.floor(o / ch.length); }
-    c.vol = Math.min(100, B[3]); c.sens = Math.min(3, Math.max(.5, B[4] / 10));
+    const c = {}, v1 = B[0] === 1; let o = v1 ? B[1] << 8 | B[2] : ((B[1] * 256 + B[2]) * 256 + B[3]) * 256 + B[4];
+    for (const [k, ch] of v1 ? SAVE_V1 : SAVE_OPTS) { c[k] = ch[o % ch.length]; o = Math.floor(o / ch.length); }
+    if (v1) { c.vol = Math.min(100, B[3]); c.sens = Math.min(3, Math.max(.5, B[4] / 10)); }
+    else { c.vol = o % 101; o = Math.floor(o / 101); c.sens = (o % 26 + 5) / 10; if (o >= 26) return null; }
     const st = {};
     NOTE_IDS.forEach((id, j) => { if (B[5 + (j >> 3)] >> (j & 7) & 1) { const nn = get(), mb = get(), t = get(); st[id] = { n: nn, ok: Math.max(0, nn - Math.floor(mb / 11)), box: mb % 11 / 2, t }; } });
     const dy = {}; let dn = 0;
@@ -1353,6 +1432,7 @@ function setCfg(k, v) {
   cfg[k] = v; save(); renderSettings();
   if (['mode', 'clefs', 'range', 'focus', 'acc', 'round'].includes(k)) { drill = null; if (view === 'practice') { kbRange = poolRange(); buildKB(); } newRound(); }
   else if (k === 'labels') buildKB();
+  else if (k === 'fing') { if (card) renderAll(); if (view === 'learn') renderLearn(); }
   else if (card) renderSide();
 }
 function go(v) { if (location.hash !== '#' + v) location.hash = v; else setView(v); }
@@ -1466,7 +1546,7 @@ if (!hasMidi) {
 if (!cfg.input) openOv('ovStart');
 else if (cfg.input === 'midi') startMidi(true);
 else if (cfg.input === 'mic') startMic(true);
-window.__dojo = { idle: () => { lastAct = -1e9; checkIdle(); }, get ac() { return ac; }, tone, outNode, exportCode, parseCode, get days() { return days; }, mic: () => ({ on: mic.on, paused: !!mic.paused, err: mic.err, ctx: ac && ac.state, healed: micHealed }), force: f => { forced = { acc: 0, ...f }; newCard(); }, onKey, get card() { return card; }, get cfg() { return cfg; }, answerLetter, setCfg, next, reveal, hint, checkPlace, stats: () => stats, spell, natMidi, nm };
+window.__dojo = { idle: () => { lastAct = -1e9; checkIdle(); }, get ac() { return ac; }, tone, outNode, exportCode, parseCode, get days() { return days; }, homePos, lineFingers, fingerOf, get line() { return line; }, mic: () => ({ on: mic.on, paused: !!mic.paused, err: mic.err, ctx: ac && ac.state, healed: micHealed }), force: f => { forced = { acc: 0, ...f }; newCard(); }, onKey, get card() { return card; }, get cfg() { return cfg; }, answerLetter, setCfg, next, reveal, hint, checkPlace, stats: () => stats, spell, natMidi, nm };
 }
 </script>
 </body>
