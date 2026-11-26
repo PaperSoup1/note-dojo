@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-dRY8s9N7C6UGjLkVNEixXRAQaVEbXfgqtUMhnuFp4+w='; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Hy4NgwnHAP7yLZdWWkNDe5tUKZKNMfyJ7PV/CPUEP4Q='; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Note Dojo</title>
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
@@ -57,7 +57,10 @@ main{flex:1;overflow:auto;overscroll-behavior:contain}
 .seg{display:flex;background:var(--panel);border-radius:11px;padding:3px;gap:2px}
 .seg button{border:0;background:none;border-radius:8px;padding:0 14px;min-height:38px;font-weight:600;font-size:15px;color:var(--mute)}
 .seg button.on{background:var(--ink);color:var(--bg)}
-.sum{border:1px dashed var(--rule);background:none;border-radius:10px;min-height:38px;padding:0 12px;font-size:14px;font-weight:600;color:var(--mute)}
+.sum{border:1px solid var(--rule);background:var(--paper);border-radius:999px;min-height:38px;padding:0 12px 0 11px;font-size:14px;font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:7px;transition:transform .15s,border-color .2s,box-shadow .2s}
+.sum::before{content:'♪';color:var(--felt);font-size:15px;line-height:1}
+.sum::after{content:'›';color:var(--mute);font-size:19px;line-height:1;margin-left:1px}
+@media(hover:hover){.sum:hover{border-color:var(--mute);box-shadow:0 4px 14px -8px rgb(0 0 0/.35)}}
 .card{background:var(--paper);border:1px solid var(--rule);border-radius:18px;box-shadow:0 1px 0 var(--rule),0 14px 34px -22px rgb(0 0 0/.3);overflow:hidden}
 .cardtop{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px 0;font-size:14px;color:var(--mute);font-weight:600;flex-wrap:wrap}
 .cardtop b{color:var(--ink)}
@@ -81,8 +84,47 @@ main{flex:1;overflow:auto;overscroll-behavior:contain}
 .n-old{opacity:.38}
 .n-fix{color:var(--amber)}
 .staff .curband{fill:var(--blue);opacity:.09}
-.n-new{animation:pop .3s ease-out}
-@keyframes pop{from{opacity:0;transform:translateX(10px)}}
+/* ---------- motion: quick, springy, and all of it off with Reduce Motion ---------- */
+:root{--spring:cubic-bezier(.3,1.45,.55,1);--ease:cubic-bezier(.2,.8,.2,1)}
+.staff g.n-new{animation:noteIn .4s var(--spring);transform-box:fill-box;transform-origin:center}
+@keyframes noteIn{from{opacity:0;transform:translateX(16px) scale(.9)}}
+.staff .n-hit,.staff .wave,.staff .n-play{animation:hit .44s var(--spring) both;transform-box:fill-box;transform-origin:center}
+@keyframes hit{35%{transform:scale(1.3)}}
+.stwrap{position:relative}
+.stwrap #staff{position:relative;z-index:1}
+.fxl{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.fxl.fx{z-index:2}
+#band{fill:var(--blue);opacity:0;transition:transform .28s var(--ease),opacity .2s}
+#band.on{opacity:.1}
+.fx .ring{fill:none;stroke-width:1.5;transform-box:fill-box;transform-origin:center;animation:ring .6s var(--ease) forwards}
+@keyframes ring{from{transform:scale(.3);opacity:.85}to{transform:scale(2.4);opacity:0}}
+.fx .spk{transform-box:fill-box;transform-origin:center;animation:spark .7s var(--ease) forwards}
+@keyframes spark{from{transform:translate(0,0) scale(1.15)}to{transform:translate(var(--dx),var(--dy)) scale(.15);opacity:0}}
+.fx .old{animation:oldOut .3s ease-in forwards}
+@keyframes oldOut{to{opacity:0;transform:translateX(-16px)}}
+.cardwrap .card{position:relative}
+.card.shake{animation:shake .38s}
+@keyframes shake{18%{transform:translateX(-7px)}36%{transform:translateX(6px)}54%{transform:translateX(-4px)}72%{transform:translateX(2px)}}
+.prog{height:4px;background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.prog i{display:block;height:100%;width:0;background:var(--ok);border-radius:0 4px 4px 0;transition:width .5s var(--ease)}
+.cheer{position:absolute;left:50%;top:44px;z-index:3;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-weight:700;font-size:15px;padding:7px 14px;border-radius:999px;white-space:nowrap;pointer-events:none;box-shadow:0 10px 24px -10px rgb(0 0 0/.45);animation:cheer 1.9s var(--ease) forwards}
+@keyframes cheer{0%{opacity:0;transform:translate(-50%,10px) scale(.7)}14%{opacity:1;transform:translate(-50%,0) scale(1.06)}22%{transform:translate(-50%,0) scale(1)}80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-8px)}}
+.fb .ic{animation:icpop .45s var(--spring)}
+.fb .ic+span{animation:fbin .3s var(--ease)}
+@keyframes icpop{from{transform:scale(.25);opacity:0}}
+@keyframes fbin{from{opacity:0;transform:translateX(-6px)}}
+.how.anim h3,.how.anim dl,.how.anim p{animation:fbin .3s var(--ease)}
+.stats b.bump{display:inline-block;animation:bump .45s var(--spring)}
+/* segmented controls: the highlight slides to the new choice */
+.seg,.tabs{position:relative}
+.seg>button,.tabs>button{position:relative;z-index:1}
+.thumb{position:absolute;left:0;top:3px;bottom:3px;width:0;border-radius:8px;pointer-events:none;transition:transform .34s var(--spring),width .34s var(--spring)}
+.seg .thumb{background:var(--ink)}
+.tabs .thumb{background:var(--bg);box-shadow:0 1px 2px rgb(0 0 0/.14)}
+.seg.slid>button.on,.tabs.slid>button.on{background:transparent;box-shadow:none}
+.seg2 button.just{animation:lpop .4s var(--spring)}
+.acts .btn,.lbtns .btn{animation:fadeIn .22s}
+@keyframes bump{40%{transform:scale(1.4)}}
 .fb{min-height:54px;padding:2px 16px 14px;display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;line-height:1.3}
 .fb.ok{color:var(--ok)}
 .fb.bad{color:var(--bad)}
@@ -98,8 +140,10 @@ main{flex:1;overflow:auto;overscroll-behavior:contain}
 .letters{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
 .letters button{height:58px;border:1px solid var(--rule);background:var(--bg);border-radius:12px;font:700 23px/1 var(--serif);box-shadow:0 3px 0 var(--rule);padding:0}
 .letters button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--rule)}
-.letters button.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
-.letters button.bad{background:color-mix(in srgb,var(--bad) 12%,var(--bg));border-color:var(--bad);color:var(--bad)}
+.letters button.ok{background:var(--ok);color:#fff;border-color:var(--ok);animation:lpop .42s var(--spring)}
+.letters button.bad{background:color-mix(in srgb,var(--bad) 12%,var(--bg));border-color:var(--bad);color:var(--bad);animation:shake .38s}
+.letters button{transition:transform .1s,box-shadow .1s,background-color .18s,color .18s,border-color .18s}
+@keyframes lpop{40%{transform:scale(1.13)}}
 .accs{display:flex;gap:6px;margin-top:6px}
 .accs button{flex:1;min-height:44px;border:1px solid var(--rule);background:var(--bg);border-radius:12px;font-weight:600}
 .accs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
@@ -124,12 +168,30 @@ kbd{font:600 12px var(--sans);border:1px solid var(--rule);border-bottom-width:2
 #kbs{height:clamp(88px,19vh,190px);overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:#555 transparent}
 #kb{height:100%;margin:0 auto}
 #kb svg{display:block}
-.kw{fill:var(--ivory);stroke:#c8c2b5;stroke-width:1}
-.kb{fill:var(--ebony);stroke:#000;stroke-width:1}
+.kw{fill:var(--ivory);stroke:#c8c2b5;stroke-width:1;transition:fill .16s}
+.kb{fill:var(--ebony);stroke:#000;stroke-width:1;transition:fill .16s}
 .kl{font:600 11px var(--sans);fill:#77705f;text-anchor:middle;pointer-events:none}
 .kl.c{fill:#2a2824}
 .kmc{fill:var(--felt);pointer-events:none}
 .staff .fing{font:700 10.5px var(--sans);fill:currentColor;opacity:.8;text-anchor:middle}
+.staff .stm{stroke:currentColor;stroke-width:1.2}
+.staff .bl{stroke:currentColor;stroke-width:1.2}
+.staff .bl.thk{stroke-width:4}
+.staff .bnum{font:600 7.5px var(--sans);fill:var(--mute)}
+.staff .loopband{fill:var(--amber);opacity:.14}
+.staff .bhit{fill:transparent;cursor:pointer}
+.n-out{opacity:.32}
+.n-play{color:var(--blue)}
+.loop{margin-top:12px;display:grid;gap:10px}
+.lbtns{display:flex;gap:8px;flex-wrap:wrap}
+#listenBtn.on{border-color:var(--blue);color:var(--blue)}
+.lbars{display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap}
+.lbars .lbl{font-size:14px;font-weight:600;color:var(--mute)}
+.barseg{display:flex;gap:2px;background:var(--panel);border-radius:11px;padding:3px}
+.barseg button{border:0;background:none;border-radius:8px;min-width:40px;min-height:36px;padding:0 11px;font-weight:700;font-size:15px;color:var(--mute);font-variant-numeric:tabular-nums}
+.barseg button.on{background:var(--amber);color:#141416}
+.barseg button.whole.on{background:var(--ink);color:var(--bg)}
+.lhint{flex-basis:100%;margin:0;font-size:13px;color:var(--mute);line-height:1.4}
 #kbFing{pointer-events:none}
 .kf circle{fill:#2a2824}
 .kf text{font:700 11px var(--sans);fill:#fff;text-anchor:middle}
@@ -214,7 +276,33 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
 .inrow .btn{flex:none}
 @keyframes sheetIn{from{transform:translateX(36px);opacity:0}}
 @keyframes sheetUp{from{transform:translateY(48px);opacity:0}}
-.ov.side .modal{animation:sheetIn .22s ease-out}
+.ov.side .modal{animation:sheetIn .26s var(--ease)}
+.ov{animation:fadeIn .2s}
+.ov:not(.side) .modal{animation:modalIn .36s var(--spring)}
+@keyframes fadeIn{from{opacity:0}}
+@keyframes modalIn{from{opacity:0;transform:scale(.9) translateY(12px)}}
+.ov.closing{animation:fadeOut .2s forwards;pointer-events:none}
+.ov.closing .modal{animation:modalOut .2s forwards}
+.ov.side.closing .modal{animation:sheetOut .22s forwards}
+@keyframes fadeOut{to{opacity:0}}
+@keyframes modalOut{to{opacity:0;transform:scale(.95)}}
+@keyframes sheetOut{to{opacity:0;transform:translateX(40px)}}
+@keyframes sheetDown{to{opacity:0;transform:translateY(60px)}}
+.view.on{animation:viewIn .28s var(--ease)}
+@keyframes viewIn{from{opacity:0;transform:translateY(8px)}}
+.lnote .lbig{animation:fbin .3s var(--ease)}
+/* buttons give a little under the finger */
+.btn,.seg button,.seg2 button,.tabs button,.mini,.chip,.icon,.pick,.trick,.lms button,.barseg button,.accs button{transition:transform .14s var(--ease),background-color .18s,color .18s,border-color .18s,box-shadow .18s}
+.btn:active:not(:disabled),.seg button:active,.seg2 button:active,.tabs button:active,.mini:active,.chip:active,.sum:active,.icon:active,.pick:active,.trick:active,.lms button:active,.barseg button:active,.accs button:active{transform:scale(.95)}
+.stars{display:flex;gap:8px;justify-content:center;margin:12px 0 0;font-size:38px;line-height:1}
+.stars span{color:color-mix(in srgb,var(--ink) 14%,transparent);opacity:0;transform:scale(.3) rotate(-30deg);animation:starIn .5s var(--spring) forwards}
+.stars span.on{color:#f3b519;text-shadow:0 2px 10px rgb(243 181 25/.35)}
+@keyframes starIn{to{opacity:1;transform:none}}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
+.confetti i{position:absolute;top:-14px;width:8px;height:13px;border-radius:2px;animation:fall var(--t) cubic-bezier(.3,.55,.45,1) var(--dl) forwards}
+@keyframes fall{to{transform:translate(var(--dx),108vh) rotate(var(--r))}}
+.toast{animation:toastIn .38s var(--spring)}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,-12px) scale(.94)}}
 .inrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule)}
 .inrow p{margin:2px 0 0;font-size:14px;color:var(--mute)}
 .inrow p.err{color:var(--bad)}
@@ -227,6 +315,22 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
 .plevel b{color:var(--ink)}
 .fnote{font-size:14px;color:var(--mute);background:var(--panel);border-radius:12px;padding:10px 12px;margin-top:12px}
 .sdesc{margin:2px 0 10px;font-size:14px;color:var(--mute)}
+.odesc{margin:8px 2px 0;font-size:13.5px;line-height:1.45;color:var(--mute)}
+.grp.hl{animation:grpHl 1.6s ease-out}
+@keyframes grpHl{0%,30%{background:color-mix(in srgb,var(--blue) 14%,transparent);box-shadow:0 0 0 8px color-mix(in srgb,var(--blue) 14%,transparent)}100%{background:transparent;box-shadow:0 0 0 8px transparent}}
+.grp{border-radius:12px}
+.npick{margin-top:16px;padding:12px 12px 8px;border:1px solid var(--rule);border-radius:14px;background:color-mix(in srgb,var(--ink) 3%,transparent)}
+.npick h4{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 6px}
+.pkn{font-size:13px;font-weight:600;color:var(--blue)}
+.pkst{margin:2px 0}.pkst.dim{opacity:.45}
+.pkh{font-size:12.5px;font-weight:600;color:var(--ink)}.pkh span{font-weight:500;color:var(--mute)}
+.pkst svg{display:block;width:100%;height:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.staff .pk-on{color:var(--blue)}
+.staff .pk-half{color:var(--blue);opacity:.45}
+.staff .pk-off{opacity:.2}
+.pkq{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 2px}
+.pkq .btn{min-height:34px;padding:0 11px;font-size:13px}
+.pkhint{margin:6px 2px 2px;font-size:12.5px;color:var(--mute)}
 .srow{display:flex;gap:8px;flex-wrap:wrap}
 .code{margin-top:10px;font:500 13px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all;background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:10px;padding:10px 12px;-webkit-user-select:all;user-select:all;max-height:calc(7.25em + 20px);overflow:auto}
 #loadIn{display:block;width:100%;margin-top:10px;font:16px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid var(--rule);border-radius:10px;padding:10px 12px;background:transparent;color:var(--ink);resize:vertical}
@@ -237,21 +341,34 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
 .smsg.err{color:var(--bad)}
 .smsg .btn{min-height:36px;padding:0 12px;font-size:14px;color:var(--ink)}
 .ver{margin:26px 0 0;font-size:13px;color:var(--mute);text-align:center}
+.lopt{display:flex;gap:12px;align-items:flex-start;margin:0 0 12px}
+.lopt .btn{flex:none;min-width:104px}
+.lopt p{margin:2px 0 0;font-size:14px;color:var(--mute);line-height:1.4}
+.lopt p b{color:var(--ink)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--mute)}
+.hist{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.hist .btn{min-height:38px;padding:0 14px;font-size:14px}
+.hist .btn:disabled{opacity:.4}
+.hist span{font-size:13px;color:var(--mute)}
 .pick{display:block;width:100%;text-align:left;border:1px solid var(--rule);background:var(--bg);border-radius:14px;padding:14px 16px;margin-top:10px}
 @media(hover:hover){.pick:hover{border-color:var(--ink)}}
 .pick b{display:block;font-size:17px}
 .pick span{color:var(--mute);font-size:14px;line-height:1.4;display:block}
 .snums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+#ovSum .modal{text-align:center}
+#ovSum .acts,#ovSum .wl{justify-content:center}
+.toast.act{cursor:pointer}
+.toast.act::after{content:' ›';opacity:.7}
 .snums b{display:block;font:700 34px/1 var(--serif);font-variant-numeric:tabular-nums}
 .snums span{font-size:13px;color:var(--mute)}
 .toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);z-index:40;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;max-width:min(92vw,520px);box-shadow:0 10px 30px -10px rgb(0 0 0/.5)}
 @media(min-width:861px){#v-practice.on{min-height:100%;display:flex;align-items:center}#v-practice .wrap{width:100%}}
 @media(max-width:860px){.prac{grid-template-rows:none;grid-template-columns:minmax(0,1fr);grid-template-areas:"bar" "prompt" "card" "answer" "how";gap:12px}.promptbox{align-self:auto}.learn{grid-template-columns:minmax(0,1fr)}.pstaves,.prow{grid-template-columns:minmax(0,1fr)}.wrap{padding-top:14px}.keys{display:none}}
-@media(max-width:640px){.tabs{order:5;width:100%;margin-left:0}.tabs button{flex:1}.brand{font-size:21px}.chip{max-width:190px}.seg button{padding:0 10px;font-size:14px}.ov.side{align-items:flex-end}.ov.side .modal{height:auto;max-height:min(88%,820px);border-radius:20px 20px 0 0;animation-name:sheetUp}.grab{display:block;position:absolute;top:6px;left:50%;width:38px;height:5px;margin-left:-19px;border-radius:3px;background:var(--rule)}.sheet .mhead{padding-top:20px}.letters button{height:52px;font-size:21px}.snums b{font-size:28px}}
+@media(max-width:640px){.tabs{order:5;width:100%;margin-left:0}.tabs button{flex:1}.brand{font-size:21px}.chip{max-width:190px}.seg button{padding:0 10px;font-size:14px}.ov.side{align-items:flex-end}.ov.side .modal{height:auto;max-height:min(88%,820px);border-radius:20px 20px 0 0;animation-name:sheetUp}.grab{display:block;position:absolute;top:6px;left:50%;width:38px;height:5px;margin-left:-19px;border-radius:3px;background:var(--rule)}.ov.side.closing .modal{animation-name:sheetDown}.sheet .mhead{padding-top:20px}.letters button{height:52px;font-size:21px}.snums b{font-size:28px}}
 @media(max-height:560px){#kbs{height:72px}#staff{max-height:52vh}}
 /* phone turned sideways (say, on the music stand): card on the left, the rest on the right, so the note never hides behind the keys */
 @media(max-height:500px) and (min-width:600px){.wrap{padding-top:10px;padding-bottom:14px}.prac{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);grid-template-rows:auto auto auto 1fr;grid-template-areas:"card bar" "card prompt" "card answer" "card how";gap:8px 18px}.promptbox{align-self:auto}.promptbox h1{font-size:24px}.promptbox p{font-size:13px;margin-top:2px}.sum{display:none}.letters button{height:46px;font-size:20px}.acts{margin-top:8px}.fb{min-height:40px;padding-bottom:10px}.cardwrap,.learn>div:first-child{position:sticky;top:10px;z-index:1}.learn{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}.learn .cardtop>span:first-child{display:none}.learn .cardtop{justify-content:flex-end;padding-top:8px}#gstaff{max-height:max(140px,calc(100dvh - 225px))}.lbig{font-size:44px}.pstaves,.prow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
-@media(prefers-reduced-motion:reduce){.ov.side .modal{animation:none}.n-new{animation:none}g.hint .kw,g.hint .kb{animation:none}.lvl i{transition:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important}g.hint .kw,g.hint .kb{animation:none}.cheer,.stars span{animation:none!important;opacity:1;transform:translateX(-50%)}.stars span{transform:none}}
 </style>
 </head>
 <body>
@@ -278,8 +395,9 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
       </div>
       <div class="cardwrap">
         <div class="card">
+          <div class="prog" id="prog" aria-hidden="true"><i></i></div>
           <div class="cardtop"><span id="clefTag"></span><span id="cnt"></span></div>
-          <svg class="staff" id="staff" viewBox="0 0 260 150" role="img" aria-label="Note on the staff"></svg>
+          <div class="stwrap"><svg class="staff fxl" id="fxb" aria-hidden="true"><rect id="band" width="30" height="80" rx="8"/></svg><svg class="staff" id="staff" viewBox="0 0 260 150" role="img" aria-label="Note on the staff"></svg><svg class="staff fxl fx" id="fx" aria-hidden="true"></svg></div>
           <div class="fb" id="fb"></div>
         </div>
       </div>
@@ -292,6 +410,10 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
           <button class="btn" id="revealBtn">Show answer</button>
           <button class="btn" id="hearBtn" hidden>Hear it</button>
           <button class="btn primary" id="nextBtn" hidden>Next</button>
+        </div>
+        <div class="loop" id="loopRow" hidden>
+          <div class="lbtns"><button class="btn" id="againBtn">↻ Again</button><button class="btn" id="listenBtn">▶ Listen</button><button class="btn" id="skipBtn">Next line ›</button></div>
+          <div class="lbars" id="barRow"><span class="lbl" id="barLbl">Loop</span><div class="barseg" id="barSeg" role="group" aria-labelledby="barLbl"></div><p class="lhint" id="loopHint"></p></div>
         </div>
       </div>
       <div class="howbox">
@@ -361,8 +483,12 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
         <div class="srow"><button class="btn" id="saveCopy">Copy code</button><button class="btn" id="saveLoad">Load code</button></div>
         <div class="code" id="saveCode" hidden></div>
         <textarea id="loadIn" rows="3" placeholder="Paste a save code here" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Save code" hidden></textarea>
-        <div id="loadAsk" hidden><p class="sinfo" id="loadInfo"></p><div class="srow"><button class="btn primary" id="loadYes">Load it</button><button class="btn" id="loadNo">Cancel</button></div></div>
+        <div id="loadAsk" hidden><p class="sinfo" id="loadInfo"></p>
+          <div class="lopt"><button class="btn primary" id="loadMerge">Combine</button><p id="loadCombHint"></p></div>
+          <div class="lopt"><button class="btn" id="loadYes">Replace</button><p id="loadRepHint"></p></div>
+          <button class="btn ghost" id="loadNo">Cancel</button></div>
         <p class="smsg" id="saveMsg" role="status" hidden></p>
+        <div class="hist" id="histRow" hidden><button class="btn" id="undoBtn">↶ Undo</button><button class="btn" id="redoBtn">↷ Redo</button><span id="histNote"></span></div>
       </section>
       <p class="ver" id="appVer"></p>
     </div>
@@ -383,6 +509,7 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
 
 <div class="ov" id="ovSum" hidden>
   <div class="modal" role="dialog" aria-label="Round summary">
+    <div class="stars" id="stars" aria-hidden="true"></div>
     <h2 id="sTitle">Round done</h2>
     <div class="snums" id="snums"></div>
     <div id="smiss"></div>
@@ -395,7 +522,7 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
 
 <script>
 {
-const GL = /* music glyphs: Bravura (SIL Open Font License 1.1) */ {"gClef":"M376 415l25 -145c3 -18 3 -18 29 -18c147 0 241 -113 241 -241c0 -113 -67 -198 -168 -238c-14 -6 -15 -5 -13 -17c11 -62 29 -157 29 -214c0 -170 -130 -200 -197 -200c-151 0 -190 98 -190 163c0 62 40 115 107 115c61 0 96 -47 96 -102c0 -58 -36 -85 -67 -94 c-23 -7 -32 -10 -32 -17c0 -13 26 -29 80 -29c59 0 159 18 159 166c0 47 -15 134 -27 201c-2 12 -4 11 -15 9c-20 -4 -46 -6 -69 -6c-245 0 -364 165 -364 339c0 202 153 345 297 464c12 10 11 12 9 24c-7 41 -14 106 -14 164c0 104 24 229 98 311c20 22 51 48 65 48 c11 0 37 -28 52 -50c41 -60 65 -146 65 -233c0 -153 -82 -280 -190 -381c-6 -6 -8 -7 -6 -19zM470 943c-61 0 -133 -96 -133 -252c0 -32 2 -66 6 -92c2 -13 6 -14 13 -8c79 69 174 159 174 270c0 55 -27 82 -60 82zM361 262l-21 128c-2 11 -4 12 -14 4 c-47 -38 -93 -75 -153 -142c-83 -94 -93 -173 -93 -232c0 -139 113 -236 288 -236c20 0 40 2 56 5c15 3 16 3 14 14l-50 298c-2 11 -4 12 -20 8c-61 -17 -100 -60 -100 -117c0 -46 30 -89 72 -107c7 -3 15 -6 15 -13c0 -6 -4 -11 -12 -11c-7 0 -19 3 -27 6 c-68 23 -115 87 -115 177c0 85 57 164 145 194c18 6 18 5 15 24zM430 103l49 -285c2 -12 4 -12 16 -6c56 28 94 79 94 142c0 88 -67 156 -148 163c-12 1 -13 -2 -11 -14z","fClef":"M252 262c173 0 279 -116 279 -290c0 -304 -260 -482 -506 -602c-6 -3 -12 -5 -17 -5c-9 0 -13 6 -13 12c0 8 6 13 15 18c233 133 371 289 371 568c0 157 -46 261 -152 261c-102 0 -162 -73 -162 -113c0 -10 3 -18 16 -18s23 7 50 7c49 0 96 -40 96 -104 c0 -62 -43 -106 -106 -106c-81 0 -123 69 -123 149c0 96 78 223 252 223zM629 180c31 0 55 -24 55 -55s-24 -55 -55 -55s-55 24 -55 55s24 55 55 55zM630 -71c31 0 54 -23 54 -54s-23 -54 -54 -54s-54 23 -54 54s23 54 54 54z","whole":"M216 125c93 0 206 -52 206 -123c0 -70 -52 -127 -216 -127c-149 0 -206 60 -206 127c0 68 83 123 216 123zM111 63c-2 -8 -3 -16 -3 -24c0 -32 15 -66 35 -89c21 -28 58 -52 94 -52c10 0 21 1 31 4c33 8 46 36 46 67c0 60 -55 134 -124 134c-31 0 -68 -5 -79 -40z","sharp":"M237 118l-26 -10c-8 -3 -13 -22 -13 -29v-93c0 -12 7 -18 13 -18l26 10c2 1 3 1 5 1c4 0 7 -3 7 -8v-71c0 -6 -5 -14 -12 -17c0 0 -21 -8 -28 -11s-11 -15 -11 -23v-142c0 -6 -6 -11 -17 -11c-7 0 -13 5 -13 11v125c0 6 -5 18 -14 18l-2 -1h-1l-61 -25 c-5 -2 -10 -9 -10 -22v-139c0 -6 -7 -11 -17 -11c-7 0 -13 5 -13 11v123c0 5 -5 16 -12 16c-1 0 -2 0 -3 -1c-9 -3 -23 -9 -24 -9l-2 -1c-6 0 -9 3 -9 9v71c0 6 5 14 12 16c0 0 21 9 27 11c6 3 11 12 11 23v99c0 8 -6 18 -14 18l-1 -1c-8 -4 -23 -10 -24 -10l-2 -1 c-6 0 -9 3 -9 9v71c0 6 5 14 12 16c0 0 20 8 26 11s12 13 12 27v135c0 6 6 11 16 11c7 0 14 -5 14 -11v-120c0 -8 3 -20 12 -20c17 4 51 18 63 25c9 6 12 19 13 29v130c0 6 6 11 16 11c8 0 14 -5 14 -11v-122c0 -8 7 -13 14 -13c5 1 25 9 25 9c2 1 3 1 5 1c4 0 7 -3 7 -8 v-71c0 -6 -5 -14 -12 -17zM168 -45c2 9 4 37 4 64s-2 52 -4 57c-2 4 -8 6 -15 6c-25 0 -71 -21 -73 -38c-2 -8 -3 -43 -3 -74c0 -24 1 -46 3 -50c1 -3 6 -5 12 -5c23 0 70 20 76 40z","flat":"M12 -170c-8 10 -12 581 -12 581c1 18 17 28 31 28c10 0 19 -6 19 -17c0 -20 -6 -260 -7 -282c0 -7 4 -14 11 -17c2 -1 3 -1 5 -1c5 0 16 9 22 14c14 9 38 17 55 17c46 -3 90 -39 90 -96c0 -46 -31 -107 -120 -169c-25 -17 -49 -44 -79 -61c0 0 -3 -2 -6 -2s-6 1 -9 5z M47 -81c0 -5 2 -15 11 -15c3 0 6 1 10 3c43 27 89 81 89 135c0 25 -12 58 -41 58c-23 0 -63 -29 -70 -49c-1 -4 -2 -16 -2 -32c0 -40 3 -100 3 -100z","natural":"M141 181l15 5c1 1 3 1 4 1c4 0 8 -3 8 -8v-502c0 -7 -6 -12 -12 -12h-13c-7 0 -12 5 -12 12v149c0 8 -7 11 -17 11c-29 0 -85 -24 -99 -30c-1 -1 -3 -1 -4 -1l-2 -1c-6 0 -9 3 -9 9v515c0 7 5 12 12 12h13c6 0 12 -5 12 -12v-167c0 -4 4 -5 10 -5c26 0 90 23 90 23 c1 0 2 1 4 1zM37 39v-103c0 -4 5 -6 12 -6c25 0 82 23 82 41v103c0 4 -3 5 -9 5c-24 0 -85 -26 -85 -40z"};
+const GL = /* music glyphs: Bravura (SIL Open Font License 1.1) */ {"gClef":"M376 415l25 -145c3 -18 3 -18 29 -18c147 0 241 -113 241 -241c0 -113 -67 -198 -168 -238c-14 -6 -15 -5 -13 -17c11 -62 29 -157 29 -214c0 -170 -130 -200 -197 -200c-151 0 -190 98 -190 163c0 62 40 115 107 115c61 0 96 -47 96 -102c0 -58 -36 -85 -67 -94 c-23 -7 -32 -10 -32 -17c0 -13 26 -29 80 -29c59 0 159 18 159 166c0 47 -15 134 -27 201c-2 12 -4 11 -15 9c-20 -4 -46 -6 -69 -6c-245 0 -364 165 -364 339c0 202 153 345 297 464c12 10 11 12 9 24c-7 41 -14 106 -14 164c0 104 24 229 98 311c20 22 51 48 65 48 c11 0 37 -28 52 -50c41 -60 65 -146 65 -233c0 -153 -82 -280 -190 -381c-6 -6 -8 -7 -6 -19zM470 943c-61 0 -133 -96 -133 -252c0 -32 2 -66 6 -92c2 -13 6 -14 13 -8c79 69 174 159 174 270c0 55 -27 82 -60 82zM361 262l-21 128c-2 11 -4 12 -14 4 c-47 -38 -93 -75 -153 -142c-83 -94 -93 -173 -93 -232c0 -139 113 -236 288 -236c20 0 40 2 56 5c15 3 16 3 14 14l-50 298c-2 11 -4 12 -20 8c-61 -17 -100 -60 -100 -117c0 -46 30 -89 72 -107c7 -3 15 -6 15 -13c0 -6 -4 -11 -12 -11c-7 0 -19 3 -27 6 c-68 23 -115 87 -115 177c0 85 57 164 145 194c18 6 18 5 15 24zM430 103l49 -285c2 -12 4 -12 16 -6c56 28 94 79 94 142c0 88 -67 156 -148 163c-12 1 -13 -2 -11 -14z","fClef":"M252 262c173 0 279 -116 279 -290c0 -304 -260 -482 -506 -602c-6 -3 -12 -5 -17 -5c-9 0 -13 6 -13 12c0 8 6 13 15 18c233 133 371 289 371 568c0 157 -46 261 -152 261c-102 0 -162 -73 -162 -113c0 -10 3 -18 16 -18s23 7 50 7c49 0 96 -40 96 -104 c0 -62 -43 -106 -106 -106c-81 0 -123 69 -123 149c0 96 78 223 252 223zM629 180c31 0 55 -24 55 -55s-24 -55 -55 -55s-55 24 -55 55s24 55 55 55zM630 -71c31 0 54 -23 54 -54s-23 -54 -54 -54s-54 23 -54 54s23 54 54 54z","whole":"M216 125c93 0 206 -52 206 -123c0 -70 -52 -127 -216 -127c-149 0 -206 60 -206 127c0 68 83 123 216 123zM111 63c-2 -8 -3 -16 -3 -24c0 -32 15 -66 35 -89c21 -28 58 -52 94 -52c10 0 21 1 31 4c33 8 46 36 46 67c0 60 -55 134 -124 134c-31 0 -68 -5 -79 -40z","sharp":"M237 118l-26 -10c-8 -3 -13 -22 -13 -29v-93c0 -12 7 -18 13 -18l26 10c2 1 3 1 5 1c4 0 7 -3 7 -8v-71c0 -6 -5 -14 -12 -17c0 0 -21 -8 -28 -11s-11 -15 -11 -23v-142c0 -6 -6 -11 -17 -11c-7 0 -13 5 -13 11v125c0 6 -5 18 -14 18l-2 -1h-1l-61 -25 c-5 -2 -10 -9 -10 -22v-139c0 -6 -7 -11 -17 -11c-7 0 -13 5 -13 11v123c0 5 -5 16 -12 16c-1 0 -2 0 -3 -1c-9 -3 -23 -9 -24 -9l-2 -1c-6 0 -9 3 -9 9v71c0 6 5 14 12 16c0 0 21 9 27 11c6 3 11 12 11 23v99c0 8 -6 18 -14 18l-1 -1c-8 -4 -23 -10 -24 -10l-2 -1 c-6 0 -9 3 -9 9v71c0 6 5 14 12 16c0 0 20 8 26 11s12 13 12 27v135c0 6 6 11 16 11c7 0 14 -5 14 -11v-120c0 -8 3 -20 12 -20c17 4 51 18 63 25c9 6 12 19 13 29v130c0 6 6 11 16 11c8 0 14 -5 14 -11v-122c0 -8 7 -13 14 -13c5 1 25 9 25 9c2 1 3 1 5 1c4 0 7 -3 7 -8 v-71c0 -6 -5 -14 -12 -17zM168 -45c2 9 4 37 4 64s-2 52 -4 57c-2 4 -8 6 -15 6c-25 0 -71 -21 -73 -38c-2 -8 -3 -43 -3 -74c0 -24 1 -46 3 -50c1 -3 6 -5 12 -5c23 0 70 20 76 40z","flat":"M12 -170c-8 10 -12 581 -12 581c1 18 17 28 31 28c10 0 19 -6 19 -17c0 -20 -6 -260 -7 -282c0 -7 4 -14 11 -17c2 -1 3 -1 5 -1c5 0 16 9 22 14c14 9 38 17 55 17c46 -3 90 -39 90 -96c0 -46 -31 -107 -120 -169c-25 -17 -49 -44 -79 -61c0 0 -3 -2 -6 -2s-6 1 -9 5z M47 -81c0 -5 2 -15 11 -15c3 0 6 1 10 3c43 27 89 81 89 135c0 25 -12 58 -41 58c-23 0 -63 -29 -70 -49c-1 -4 -2 -16 -2 -32c0 -40 3 -100 3 -100z","natural":"M141 181l15 5c1 1 3 1 4 1c4 0 8 -3 8 -8v-502c0 -7 -6 -12 -12 -12h-13c-7 0 -12 5 -12 12v149c0 8 -7 11 -17 11c-29 0 -85 -24 -99 -30c-1 -1 -3 -1 -4 -1l-2 -1c-6 0 -9 3 -9 9v515c0 7 5 12 12 12h13c6 0 12 -5 12 -12v-167c0 -4 4 -5 10 -5c26 0 90 23 90 23 c1 0 2 1 4 1zM37 39v-103c0 -4 5 -6 12 -6c25 0 82 23 82 41v103c0 4 -3 5 -9 5c-24 0 -85 -26 -85 -40z","black":"M97 -125c-54 0 -97 31 -97 83c0 86 88 167 198 167c57 0 97 -32 97 -83c0 -85 -109 -167 -198 -167z","half":"M97 -125c-55 0 -97 30 -97 83c0 52 47 167 196 167c58 0 99 -32 99 -83c0 -33 -33 -167 -198 -167zM75 -87c48 0 189 88 189 131c0 7 -3 13 -6 19c-7 12 -18 21 -37 21c-47 0 -192 -79 -192 -128c0 -7 3 -14 6 -20c7 -12 19 -23 40 -23z","flagU":"M238 -790c-5 -17 -22 -23 -28 -19s-16 13 -16 29c0 4 1 9 3 15c17 45 24 92 24 137c0 59 -9 116 -24 150c-36 85 -131 221 -197 233v239c0 12 8 15 19 15c10 0 18 -6 21 -22c16 -96 58 -182 109 -261c63 -100 115 -218 115 -343c0 -78 -26 -173 -26 -173z","flagD":"M240 760c-10 29 7 48 22 48c7 0 13 -4 16 -15c8 -32 28 -103 28 -181c0 -125 -61 -244 -124 -343c-51 -79 -125 -166 -142 -261c-2 -16 -15 -22 -24 -22c-8 0 -16 5 -16 15v235c134 45 184 126 221 210c15 34 40 118 40 177c0 45 -7 95 -21 137z","dot":"M100 0c0 -28 -22 -50 -50 -50s-50 22 -50 50s22 50 50 50s50 -22 50 -50z","ts2":"M421 -91c-16 -155 -93 -159 -136 -159c-89 0 -104 54 -144 54c-59 0 -71 -61 -93 -61c-15 0 -26 21 -26 34l1 3c17 65 56 114 111 149c72 44 147 113 147 204c0 29 -1 96 -90 96c-59 0 -77 -24 -79 -38c0 -20 69 -23 69 -83c0 -25 -9 -88 -70 -88c-36 0 -67 24 -82 55 c-6 15 -9 29 -9 43c0 27 11 52 28 73c49 57 111 63 181 63c93 0 197 -46 197 -152c0 -83 -63 -112 -133 -131c-22 -6 -107 -36 -129 -72c11 4 24 6 37 6c41 0 88 -16 108 -24c10 -5 17 -6 30 -11c7 -2 12 -3 17 -3c21 0 29 19 39 44l1 1c2 7 5 11 13 11c7 0 12 -2 12 -14z ","ts3":"M213 248c42 -3 167 -30 167 -122c0 -46 -21 -72 -61 -91c-9 -5 -20 -6 -31 -9c-3 -1 -4 -5 -4 -9c0 -2 0 -3 1 -5c2 -4 5 -4 10 -5l33 -9l21 -12c10 -6 18 -13 24 -21c19 -22 26 -41 28 -70v-7c0 -88 -102 -139 -201 -139h-9c-98 2 -169 32 -171 110c0 22 5 46 22 61 c12 13 31 23 48 26c4 1 7 1 11 1c43 0 72 -30 72 -72c-1 -29 -23 -44 -23 -66v-5c1 -15 20 -15 28 -16c1 0 5 -1 9 -1c22 0 76 12 76 118c0 13 -9 91 -124 91c-8 0 -25 0 -25 12c0 11 14 16 24 17c63 3 122 32 122 106v7c0 24 -8 77 -93 77c-9 0 -40 -8 -42 -25v-4 c0 -14 15 -12 20 -14s30 -4 33 -41v-8c0 -33 -22 -65 -66 -65h-5c-62 4 -81 48 -81 81c0 53 86 110 172 110h4l7 -1h4z","ts4":"M362 -74h73c11 0 15 -7 15 -19s-5 -19 -15 -19h-73v-59c0 -32 21 -38 31 -38s22 -6 22 -20s-10 -21 -20 -21h-213c-15 0 -19 11 -19 21s7 19 23 19c18 0 40 8 40 35v63h-186c-12 0 -20 7 -20 17c0 3 1 7 3 12l1 1v1l6 8c30 42 128 181 128 305c0 16 14 19 23 19 c8 0 53 -2 71 -2s59 2 68 2c8 0 15 -6 15 -15l-1 -3c-3 -12 -163 -239 -243 -307h135v84c0 12 5 18 9 23l95 115c6 7 11 9 20 9c11 0 12 -9 12 -17v-214z","ts6":"M305 83c-13 0 -42 8 -49 21c-10 11 -15 26 -15 41c0 10 2 20 7 29c6 12 25 24 25 38c0 10 -13 15 -33 15c-21 0 -80 -5 -83 -190c0 -16 3 -24 9 -24c2 0 4 0 6 2c26 23 59 35 91 35c77 0 151 -67 151 -145c0 -45 -23 -90 -58 -118c-36 -29 -86 -36 -131 -36 c-84 0 -133 36 -174 110c-22 40 -30 92 -31 138v4c0 47 17 100 39 142c36 68 107 105 183 106c54 0 132 -17 142 -81c1 -4 1 -7 1 -11c0 -43 -38 -76 -80 -76zM222 2c-32 0 -58 -50 -58 -112s26 -112 58 -112s59 50 59 112s-27 112 -59 112z","ts8":"M334 36c47 -24 82 -57 82 -117c0 -135 -107 -178 -207 -178c-99 0 -189 40 -189 127c0 63 40 96 92 121c-48 27 -87 64 -87 133c0 84 79 137 195 137c27 0 174 -15 174 -117c0 -50 -24 -83 -60 -106zM282 59c33 19 53 45 53 85c0 70 -85 86 -117 86 c-44 0 -101 -21 -101 -63c0 -63 85 -80 165 -108zM205 -226c67 0 98 34 98 74c0 66 -74 87 -147 119c-44 -17 -79 -54 -79 -94c0 -65 61 -99 128 -99z"};
 /* ---- pitch detection (YIN) + piano note-event logic ---- */
 function yinPitch(buf, sr, opts) {
   const o = opts || {};
@@ -553,7 +680,7 @@ const accSym = a => a > 0 ? '♯' : a < 0 ? '♭' : '';
 const nm = (d, a = 0) => LET[d % 7] + accSym(a) + oct(d);
 const isWhite = m => SEMI.includes(((m % 12) + 12) % 12);
 const ord = n => n + (n === 1 ? 'st' : n === 2 ? 'nd' : n === 3 ? 'rd' : 'th');
-const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+const plural = (n, w, pl) => n + ' ' + (n === 1 ? w : pl || w + 's');
 function spell(m, pref) {
   const pc = m % 12, o = Math.floor(m / 12) - 1, i = SEMI.indexOf(pc);
   if (i >= 0) return { d: o * 7 + i, acc: 0 };
@@ -573,31 +700,132 @@ const CLEF = {
     lm: [[14, 'Low C', '2 ledger lines below the bass staff'], [18, 'Bottom-line G', 'the bottom line of the bass staff'], [21, 'Bass C', 'the 2nd space of the bass staff'], [24, 'Bass F', 'the 4th line. The bass clef is an old F, and its two dots hug this line', 1], [28, 'Middle C', 'its own ledger line just above the bass staff']] }
 };
 const RANGES = { landmarks: { list: 1, t: [28,32,35,38,42], b: [14,18,21,24,28] }, staff: { t: [30,38], b: [18,26] }, near: { t: [28,40], b: [16,28] }, far: { t: [24,44], b: [12,32] } };
+/* Real tunes for Sight-read: well-known melodies, all public domain, a phrase per line, on the white keys only
+   (so no key signature is needed). Each note is letter + octave + length: e eighth, q quarter, h half, w whole,
+   with a dot for dotted notes. Bars are split by |. The left hand plays them an octave or two lower. */
+const TUNES = [
+  { t: 'Ode to Joy', by: 'Beethoven', ts: '4/4', ph: [
+    'E4q E4q F4q G4q | G4q F4q E4q D4q | C4q C4q D4q E4q | E4q. D4e D4h',
+    'E4q E4q F4q G4q | G4q F4q E4q D4q | C4q C4q D4q E4q | D4q. C4e C4h',
+    'D4q D4q E4q C4q | D4q E4e F4e E4q C4q | D4q E4e F4e E4q D4q | C4q D4q G3h',
+    'E4q E4q F4q G4q | G4q F4q E4q D4q | C4q C4q D4q E4q | D4q. C4e C4h'] },
+  { t: 'Twinkle, Twinkle, Little Star', by: 'French folk tune', ts: '4/4', ph: [
+    'C4q C4q G4q G4q | A4q A4q G4h | F4q F4q E4q E4q | D4q D4q C4h',
+    'G4q G4q F4q F4q | E4q E4q D4h | G4q G4q F4q F4q | E4q E4q D4h',
+    'C4q C4q G4q G4q | A4q A4q G4h | F4q F4q E4q E4q | D4q D4q C4h'] },
+  { t: 'Mary Had a Little Lamb', by: 'Traditional', ts: '4/4', ph: [
+    'E4q D4q C4q D4q | E4q E4q E4h | D4q D4q D4h | E4q G4q G4h',
+    'E4q D4q C4q D4q | E4q E4q E4q E4q | D4q D4q E4q D4q | C4w'] },
+  { t: 'Hot Cross Buns', by: 'Traditional', ts: '4/4', ph: [
+    'E4q D4q C4h | E4q D4q C4h | C4e C4e C4e C4e D4e D4e D4e D4e | E4q D4q C4h'] },
+  { t: 'Jingle Bells', by: 'James Lord Pierpont', ts: '4/4', ph: [
+    'E4q E4q E4h | E4q E4q E4h | E4q G4q C4q. D4e | E4w',
+    'F4q F4q F4q. F4e | F4q E4q E4q E4e E4e | E4q D4q D4q E4q | D4h G4h',
+    'E4q E4q E4h | E4q E4q E4h | E4q G4q C4q. D4e | E4w',
+    'F4q F4q F4q. F4e | F4q E4q E4q E4e E4e | G4q G4q F4q D4q | C4w'] },
+  { t: 'Lightly Row', by: 'German folk song', ts: '4/4', ph: [
+    'G4q E4q E4h | F4q D4q D4h | C4q D4q E4q F4q | G4q G4q G4h',
+    'G4q E4q E4h | F4q D4q D4h | C4q E4q G4q G4q | C4w',
+    'D4q D4q D4q D4q | D4q E4q F4h | E4q E4q E4q E4q | E4q F4q G4h',
+    'G4q E4q E4h | F4q D4q D4h | C4q E4q G4q G4q | C4w'] },
+  { t: 'Au Clair de la Lune', by: 'French folk song', ts: '4/4', ph: [
+    'C5q C5q C5q D5q | E5h D5h | C5q E5q D5q D5q | C5w',
+    'D5q D5q D5q D5q | A4h A4h | D5q C5q B4q A4q | G4w',
+    'C5q C5q C5q D5q | E5h D5h | C5q E5q D5q D5q | C5w'] },
+  { t: 'Frère Jacques', by: 'French round', ts: '4/4', ph: [
+    'G4q A4q B4q G4q | G4q A4q B4q G4q | B4q C5q D5h | B4q C5q D5h',
+    'D5e E5e D5e C5e B4q G4q | D5e E5e D5e C5e B4q G4q | G4q D4q G4h | G4q D4q G4h'] },
+  { t: 'Old MacDonald', by: 'Traditional', ts: '4/4', ph: [
+    'G4q G4q G4q D4q | E4q E4q D4h | B4q B4q A4q A4q | G4h. D4q',
+    'G4q G4q G4q D4q | E4q E4q D4h | B4q B4q A4q A4q | G4w'] },
+  { t: 'London Bridge', by: 'Traditional', ts: '4/4', ph: [
+    'G4q. A4e G4q F4q | E4q F4q G4h | D4q E4q F4h | E4q F4q G4h',
+    'G4q. A4e G4q F4q | E4q F4q G4h | D4h G4h | E4q C4h.'] },
+  { t: 'Row, Row, Row Your Boat', by: 'Traditional round', ts: '6/8', ph: [
+    'C4q. C4q. | C4q D4e E4q. | E4q D4e E4q F4e | G4h.',
+    'C5e C5e C5e G4e G4e G4e | E4e E4e E4e C4e C4e C4e | G4q F4e E4q D4e | C4h.'] },
+  { t: 'Deck the Halls', by: 'Welsh carol', ts: '4/4', ph: [
+    'G4q. F4e E4q D4q | C4q D4q E4q C4q | D4e E4e F4e D4e E4q. D4e | C4q B3q C4h',
+    'G4q. F4e E4q D4q | C4q D4q E4q C4q | D4e E4e F4e D4e E4q. D4e | C4q B3q C4h',
+    'D4q. E4e F4q D4q | E4q. F4e G4q D4q | E4e F4e G4q A4e B4e C5q | B4q A4q G4h',
+    'G4q. F4e E4q D4q | C4q D4q E4q C4q | A4e A4e A4e A4e G4q. F4e | E4q D4q C4h'] },
+  { t: 'Silent Night', by: 'Franz Gruber', ts: '3/4', ph: [
+    'G4q. A4e G4q | E4h. | G4q. A4e G4q | E4h.',
+    'D5h D5q | B4h. | C5h C5q | G4h.',
+    'A4h A4q | C5q. B4e A4q | G4q. A4e G4q | E4h.',
+    'A4h A4q | C5q. B4e A4q | G4q. A4e G4q | E4h.',
+    'D5h D5q | F5q. D5e B4q | C5h. | E5h.',
+    'C5q. G4e E4q | G4q. F4e D4q | C4h.'] },
+  { t: 'Westminster Chimes', by: 'the Big Ben clock tune', ts: '3/4', ph: [
+    'G4q B4q A4q | D4h. | G4q A4q B4q | G4h.',
+    'B4q G4q A4q | D4h. | D4q A4q B4q | G4h.'] },
+  { t: 'Surprise Symphony', by: 'Haydn', ts: '4/4', ph: [
+    'C5q C5q E5q E5q | G5q G5q E5h | F5q F5q D5q D5q | B4q B4q G4h'] },
+  { t: 'Aura Lee', by: 'George R. Poulton (the tune of Love Me Tender)', ts: '4/4', ph: [
+    'C4q F4q E4q F4q | G4q D4q G4h | F4q E4q D4q E4q | F4w'] },
+  { t: 'Joy to the World', by: 'Handel, arranged by Lowell Mason', ts: '4/4', ph: [
+    'C5h B4q. A4e | G4h. F4q | E4h D4h | C4w'] }
+];
 const OPTS = [
-  ['mode', 'Mode', [['play', 'Play it', 'find the key'], ['name', 'Name it', 'say the letter'], ['place', 'Place it', 'put it on the staff'], ['line', 'Sight-read', '5 notes in a row']]],
+  ['mode', 'Mode', [['play', 'Play it', 'find the key'], ['name', 'Name it', 'say the letter'], ['place', 'Place it', 'put it on the staff'], ['line', 'Sight-read', 'read a whole line']]],
   ['clefs', 'Staff', [['t', 'Treble', 'right hand'], ['b', 'Bass', 'left hand'], ['both', 'Both']]],
-  ['range', 'Which notes', [['levels', 'Levels', 'grow as you learn'], ['landmarks', 'Landmarks', '9 anchor notes'], ['staff', 'On the staff'], ['near', '+ 1 ledger line'], ['far', '+ 3 ledger lines']]],
+  ['range', 'Which notes', [['levels', 'Levels', 'grow as you learn'], ['landmarks', 'Landmarks', '9 anchor notes'], ['staff', 'On the staff', 'no ledger lines'], ['near', '+ 1 ledger line', 'above and below'], ['far', '+ 3 ledger lines', 'every note'], ['custom', 'Custom', 'tap to pick']]],
   ['focus', 'Lines or spaces', [['all', 'Both'], ['lines', 'Lines only'], ['spaces', 'Spaces only']]],
   ['acc', 'Sharps and flats', [[false, 'Off'], [true, 'Mix some in']]],
   ['round', 'Cards per round', [[10, '10'], [20, '20'], [30, '30'], [0, 'Endless']]],
   ['auto', 'After a right answer', [[true, 'Go straight on'], [false, 'Wait for me']]],
   ['labels', 'Key labels', [['none', 'None'], ['c', 'C keys'], ['all', 'All white']]],
   ['sound', 'Sound when tapping', [[true, 'On'], [false, 'Off']]],
-  ['fing', 'Finger numbers', [['off', 'Off'], ['start', 'First note', '+ hand moves'], ['all', 'Every note']]]
+  ['fing', 'Finger numbers', [['off', 'Off'], ['start', 'First note', '+ hand moves'], ['all', 'Every note']]],
+  ['sr', 'Style', [['classic', 'Classic', '5 random notes'], ['melody', 'Melodies', 'made-up tunes'], ['tunes', 'Real tunes', 'famous melodies']]],
+  ['bars', 'Melody length', [[2, '2 bars'], [4, '4 bars']]],
+  ['tune', 'Which tune', [['mix', 'Mix them up', 'a new one each time'], ...TUNES.map(T => [T.t, T.t])]]
 ];
-const SECTIONS = [['Practice', ['mode', 'clefs', 'range', 'focus', 'acc', 'round', 'auto']], ['Display and sound', ['fing', 'labels', 'sound']]];
-const LABEL = { t: 'Treble', b: 'Bass', both: 'Treble + bass', levels: 'levels', landmarks: 'landmarks', staff: 'on the staff', near: '+ 1 ledger', far: '+ 3 ledgers' };
-const DEF = { mode: 'play', clefs: 'both', range: 'staff', focus: 'all', acc: false, round: 20, auto: true, labels: 'c', sound: true, fing: 'start', vol: 75, input: null, sens: 1.2, names: false };
+const SECTIONS = [['Practice', ['mode', 'clefs', 'range', 'focus', 'acc', 'round', 'auto']], ['Sight-read', ['sr', 'bars', 'tune']], ['Display and sound', ['fing', 'labels', 'sound']]];
+const LABEL = { t: 'Treble', b: 'Bass', both: 'Treble + bass', levels: 'levels', custom: 'custom notes', landmarks: 'landmarks', staff: 'on the staff', near: '+ 1 ledger', far: '+ 3 ledgers' };
+const DEF = { mode: 'play', clefs: 'both', range: 'staff', focus: 'all', acc: false, round: 20, auto: true, labels: 'c', sound: true, fing: 'start', sr: 'classic', bars: 2, tune: 'mix', pick: [], vol: 75, input: null, sens: 1.2, names: false };
 const LS = 'noteDojo.v1';
-let cfg = { ...DEF }, stats = {}, days = {};
-try { const j = JSON.parse(localStorage.getItem(LS) || 'null'); if (j) { cfg = { ...DEF, ...(j.cfg || {}) }; stats = j.stats || {}; days = j.days || {}; } } catch (e) {}
+/* Progress is kept per device: ownStats/ownDays is what was practised on this device; others holds the
+   history of each device combined in from a save code, by that device's id. stats/days is everything added up
+   (what the app shows and adapts to). Keeping devices apart is what lets you combine again and again without
+   counting anything twice. */
+let cfg = { ...DEF }, ownStats = {}, ownDays = {}, others = {}, dev = null, stats = {}, days = {};
+try { const j = JSON.parse(localStorage.getItem(LS) || 'null'); if (j) { cfg = { ...DEF, ...(j.cfg || {}) }; ownStats = j.stats; ownDays = j.days; others = j.others; dev = j.dev; } } catch (e) {}
 for (const [k, , ch] of OPTS) if (!ch.some(c => c[0] === cfg[k])) cfg[k] = DEF[k];
-for (const k of Object.keys(stats)) { const v = stats[k]; if (!/^[tb]\d{1,2}$/.test(k) || !v || typeof v.n !== 'number' || typeof v.ok !== 'number' || typeof v.box !== 'number') delete stats[k]; }
-if (!days || typeof days !== 'object' || Array.isArray(days)) days = {};
+function cleanStats(st) { const o = {}; if (st && typeof st === 'object') for (const k of Object.keys(st)) { const v = st[k]; if (/^[tb]\d{1,2}$/.test(k) && v && typeof v.n === 'number' && typeof v.ok === 'number' && typeof v.box === 'number') o[k] = v; } return o; }
+function cleanDays(dy) { const o = {}; if (dy && typeof dy === 'object' && !Array.isArray(dy)) for (const k of Object.keys(dy)) if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(k) && dy[k] > 0) o[k] = +dy[k]; return o; }
+function cleanOthers(ot) { const o = {}; if (ot && typeof ot === 'object') for (const id of Object.keys(ot)) { const v = ot[id]; if (/^\d+$/.test(id) && v) o[id] = { kind: v.kind | 0, stats: cleanStats(v.stats), days: cleanDays(v.days) }; } return o; }
+ownStats = cleanStats(ownStats); ownDays = cleanDays(ownDays); others = cleanOthers(others);
 if (!(cfg.sens >= .5 && cfg.sens <= 3)) cfg.sens = DEF.sens;
+cfg.pick = Array.isArray(cfg.pick) ? [...new Set(cfg.pick.filter(id => typeof id === 'string' && /^[tb]\d{1,2}$/.test(id)))] : [];
 cfg.vol = Math.round(+cfg.vol); if (!(cfg.vol >= 0 && cfg.vol <= 100)) cfg.vol = DEF.vol;
-const save = () => { try { localStorage.setItem(LS, JSON.stringify({ cfg, stats, days })); } catch (e) {} };
+// this device: a random id made once, and what kind of device it is (only used for labels like "from iPhone")
+const UA = navigator.userAgent, KINDS = ['an older save', 'iPhone', 'iPad', 'Mac', 'Windows PC', 'Android', 'computer'];
+const DEV_KIND = /iPad/.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1) ? 2 : /iPhone|iPod/.test(UA) ? 1 : /Android/.test(UA) ? 5 : /Mac/.test(UA) ? 3 : /Win/.test(UA) ? 4 : 6;
+if (!dev || !(dev.id > 0 && dev.id < 2 ** 32)) { let id = 0; try { id = crypto.getRandomValues(new Uint32Array(1))[0]; } catch (e) {} dev = { id: id || 1 + Math.floor(Math.random() * 4e9) }; }
+dev.kind = DEV_KIND;
+// add up one note across devices: counts add; the average time is weighted by right answers; the level comes
+// from whichever device practised that note most recently (so practice here counts straight away)
+function combineNote(id) {
+  const src = [ownStats[id], ...Object.values(others).map(o => o.stats[id])].filter(Boolean);
+  if (src.length < 2) return src[0];
+  const n = src.reduce((a, v) => a + v.n, 0), ok = src.reduce((a, v) => a + v.ok, 0), tw = src.filter(v => v.t > 0 && v.ok > 0);
+  const t = tw.length ? Math.round(tw.reduce((a, v) => a + v.t * v.ok, 0) / tw.reduce((a, v) => a + v.ok, 0)) : 0;
+  const last = Math.max(...src.map(v => v.last || 0)), nw = src.filter(v => (v.last || 0) === last), nn = nw.reduce((a, v) => a + v.n, 0);
+  return { n, ok, t, last, box: nn ? Math.round(nw.reduce((a, v) => a + v.box * v.n, 0) / nn * 2) / 2 : nw[0].box };
+}
+function recombine() {
+  const ids = Object.keys(others);
+  if (!ids.length) { stats = ownStats; days = ownDays; return; }
+  stats = {}; days = {};
+  for (const id of new Set([...Object.keys(ownStats), ...ids.flatMap(k => Object.keys(others[k].stats))])) stats[id] = combineNote(id);
+  for (const src of [ownDays, ...ids.map(k => others[k].days)]) for (const k of Object.keys(src)) days[k] = (days[k] || 0) + src[k];
+}
+recombine();
+const save = () => { try { localStorage.setItem(LS, JSON.stringify({ cfg, stats: ownStats, days: ownDays, dev, others })); } catch (e) {} };
 const dayKey = (d = new Date()) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+const dayNum = k => { const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(k); return m ? Math.round(Date.UTC(+m[1], m[2] - 1, +m[3]) / 864e5) : null; };
+const dayStr = n => { const t = new Date(n * 864e5); return `${t.getUTCFullYear()}-${t.getUTCMonth() + 1}-${t.getUTCDate()}`; };
 function dayStreak() { const d = new Date(); let n = 0; if (!days[dayKey(d)]) d.setDate(d.getDate() - 1); while (days[dayKey(d)]) { n++; d.setDate(d.getDate() - 1); } return n; }
 
 /* ---------- drawing ---------- */
@@ -635,6 +863,83 @@ function single(c, notes, W = CW) {
   return s;
 }
 function svgY(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; const m = svg.getScreenCTM(); return m ? p.matrixTransform(m.inverse()).y : 0; }
+
+/* ---------- motion: little celebrations and smooth moves (Reduce Motion turns them off) ----------
+   Two layers sit on the staff and are never redrawn with it: one behind (the blue band that glides from note
+   to note) and one in front (sparkles, and the last card fading out as the next one comes in). */
+const NS = 'http://www.w3.org/2000/svg', calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+let fxPts = {}, justHit = null, bandAt = null;
+function fxView(vb) { $('#fx').setAttribute('viewBox', vb); $('#fxb').setAttribute('viewBox', vb); }
+function setBand(b, jump) {
+  const r = $('#band');
+  if (!b) { r.classList.remove('on'); bandAt = null; return; }
+  const glide = bandAt && !jump && !calm();
+  if (!glide) r.style.transition = 'none';
+  r.setAttribute('width', f2(b.w)); r.setAttribute('height', f2(b.h));
+  r.style.transform = `translate(${f2(b.x)}px,${f2(b.y)}px)`; r.classList.add('on');
+  if (!glide) { r.getBoundingClientRect(); r.style.transition = ''; }
+  bandAt = b;
+}
+// a ring and a few sparks from a note you got right; a bigger, golden one for streaks
+function burst(p, big, col) {
+  if (calm() || !p || view !== 'practice') return;
+  const [x, y] = p, c = col || 'var(--ok)', n = big ? 12 : 7, R = big ? 27 : 17;
+  let h = `<circle class="ring" cx="${f2(x)}" cy="${f2(y)}" r="9" style="stroke:${c}"/>` + (big ? `<circle class="ring" cx="${f2(x)}" cy="${f2(y)}" r="13" style="stroke:#f3b519;animation-delay:.09s"/>` : '');
+  for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2 + Math.random() * .6, d = R * (.7 + Math.random() * .5); h += `<circle class="spk" cx="${f2(x)}" cy="${f2(y)}" r="${big ? 2.1 : 1.6}" style="fill:${big && i % 3 === 1 ? '#f3b519' : c};--dx:${f2(Math.cos(a) * d)}px;--dy:${f2(Math.sin(a) * d)}px"/>`; }
+  const g = document.createElementNS(NS, 'g'); g.innerHTML = h; $('#fx').appendChild(g); setTimeout(() => g.remove(), 900);
+}
+// the card on screen fades out while the next one springs in
+function fxOut() {
+  const st = $('#staff'); if (calm() || view !== 'practice' || !st.firstChild) return;
+  const sv = document.createElementNS(NS, 'svg'); sv.setAttribute('viewBox', st.getAttribute('viewBox')); sv.setAttribute('class', 'staff fxl fx'); sv.setAttribute('aria-hidden', 'true');
+  sv.innerHTML = `<g class="old">${st.innerHTML}</g>`; st.parentElement.appendChild(sv); setTimeout(() => sv.remove(), 340);
+}
+// slide a segmented control's highlight under its chosen button
+function slide(box) {
+  const on = box && box.querySelector(':scope > button.on'); if (!on || !on.offsetWidth) return;
+  let t = box.querySelector(':scope > .thumb'); if (!t) { t = document.createElement('i'); t.className = 'thumb'; t.setAttribute('aria-hidden', 'true'); box.prepend(t); }
+  const first = !box.classList.contains('slid') || calm();
+  if (first) t.style.transition = 'none';
+  t.style.width = on.offsetWidth + 'px'; t.style.transform = `translateX(${on.offsetLeft}px)`;
+  if (first) { t.getBoundingClientRect(); t.style.transition = ''; box.classList.add('slid'); }
+}
+function shake() { if (calm()) return; const c = $('.cardwrap .card'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); }
+function cheer(txt) {
+  if (view !== 'practice') return;
+  const c = $('.cardwrap .card'), o = c.querySelector('.cheer'); if (o) o.remove();
+  const el = document.createElement('div'); el.className = 'cheer'; el.textContent = txt; c.appendChild(el); setTimeout(() => el.remove(), 2000);
+}
+const MILES = [5, 10, 15, 20, 25, 30, 40, 50, 75, 100];
+function celebrate(p, clean) {
+  if (!clean) { burst(p, false, 'var(--amber)'); return; }
+  const mile = MILES.includes(streak);
+  burst(p, mile);
+  if (mile) cheer(`${streak >= 50 ? '🏆' : streak >= 20 ? '⚡️' : '🔥'} ${streak} in a row!`);
+}
+function confetti(n = 70) {
+  if (calm()) return;
+  const box = document.createElement('div'), cols = ['#f3b519', '#2b62e0', '#13a35a', '#c2253c', '#7aa5ff', '#45d38c', '#ff7a5c'];
+  box.className = 'confetti';
+  let h = ''; for (let i = 0; i < n; i++) h += `<i style="left:${(Math.random() * 100).toFixed(1)}%;background:${cols[i % cols.length]};width:${5 + (Math.random() * 5 | 0)}px;--t:${(1.7 + Math.random() * 1.4).toFixed(2)}s;--dl:${(Math.random() * .45).toFixed(2)}s;--dx:${((Math.random() - .5) * 240) | 0}px;--r:${(Math.random() * 1000 - 500) | 0}deg"></i>`;
+  box.innerHTML = h; document.body.appendChild(box); setTimeout(() => box.remove(), 3600);
+}
+// numbers that count up (round summary, progress)
+function countUp(el, to, dec, suf, ms = 750) {
+  const out = v => el.textContent = v.toFixed(dec) + suf;
+  if (calm() || !(to > 0)) { out(to); return; }
+  const t0 = performance.now(), step = now => { const k = Math.min(1, (now - t0) / ms); out(to * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); };
+  out(0); requestAnimationFrame(step);
+}
+function countAll(root) { root.querySelectorAll('[data-v]').forEach(b => countUp(b, +b.dataset.v, +b.dataset.d || 0, b.dataset.s || '')); }
+const numCell = (v, dec, suf) => `<b data-v="${v}" data-d="${dec}" data-s="${suf}">${v.toFixed(dec)}${suf}</b>`;
+function renderProg() {
+  const el = $('#prog'), bar = el.firstChild; let p = null;
+  if (cfg.round) p = Math.min(1, round.n / cfg.round);
+  else if (cfg.mode === 'line' && line && line.style !== 'classic') p = line.notes.filter(n => n.st).length / line.notes.length;
+  el.style.visibility = p === null ? 'hidden' : '';
+  const w = (p || 0) * 100, was = parseFloat(bar.style.width) || 0;
+  bar.style.transition = w < was ? 'none' : ''; bar.style.width = w + '%';
+}
 
 /* ---------- note descriptions ---------- */
 const KPOS = ['just left of the group of 2 black keys', 'between the 2 black keys', 'just right of the group of 2 black keys', 'just left of the group of 3 black keys', 'between the 1st and 2nd of the 3 black keys', 'between the 2nd and 3rd of the 3 black keys', 'just right of the group of 3 black keys'];
@@ -682,11 +987,13 @@ let marks = {}; const pressed = new Set();
 
 function poolList() {
   if (drill && drill.length) return drill.map(id => ({ clef: id[0], d: +id.slice(1) }));
-  const clefs = cfg.clefs === 'both' ? ['t', 'b'] : [cfg.clefs], R = RANGES[cfg.range], out = [];
+  const clefs = cfg.clefs === 'both' ? ['t', 'b'] : [cfg.clefs], out = [];
+  const cus = cfg.range === 'custom' ? cfg.pick.filter(id => clefs.includes(id[0])) : null, R = RANGES[cus ? 'staff' : cfg.range];
   const lv = cfg.range === 'levels' ? levelNow() : null;
   for (const c of clefs) {
     let ds;
     if (lv) { ds = lv.L[lv.i].ids.filter(id => id[0] === c).map(id => +id.slice(1)); if (!ds.length) continue; }
+    else if (cus && cus.length) { ds = cus.filter(id => id[0] === c).map(id => +id.slice(1)).sort((x, y) => x - y); if (!ds.length) continue; }
     else { ds = R.list ? R[c].slice() : []; if (!R.list) for (let d = R[c][0]; d <= R[c][1]; d++) ds.push(d); }
     let f = ds;
     if (cfg.focus !== 'all') f = ds.filter(d => ((d - CLEF[c].bottom) % 2 === 0) === (cfg.focus === 'lines'));
@@ -723,21 +1030,154 @@ function makeLine() {
     const q = wpick(pool, pool.map(p => { if (p.d === pd && pool.length > 1) return 0; const g = Math.abs(p.d - pd); return noteWeight(p) * (g <= 2 ? 2.2 : g <= 4 ? 1.4 : .6); }));
     notes.push({ d: q.d, st: '' });
   }
-  return { clef: first.clef, notes, idx: 0 };
+  return { clef: first.clef, notes, idx: 0, style: 'classic' };
+}
+/* ---------- sight-read: melodies and real tunes ----------
+   Classic (above) is the original: 5 random whole notes. Melodies are made up here the way real tunes move: a time
+   signature and bars, mostly steps with a few leaps (a leap is answered by a step back), the beats landing on
+   chord notes, and an ending on C. Real tunes come from TUNES, a phrase per line. Any line can be played again,
+   or one bar (or a few) looped until it's easy. Lengths are in quarter notes: eighth .5 … whole 4. */
+const DUR = { e: .5, q: 1, h: 2, w: 4 };
+const tsLen = ts => { const [n, d] = ts.split('/').map(Number); return n * 4 / d; };
+const tsGrp = ts => ts === '6/8' ? 1.5 : ts === '4/4' ? 2 : 1;   // eighths are beamed together within these
+function parseBars(s, sh) {
+  return s.split('|').map(b => b.trim().split(/\s+/).map(tk => {
+    const m = /^([A-G])(\d)([ewhq])(\.?)$/.exec(tk);
+    return { d: LET.indexOf(m[1]) + 7 * +m[2] + sh, dur: DUR[m[3]] * (m[4] ? 1.5 : 1) };
+  }));
+}
+const ledN = (c, d) => { const o = d - CLEF[c].bottom; return o <= -2 ? Math.floor(-o / 2) : o >= 10 ? Math.floor((o - 8) / 2) : 0; };
+// the left hand plays a tune one or two octaves down, whichever needs fewer ledger lines
+const shiftC = {};
+function tuneShift(T, c) {
+  if (c === 't') return 0;
+  if (shiftC[T.t] == null) { const ds = T.ph.flatMap(p => parseBars(p, 0).flat().map(n => n.d)), cost = s => ds.reduce((a, d) => a + ledN('b', d + s), 0); shiftC[T.t] = cost(-14) < cost(-7) ? -14 : -7; }
+  return shiftC[T.t];
+}
+const tunePick = () => TUNES.findIndex(T => T.t === cfg.tune);
+const tuneNotes = (c, list) => list.flatMap(T => { const sh = tuneShift(T, c); return T.ph.flatMap(p => parseBars(p, sh).flat()); });
+let tuneAt = null, tuneRecent = [];   // where Real tunes are up to: which tune, which phrase, which hand
+function makeTune() {
+  const cl = cfg.clefs === 'both' ? ['t', 'b'] : [cfg.clefs], fix = tunePick();
+  let at = tuneAt;
+  if (at && (fix < 0 || at.i === fix) && cl.includes(at.c) && at.p + 1 < TUNES[at.i].ph.length) at = { ...at, p: at.p + 1 };
+  else {
+    let i = fix;
+    if (i < 0) { const ok = TUNES.map((_, k) => k).filter(k => !tuneRecent.includes(k)); i = ok[Math.floor(Math.random() * ok.length)]; tuneRecent.push(i); if (tuneRecent.length > 5) tuneRecent.shift(); }
+    // with both hands on, the tunes take turns: right hand, then left
+    const c = cl.length < 2 ? cl[0] : at ? (at.c === 't' ? 'b' : 't') : Math.random() < .5 ? 't' : 'b';
+    at = { i, p: 0, c };
+  }
+  const T = TUNES[at.i], bars = parseBars(T.ph[at.p], tuneShift(T, at.c)), notes = [];
+  bars.forEach((b, k) => b.forEach(n => notes.push({ d: n.d, dur: n.dur, bar: k, st: '' })));
+  const L = { clef: at.c, notes, idx: 0, style: 'tune', ts: T.ts, nb: bars.length, title: T.t, by: T.by, part: [at.p + 1, T.ph.length], fin: at.p === T.ph.length - 1, loop: null, pass: 0, P0: at.p ? at.P : null };
+  const f = lineFing(L); at.P = f[f.length - 1].P; tuneAt = at;
+  return L;
+}
+// rhythms for one bar [lengths, how often]; the last bar ends on a long note so the tune sounds finished
+const RHY = {
+  '4/4': { mid: [[[1, 1, 1, 1], 4], [[2, 1, 1], 2], [[1, 1, 2], 3], [[2, 2], 1.2], [[1.5, .5, 1, 1], 1], [[.5, .5, 1, 1, 1], .7], [[1, 1, .5, .5, 1], .7], [[1, 2, 1], .6], [[3, 1], .4]],
+    end: [[[4], 2], [[2, 2], 2], [[1, 1, 2], 3]] },
+  '3/4': { mid: [[[1, 1, 1], 4], [[2, 1], 2.2], [[1, 2], 1], [[1.5, .5, 1], 1], [[.5, .5, 1, 1], .6]], end: [[[3], 3], [[1, 2], 1.5]] }
+};
+const CHORD = { I: [0, 2, 4], IV: [3, 5, 0], V: [4, 6, 1] };
+function makeMelody() {
+  const first = pick(), c = first.clef;
+  const ds = [...new Set(poolList().filter(p => p.clef === c).map(p => p.d))].sort((a, b) => a - b);
+  if (ds.length < 3) return makeLine();   // too few notes to make a tune from
+  const ts = Math.random() < .25 ? '3/4' : '4/4', nb = cfg.bars, R = RHY[ts], wr = L => wpick(L.map(x => x[0]), L.map(x => x[1]));
+  const harm = nb === 2 ? ['I', 'V'] : ['I', 'IV', 'V', 'I'];
+  const rh = []; for (let k = 0; k < nb; k++) rh.push(k === nb - 1 ? wr(R.end) : k === 2 && Math.random() < .7 ? rh[0] : wr(R.mid));   // bar 3 echoes bar 1
+  const ctr = (ds[0] + ds[ds.length - 1]) / 2, chordT = (d, h) => CHORD[h].includes(d % 7), total = rh.reduce((a, r) => a + r.length, 0);
+  const near = (d, f) => { let b = null; for (const x of ds) if (f(x) && (b === null || Math.abs(x - d) < Math.abs(b - d))) b = x; return b; };
+  const notes = []; let prev = null, step = 0, reps = 0, j = 0;
+  rh.forEach((r, k) => {
+    let beat = 0;
+    r.forEach(dur => {
+      let d;
+      if (prev === null) d = wpick(ds, ds.map(x => (chordT(x, 'I') ? 3 : .3) / (1 + Math.abs(x - ctr))));
+      else if (j === total - 1) d = near(prev, x => x % 7 === 0) ?? near(prev, x => chordT(x, 'I')) ?? near(prev, () => true);
+      else d = wpick(ds, ds.map(x => {
+        const g = x - prev, a = Math.abs(g);
+        let w = a === 0 ? (reps ? 0 : .35) : a === 1 ? 3 : a === 2 ? 1.7 : a === 3 ? .8 : a === 4 ? .55 : a <= 7 ? .25 : .04;
+        if (Math.abs(step) >= 3) w *= Math.sign(g) === Math.sign(step) ? .25 : a <= 2 ? 2 : 1;   // after a leap, step back
+        if (beat === 0 && chordT(x, harm[k])) w *= 2.6; else if (ts === '4/4' && beat === 2 && chordT(x, harm[k])) w *= 1.5;
+        if (j === total - 2) { if (chordT(x, 'V')) w *= 2.5; if (ds.some(y => y % 7 === 0 && Math.abs(y - x) <= 2)) w *= 1.5; if (x === prev && x % 7 === 0) w = 0; }   // no C C C at the end
+        if (Math.abs(x - ctr) > 5) w *= .4;
+        return w * Math.sqrt(noteWeight({ clef: c, d: x }));
+      }));
+      if (prev !== null) { step = d - prev; reps = d === prev ? reps + 1 : 0; }
+      notes.push({ d, dur, bar: k, st: '' }); prev = d; beat += dur; j++;
+    });
+  });
+  return { clef: c, notes, idx: 0, style: 'melody', ts, nb, fin: true, loop: null, pass: 0 };
+}
+function makeAnyLine() { return drill || cfg.sr === 'classic' ? makeLine() : cfg.sr === 'tunes' ? makeTune() : makeMelody(); }
+// the part being practised: the whole line, or the looped bars
+function secRange() {
+  if (!line) return [0, 0];
+  if (!line.loop) return [0, line.notes.length - 1];
+  let s = -1, e = -1; line.notes.forEach((n, i) => { if (n.bar >= line.loop[0] && n.bar <= line.loop[1]) { if (s < 0) s = i; e = i; } });
+  return [s, e];
+}
+const barName = L => L[0] === L[1] ? `bar ${L[0] + 1}` : `bars ${L[0] + 1}–${L[1] + 1}`;
+function again() {
+  if (cfg.mode !== 'line' || !line || !card) return;
+  clearTimeout(advT); stopListen();
+  const [a, b] = secRange(); for (let i = a; i <= b; i++) line.notes[i].st = '';
+  line.idx = a; mkCard({ clef: line.clef, d: line.notes[a].d, acc: 0 }, false);
+}
+// tap a bar to loop it; tap a second bar to loop everything between; tap the looped bar again for the whole line
+function tapBar(k) {
+  if (cfg.mode !== 'line' || !line || line.style === 'classic' || !(k >= 0 && k < line.nb)) return;
+  const L = line.loop;
+  setLoop(!L ? [k, k] : L[0] === L[1] ? (L[0] === k ? null : [Math.min(L[0], k), Math.max(L[0], k)]) : [k, k]);
+}
+function setLoop(L) {
+  if (!line || line.style === 'classic') return;
+  line.loop = L; line.pass = 0;
+  if (!L) for (const n of line.notes) n.st = '';
+  again();
+  setFb('info', L ? `Looping ${barName(L)}. It plays again each time you finish it.` : 'The whole line, from the top.');
+}
+function skipLine() {
+  if (cfg.mode !== 'line' || !line) return;
+  clearTimeout(advT); stopListen();
+  if (cfg.round && round.n >= cfg.round) { showSummary(); return; }
+  line = null; newCard();
+}
+// Listen: plays the line (or the looped bars) in time, lighting each note and key as it sounds
+let lisT = [], lisAt = -1;
+const hearTone = m => { const s = cfg.sound; cfg.sound = true; tone(m); cfg.sound = s; };
+function stopListen() { const was = lisT.length || lisAt >= 0; lisT.forEach(clearTimeout); lisT = []; lisAt = -1; if (was && card) { renderCard(); renderSide(); } }
+function listen() {
+  if (!line || line.style === 'classic') return;
+  if (lisT.length) { stopListen(); return; }
+  const [a, b] = secRange(), q = line.ts === '6/8' ? .4 : line.ts === '3/4' ? .58 : .52;
+  let t = .05;
+  for (let i = a; i <= b; i++) {
+    const n = line.notes[i], at = t;
+    lisT.push(setTimeout(() => { lisAt = i; const m = natMidi(n.d); hearTone(m); flashPress(m); ensureVisible(m); renderCard(); }, at * 1000));
+    t += n.dur * q;
+  }
+  lisT.push(setTimeout(() => { lisT = []; lisAt = -1; if (card) { renderCard(); renderSide(); } }, t * 1000 + 120));
+  renderSide();
 }
 function record(ok, hinted) {
   const id = card.clef + card.d, ms = performance.now() - card.t0;
-  const s = stats[id] || (stats[id] = { n: 0, ok: 0, box: 0, t: 0 });
+  const s = ownStats[id] || (ownStats[id] = { n: 0, ok: 0, box: 0, t: 0 });
   s.n++;
   if (ok) { s.ok++; s.t = s.t ? Math.round(s.t * .7 + ms * .3) : Math.round(ms); }
   if (ok && !hinted) s.box = Math.min(5, s.box + (ms < 5000 ? 1 : .5));
   else if (!ok) s.box = Math.max(0, s.box - 2);
   round.res++;
-  const dk = dayKey(); days[dk] = (days[dk] || 0) + 1;
+  const dk = dayKey(); s.last = dayNum(dk); ownDays[dk] = (ownDays[dk] || 0) + 1;
+  if (stats !== ownStats) { stats[id] = combineNote(id); days[dk] = (days[dk] || 0) + 1; }
   if (ok && !hinted) { round.clean++; round.times.push(ms); streak++; round.best = Math.max(round.best, streak); } else { streak = 0; if (!ok) round.missed.add(id); }
   save(); checkLevel();
 }
 function newRound() {
+  lisT.forEach(clearTimeout); lisT = []; lisAt = -1;   // a tune that was playing stops with the old round
   round = { n: 0, res: 0, clean: 0, times: [], best: 0, missed: new Set() }; streak = 0; line = null; pendingNext = false;
   if (view === 'practice') { const r = poolRange(); if (r[0] !== kbRange[0] || r[1] !== kbRange[1]) { kbRange = r; buildKB(); } }
   newCard();
@@ -746,9 +1186,16 @@ function newCard() {
   clearTimeout(advT);
   let p, cont = false;
   if (cfg.mode === 'line') {
-    if (line && line.idx < line.notes.length - 1) { line.idx++; cont = true; } else line = makeLine();
+    const b = secRange()[1];
+    if (line && line.idx < b) { line.idx++; cont = true; }
+    else if (line && line.loop) { const a = secRange()[0]; for (let i = a; i <= b; i++) line.notes[i].st = ''; line.idx = a; cont = true; }   // looping: back to the loop's first note
+    else { stopListen(); line = makeAnyLine(); }
     p = { clef: line.clef, d: line.notes[line.idx].d, acc: 0 };
   } else { line = null; p = pick(); }
+  mkCard(p, cont);
+}
+function mkCard(p, cont) {
+  if (!cont && card) fxOut();
   card = { ...p, midi: natMidi(p.d) + p.acc, t0: performance.now(), tries: 0, hint: 0, done: false, rec: false, counted: false, revealed: false, pend: null, hover: null, pendBad: false, ghost: null, fresh: true };
   cardNo++; recent.push(p.clef + p.d); if (recent.length > 3) recent.shift();
   marks = {}; accMod = 0;
@@ -766,7 +1213,9 @@ function next() {
   if (view !== 'practice') { pendingNext = true; return; }
   if (card && !card.done && !card.rec) { record(false, true); }
   if (card) finish();
-  if (cfg.round && round.n >= cfg.round) { showSummary(); return; }
+  // a sight-read round only ends between lines (never halfway through a tune or a loop)
+  const mid = cfg.mode === 'line' && line && (line.idx < secRange()[1] || line.loop);
+  if (cfg.round && round.n >= cfg.round && !mid) { showSummary(); return; }
   newCard();
 }
 function setFb(kind, html) {
@@ -784,15 +1233,29 @@ function correct(m) {
   setFb('ok', `${name}${lm ? ' · ' + lm[1] : ''} <span class="t">${(ms / 1000).toFixed(1)} s</span>`);
   if (cfg.mode === 'line' && line) {
     line.notes[line.idx].st = clean ? 'ok' : 'fix';
-    if (line.idx < line.notes.length - 1 && !(cfg.round && round.n >= cfg.round)) { const k = card.midi; next(); flashMark(k, 'ok'); return; }
-    renderAll();
-    if (cfg.auto) advT = setTimeout(next, 800);
+    const [a, b] = secRange(), at = fxPts[line.idx];
+    justHit = line.idx;
+    if (line.idx < b) { const k = card.midi; next(); flashMark(k, 'ok'); celebrate(at, clean); return; }
+    line.pass = (line.pass || 0) + 1;
+    const perfect = line.notes.slice(a, b + 1).every(n => n.st === 'ok');
+    if (line.loop) {   // a looped part: a moment to breathe, then it goes again
+      setFb('ok', `${perfect ? 'Clean! ' : ''}${barName(line.loop).replace(/^./, x => x.toUpperCase())}, pass ${line.pass} <span class="t">again…</span>`);
+      line.wave = perfect; renderAll(); celebrate(at, clean); advT = setTimeout(next, 1100);
+      return;
+    }
+    if (line.style !== 'classic') { const k = line.notes.filter(n => n.st === 'ok').length, n = line.notes.length; setFb('ok', `${k === n ? 'Perfect line!' : 'Line done'} <span class="t">${k} of ${n} first try</span>`); }
+    line.wave = perfect && line.notes.length > 1;
+    renderAll(); celebrate(at, clean);
+    if (line.wave && line.style !== 'classic' && !MILES.includes(streak)) cheer('✨ Perfect line!');
+    if (cfg.auto) advT = setTimeout(next, line.style === 'classic' ? 800 : 1500);
     return;
   }
-  renderAll();
+  justHit = 'card';
+  renderAll(); celebrate(fxPts.card, clean);
   if (cfg.auto && clean) advT = setTimeout(next, 900);
 }
 function wrong(msg, ghost) {
+  shake();
   card.tries++;
   if (!card.rec) { card.rec = true; record(false, false); }
   card.hint = Math.max(card.hint, Math.min(3, card.tries));
@@ -843,12 +1306,16 @@ function showHow() {
 let lastMic = { m: null, t: -1e9 };
 function answerKey(m, src) {
   if (!card || overlayOpen()) return;
+  const loopNext = card.done && cfg.mode === 'line' && line && line.loop ? natMidi(line.notes[secRange()[0]].d) : null;
   if (src === 'mic') {
-    const now = performance.now(), right = !card.done && cfg.mode !== 'place' && (cfg.mode === 'name' ? (m - card.midi) % 12 === 0 : m === card.midi);
+    const now = performance.now(), right = m === loopNext || (!card.done && cfg.mode !== 'place' && (cfg.mode === 'name' ? (m - card.midi) % 12 === 0 : m === card.midi));
     const again = m === lastMic.m && now - lastMic.t < 1200; lastMic = { m, t: now };
     if (again && !right) return;
   }
+  if (lisT.length) stopListen();
   if (card.done) {
+    // end of a looped part: playing its first note starts the next pass straight away
+    if (m === loopNext && performance.now() - lastResolve > 150) { next(); if (card && !card.done) answerKey(m, src); return; }
     const waiting = !(cfg.auto && card.tries === 0 && card.hint === 0 && !card.revealed);
     if (src !== 'tap' && waiting && performance.now() - lastResolve > 450) next();
     return;
@@ -896,51 +1363,172 @@ function checkPlace() {
 
 /* ---------- render practice ---------- */
 function renderAll() { renderCard(); renderSide(); kbFingers(); }
+/* melodies and tunes are engraved like real sheet music: noteheads by length, stems (up below the middle line,
+   down from it), flags or beams for eighths, dots, bar lines and a time signature. Space follows the note lengths.
+   On a narrow screen a 4-bar line wraps onto two staves, so the notes stay big enough to read. */
+const SPW = { .5: 1, 1: 1.4, 1.5: 1.65, 2: 1.9, 3: 2.3, 4: 2.7 }, MINW = { .5: 13.5, 1: 17, 1.5: 21, 2: 21, 3: 26, 4: 30 }, BARW = { '4/4': 112, '3/4': 90, '6/8': 104 };
+const staffMaxH = () => innerHeight <= 560 ? innerHeight * .52 : Math.min(innerHeight * .46, 430);
+function melLayout(L, nsys) {
+  const per = Math.ceil(L.nb / nsys), sys = [];
+  for (let s = 0; s < nsys; s++) sys.push([...Array(L.nb).keys()].slice(s * per, (s + 1) * per));
+  const inBar = k => L.notes.map((n, i) => ({ n, i })).filter(o => o.n.bar === k);
+  const natW = k => Math.max(BARW[L.ts] || 100, 18 + inBar(k).reduce((a, o) => a + MINW[o.n.dur], 0));
+  const h0 = s => s ? 42 : 68;   // the first bar starts after the clef (and on the first staff, the time signature)
+  const sw = sys.map((bs, s) => h0(s) + bs.reduce((a, k) => a + natW(k), 0)), W = Math.max(...sw) + 3, pos = [], barX = [];
+  sys.forEach((bs, s) => {
+    const f = (W - 3 - h0(s)) / (sw[s] - h0(s)); let x = h0(s);   // shorter staves stretch to the same width
+    for (const k of bs) {
+      const w = natW(k) * f, ns = inBar(k), tot = ns.reduce((a, o) => a + SPW[o.n.dur], 0); let c = 0;
+      for (const o of ns) { pos[o.i] = { x: x + 12 + (w - 18) * c / tot, s }; c += SPW[o.n.dur]; }
+      barX[k] = [x, x + w, s]; x += w;
+    }
+  });
+  return { W, pos, barX, sys };
+}
+function renderMel(st, vb0) {
+  fxPts = {};
+  const L = line, c = L.clef, b0 = CLEF[c].bottom, mid = b0 + 4, yf = d => YB - (d - b0) * 5, N = L.notes, H0 = vb0[1] - vb0[0];
+  const cw = st.parentElement.clientWidth || 600, mh = staffMaxH();
+  let lay = melLayout(L, 1);
+  if (L.nb >= 3) { const l2 = melLayout(L, 2); if (Math.min(cw / l2.W, mh / (2 * H0)) > 1.12 * Math.min(cw / lay.W, mh / H0)) lay = l2; }
+  const { W, pos, barX, sys } = lay;
+  const y = N.map(q => yf(q.d)), dir = N.map(q => q.d < mid ? 1 : -1);
+  const natTip = (i, D) => D > 0 ? Math.min(y[i] - 35, yf(mid)) : Math.max(y[i] + 35, yf(mid)), tip = N.map((q, i) => natTip(i, dir[i]));
+  const sx = i => pos[i].x + dir[i] * 5.3;
+  // eighths in the same beat group share a beam; the note furthest from the middle line decides which way
+  const groups = [], gl = tsGrp(L.ts); let beat = 0, bar = -1, cur = null;
+  N.forEach((q, i) => {
+    if (q.bar !== bar) { bar = q.bar; beat = 0; cur = null; }
+    const g = Math.floor(beat / gl + 1e-9);
+    if (q.dur === .5) { if (cur && cur.g === g) cur.ix.push(i); else groups.push(cur = { g, ix: [i] }); } else cur = null;
+    beat += q.dur;
+  });
+  const beamed = new Set(), beams = [];
+  for (const G of groups) {
+    const ix = G.ix; if (ix.length < 2) continue;
+    const far = ix.reduce((a, i) => Math.abs(N[i].d - mid) > Math.abs(N[a].d - mid) ? i : a, ix[0]), D = N[far].d < mid ? 1 : -1;
+    ix.forEach(i => { dir[i] = D; beamed.add(i); });
+    const i0 = ix[0], i1 = ix[ix.length - 1], x0 = sx(i0), x1 = sx(i1), dy = Math.max(-5, Math.min(5, natTip(i1, D) - natTip(i0, D)));
+    let y0 = natTip(i0, D);
+    const at = x => y0 + (x - x0) / (x1 - x0) * dy;
+    let sh = 0; for (const i of ix) sh = Math.max(sh, D > 0 ? at(sx(i)) - (y[i] - 28) : y[i] + 28 - at(sx(i)));
+    y0 -= D * sh;
+    for (const i of ix) tip[i] = at(sx(i));
+    beams.push({ ix, D, x0: x0 - .6, x1: x1 + .6, y0, y1: y0 + dy });
+  }
+  const lf = cfg.fing !== 'off' ? lineFing(L) : null, sec = secRange();
+  let fy = 0, T = vb0[0], B = vb0[1];
+  if (lf) {
+    if (c === 't') { fy = Math.min(YB - 54, ...N.map((q, i) => (q.dur < 4 && dir[i] > 0 ? tip[i] : y[i] - 5) - 6)); T = Math.min(T, fy - 11); }
+    else { fy = Math.max(YB + 24, ...N.map((q, i) => (q.dur < 4 && dir[i] < 0 ? tip[i] : y[i] + 5) + 12)); B = Math.max(B, fy + 4); }
+  }
+  const tips = tip.filter((t, i) => N[i].dur < 4);   // whole notes have no stem
+  T = Math.min(T, ...tips.map(t => t - 4)); B = Math.max(B, ...tips.map(t => t + 4));
+  const Hs = B - T, enter = card.fresh && L.idx === 0 && !L.pass && !L.loop;
+  let out = '';
+  sys.forEach((bs, s) => {
+    let g = '', fg = '';
+    if (L.loop) { const lb = bs.filter(k => k >= L.loop[0] && k <= L.loop[1]); if (lb.length) { const xa = barX[lb[0]][0] + 2, xb = barX[lb[lb.length - 1]][1] - 2; g += `<rect class="loopband" x="${f2(xa)}" y="${YB - 52}" width="${f2(xb - xa)}" height="64" rx="8"/>`; } }
+    g += lines(3, W - 3, [0, 1, 2, 3, 4].map(i => YB - i * 10));
+    g += c === 't' ? glyph('gClef', 9, yf(32)) : glyph('fClef', 9, yf(24));
+    if (!s) { const [tn, td] = L.ts.split('/'); g += glyph('ts' + tn, 41.5, YB - 30) + glyph('ts' + td, 41.5, YB - 10); }
+    for (const k of bs) {
+      const x = barX[k][1];
+      g += k === L.nb - 1 && L.fin ? `<line class="bl" x1="${f2(x - 6.5)}" x2="${f2(x - 6.5)}" y1="${YB - 40}" y2="${YB}"/><line class="bl thk" x1="${f2(x - 2)}" x2="${f2(x - 2)}" y1="${YB - 40}" y2="${YB}"/>` : `<line class="bl" x1="${f2(x - .6)}" x2="${f2(x - .6)}" y1="${YB - 40}" y2="${YB}"/>`;
+    }
+    if (s) g += `<text class="bnum" x="4" y="${YB - 47}">${bs[0] + 1}</text>`;   // like printed music: the bar number at the start of each new staff
+    N.forEach((q, i) => {
+      if (pos[i].s !== s) return;
+      const x = pos[i].x, yy = y[i], whole = q.dur >= 4;
+      const cls = (q.st === 'ok' ? 'n-ok' : q.st === 'fix' ? 'n-fix' : i === L.idx && !card.done ? 'n-pend' : i < sec[0] || i > sec[1] ? 'n-out' : '') + (i === lisAt ? ' n-play' : L.wave ? ' wave' : i === justHit ? ' n-hit' : '');
+      fxPts[i] = [x, yy + s * Hs];
+      let h = ledgersFor(b0, yf, q.d, x, whole ? 13 : 9.6);
+      h += whole ? glyph('whole', x - HW, yy) : glyph(q.dur >= 2 ? 'half' : 'black', x - 5.9, yy);
+      if (q.dur === 1.5 || q.dur === 3) h += glyph('dot', x + 8.8, (q.d - b0) % 2 === 0 ? yy - 5 : yy);
+      if (!whole) { const X = sx(i); h += `<line class="stm" x1="${f2(X)}" x2="${f2(X)}" y1="${f2(yy - dir[i] * 1.7)}" y2="${f2(tip[i])}"/>`; if (q.dur === .5 && !beamed.has(i)) h += glyph(dir[i] > 0 ? 'flagU' : 'flagD', X - .6, tip[i]); }
+      if (lf && (cfg.fing === 'all' || !i || lf[i].move || (L.loop && i === sec[0]))) fg += `<text class="fing ${cls.split(' ')[0]}" x="${f2(x)}" y="${f2(fy)}">${lf[i].f}</text>`;
+      g += `<g class="${cls}"${L.wave ? ` style="animation-delay:${(i * .04).toFixed(2)}s"` : ''}>${h}</g>`;
+    });
+    for (const bm of beams) {
+      if (pos[bm.ix[0]].s !== s) continue;
+      const sts = bm.ix.map(i => N[i].st), t = bm.D > 0 ? 5 : -5, cls = sts.every(v => v === 'ok') ? 'n-ok' : sts.every(v => v) ? 'n-fix' : '';
+      g += `<path class="${cls}" d="M${f2(bm.x0)} ${f2(bm.y0)}L${f2(bm.x1)} ${f2(bm.y1)}L${f2(bm.x1)} ${f2(bm.y1 + t)}L${f2(bm.x0)} ${f2(bm.y0 + t)}Z"/>`;
+    }
+    if (card.ghost && !card.done && pos[L.idx].s === s) { const gx = pos[L.idx].x + 15, gy = yf(card.ghost.d); if (gy > T + 7 && gy < B - 7) g += `<g class="n-bad">${ledgersFor(b0, yf, card.ghost.d, gx, 9.6)}${glyph('black', gx - 5.9, gy)}</g>`; }
+    g += fg;
+    for (const k of bs) g += `<rect class="bhit" data-bar="${k}" x="${f2(barX[k][0])}" y="${f2(T)}" width="${f2(barX[k][1] - barX[k][0])}" height="${f2(Hs)}"/>`;
+    out += `<g${s ? ` transform="translate(0 ${f2(s * Hs)})"` : ''}>${g}</g>`;
+  });
+  const vbs = `0 ${f2(T)} ${f2(W)} ${f2(Hs * sys.length)}`;
+  st.setAttribute('viewBox', vbs); fxView(vbs);
+  st.innerHTML = enter ? `<g class="n-new">${out}</g>` : out;
+  st.setAttribute('aria-label', `${L.title ? L.title + ', line ' + L.part[0] : 'A melody'} in ${L.ts}, ${plural(L.nb, 'bar')}`);
+  const ci = L.idx; setBand(card.done ? null : { x: pos[ci].x - 12, y: T + 3 + pos[ci].s * Hs, w: 24, h: Hs - 6 }, enter);
+  st.classList.toggle('mel', true);
+}
 function renderCard() {
   if (!card) return;
-  const items = [], NX = 140, place = cfg.mode === 'place', vb = cardVB();
-  let band = '', gx = 205;
+  if (cfg.mode === 'line' && line && line.style !== 'classic') {
+    const st = $('#staff'); renderMel(st, cardVB()); card.fresh = false; st.classList.remove('placing'); justHit = null; line.wave = false;
+    $('#clefTag').innerHTML = `<b>${CLEF[card.clef].name} clef</b> · ${CLEF[card.clef].hand}`;
+    $('#cnt').textContent = cfg.round ? `${Math.min(cfg.round, round.n + (card.counted ? 0 : 1))} / ${cfg.round}` : `Card ${round.n + (card.counted ? 0 : 1)}`;
+    renderProg();
+    return;
+  }
+  $('#staff').classList.remove('mel'); $('#staff').setAttribute('aria-label', 'Note on the staff');
+  const items = [], NX = 140, place = cfg.mode === 'place', vb = cardVB(), b = CLEF[card.clef].bottom, yOf = d => YB - (d - b) * 5;
+  let band = null, gx = 205; fxPts = {};
   if (cfg.mode === 'line' && line) {
     const lx = i => 72 + i * 40;
-    line.notes.forEach((n, i) => items.push({ d: n.d, x: lx(i), cls: (n.st === 'ok' ? 'n-ok' : n.st === 'fix' ? 'n-fix' : i === line.idx ? 'n-pend' : '') + (card.fresh && line.idx === 0 ? ' n-new' : '') }));
-    band = `<rect class="curband" x="${lx(line.idx) - 15}" y="${vb[0] + 3}" width="30" height="${vb[1] - vb[0] - 6}" rx="8"/>`;
+    line.notes.forEach((n, i) => { fxPts[i] = [lx(i), yOf(n.d)]; items.push({ d: n.d, x: lx(i), cls: (n.st === 'ok' ? 'n-ok' : n.st === 'fix' ? 'n-fix' : i === line.idx ? 'n-pend' : '') + (card.fresh && line.idx === 0 ? ' n-new' : '') + (line.wave ? ' wave' : i === justHit ? ' n-hit' : ''), attrs: line.wave ? `style="animation-delay:${i * .05}s"` : '' }); });
+    band = { x: lx(line.idx) - 15, y: vb[0] + 3, w: 30, h: vb[1] - vb[0] - 6 };
     gx = lx(line.idx) + 20;
   }
-  else if (!place) items.push({ d: card.d, acc: card.acc, x: NX, cls: (card.done ? 'n-ok ' : '') + (card.fresh ? 'n-new' : '') });
+  else if (!place) items.push({ d: card.d, acc: card.acc, x: NX, cls: (card.done ? 'n-ok ' : '') + (card.fresh ? 'n-new' : '') + (justHit === 'card' ? ' n-hit' : '') });
   else {
     if (card.hint >= 3 && !card.done) items.push({ d: card.d, x: NX, cls: 'n-tgt' });
-    if (card.pend != null) items.push({ d: card.pend, x: NX, cls: card.done ? 'n-ok' : card.pendBad ? 'n-bad' : 'n-pend' });
+    if (card.pend != null) items.push({ d: card.pend, x: NX, cls: card.done ? 'n-ok' + (justHit === 'card' ? ' n-hit' : '') : card.pendBad ? 'n-bad' : 'n-pend' });
     else if (card.hover != null) items.push({ d: card.hover, x: NX, cls: 'n-ghost' });
   }
-  const b = CLEF[card.clef].bottom;
+  fxPts.card = [NX, yOf(card.d)];
+  const fresh = card.fresh && (!line || line.idx === 0);
   if (card.ghost && !card.done) items.push({ d: card.ghost.d, acc: cfg.mode === 'line' ? 0 : card.ghost.acc, x: gx, cls: 'n-bad', label: cfg.mode === 'line' ? '' : card.ghost.label, g: 1 });
   card.fresh = false;
   let fs = '';
   if (cfg.fing !== 'off') {
     const t = card.clef === 't', put = (x, d, f) => { const y = YB - (d - b) * 5; fs += `<text class="fing" x="${x}" y="${t ? Math.min(y - 9, YB - 47) : Math.max(y + 15, YB + 14)}">${f}</text>`; };
-    if (cfg.mode === 'line' && line) { const lf = lineFingers(line.clef, line.notes.map(n => n.d)); line.notes.forEach((n, i) => { if (cfg.fing === 'all' || !i || lf[i].move) put(72 + i * 40, n.d, lf[i].f); }); }
+    if (cfg.mode === 'line' && line) { const lf = lineFing(line); line.notes.forEach((n, i) => { if (cfg.fing === 'all' || !i || lf[i].move) put(72 + i * 40, n.d, lf[i].f); }); }
     else if (!place || card.done) put(NX, card.d, fingerOf(card.clef, card.d, homePos(card.clef, card.d)));
   }
-  const st = $('#staff');
-  st.setAttribute('viewBox', `0 ${vb[0]} ${CW} ${vb[1] - vb[0]}`);
-  st.innerHTML = band + single(card.clef, items.filter(n => { const yy = YB - (n.d - b) * 5; return n.g ? yy > vb[0] + 7 && yy < vb[1] - 7 : true; })) + fs;
+  const st = $('#staff'), vbs = `0 ${vb[0]} ${CW} ${vb[1] - vb[0]}`;
+  st.setAttribute('viewBox', vbs); fxView(vbs);
+  st.innerHTML = single(card.clef, items.filter(n => { const yy = YB - (n.d - b) * 5; return n.g ? yy > vb[0] + 7 && yy < vb[1] - 7 : true; })) + fs;
+  setBand(band, fresh);
+  justHit = null; if (line) line.wave = false;
+  renderProg();
   st.classList.toggle('placing', place && !card.done);
   $('#clefTag').innerHTML = `<b>${CLEF[card.clef].name} clef</b> · ${CLEF[card.clef].hand}`;
   $('#cnt').textContent = cfg.round ? `${Math.min(cfg.round, round.n + (card.counted ? 0 : 1))} / ${cfg.round}` : `Card ${round.n + (card.counted ? 0 : 1)}`;
 }
 function cardVB() {
   let lo = -6, hi = 14;
-  if (cfg.mode !== 'place') { const o = poolList().map(p => p.d - CLEF[p.clef].bottom); lo = Math.min(...o); hi = Math.max(...o); }
+  // real tunes: one box for every tune in that hand (or the picked tune), so the card keeps its size line to line
+  if (cfg.mode === 'line' && line && line.style === 'tune') { const f = tunePick(), o = tuneNotes(line.clef, f < 0 ? TUNES : [TUNES[f]]).map(n => n.d - CLEF[line.clef].bottom); lo = Math.min(...o); hi = Math.max(...o); }
+  else if (cfg.mode !== 'place') { const o = poolList().map(p => p.d - CLEF[p.clef].bottom); lo = Math.min(...o); hi = Math.max(...o); }
   return [Math.min(28, YB - hi * 5 - 24), Math.max(124, YB - lo * 5 + 24)];
 }
 function hasPiano() { return mic.on || midiS.names.length > 0; }
 function renderSide() {
   const m = cfg.mode, place = m === 'place';
-  $$('#modeSeg button').forEach(b => b.classList.toggle('on', b.dataset.mode === m));
+  $$('#modeSeg button').forEach(b => b.classList.toggle('on', b.dataset.mode === m)); slide($('#modeSeg'));
   const lvc = cfg.range === 'levels' && !drill ? levelNow() : null;
-  $('#sumChip').textContent = `${lvc ? `Level ${lvc.i + 1} · ${levelSpan(lvc.L[lvc.i].ids)}` : LABEL[cfg.clefs] + ' · ' + LABEL[cfg.range]}${cfg.focus !== 'all' ? ' · ' + cfg.focus + ' only' : ''}${cfg.acc && (m === 'play' || m === 'name') ? ' · ♯♭' : ''}${drill ? ' · drill' : ''}`;
+  const cusN = cfg.range === 'custom' && !drill ? poolList().length : 0;
+  const tm = tuneMode();
+  $('#sumChip').textContent = tm ? `${cfg.tune === 'mix' ? 'Real tunes' : cfg.tune} · ${cfg.clefs === 'both' ? 'both hands' : CLEF[cfg.clefs].hand}` : `${lvc ? `Level ${lvc.i + 1} · ${levelSpan(lvc.L[lvc.i].ids)}` : cusN ? `Custom · ${plural(cusN, 'note')}` : LABEL[cfg.clefs] + ' · ' + LABEL[cfg.range]}${cfg.focus !== 'all' ? ' · ' + cfg.focus + ' only' : ''}${cfg.acc && (m === 'play' || m === 'name') ? ' · ♯♭' : ''}${m === 'line' && cfg.sr === 'melody' && !drill ? ' · melodies' : ''}${drill ? ' · drill' : ''}`;
   if (m === 'play') { $('#prompt').textContent = 'Play this note'; $('#promptSub').textContent = hasPiano() ? 'Find the exact key on your piano. The octave counts.' : 'Tap the exact key on the keyboard below. The octave counts.'; }
   else if (m === 'name') { $('#prompt').textContent = 'Name this note'; $('#promptSub').textContent = (hasPiano() ? 'Tap the letter, or play it anywhere on your piano.' : 'Tap the letter, or any matching key below.') + (cfg.acc ? ' For a sharp or flat, tap the sign first, then the letter.' : ''); }
+  else if (m === 'line' && line && line.style === 'tune') { $('#prompt').textContent = line.title; $('#promptSub').textContent = `${line.by.replace(/^./, x => x.toUpperCase())} · line ${line.part[0]} of ${line.part[1]}. ${hasPiano() ? 'Play it on your piano' : 'Tap the keys below'}, left to right. The blue note is next.`; }
+  else if (m === 'line' && line && line.style === 'melody') { $('#prompt').textContent = 'Sight-read this melody'; $('#promptSub').textContent = hasPiano() ? 'Play it on your piano, left to right. The blue note is next. Stuck on a bar? Loop it below.' : 'Tap the keys below, left to right. The blue note is next. Stuck on a bar? Loop it below.'; }
   else if (m === 'line') { $('#prompt').textContent = 'Sight-read this line'; $('#promptSub').textContent = hasPiano() ? 'Play the notes left to right on your piano. The blue one is next.' : 'Tap the keys below, left to right. The blue note is next.'; }
   else { $('#prompt').innerHTML = `Put <span class="tname">${nm(card.d)}</span> on the staff`; $('#promptSub').textContent = 'It\'s the blue key below. Tap the staff, drag to fine-tune, then Check.'; }
   $('#letters').hidden = m !== 'name';
@@ -950,49 +1538,94 @@ function renderSide() {
   $('#hintBtn').textContent = card.hint ? `Hint ${card.hint}/3` : 'Hint';
   $('#hintBtn').disabled = card.hint >= 3;
   $('#hintBtn').hidden = $('#revealBtn').hidden = fin;
-  $('#hearBtn').hidden = !fin;
+  const mel = m === 'line' && line && line.style !== 'classic';
+  $('#hearBtn').hidden = !fin || mel;
   $('#checkBtn').hidden = !place || card.done;
   $('#upBtn').hidden = $('#downBtn').hidden = !place || card.done;
   $('#checkBtn').disabled = card.pend == null;
-  const lineEnd = m === 'line' && line && line.idx >= line.notes.length - 1;
+  const lineEnd = m === 'line' && line && line.idx >= line.notes.length - 1 && !line.loop;
   $('#nextBtn').hidden = !fin || (card.done && (m === 'line' ? cfg.auto || !lineEnd : cfg.auto && card.tries === 0 && card.hint === 0 && !card.revealed));
+  renderLoop();
   renderHow();
   const avg = round.times.length ? round.times.reduce((a, b) => a + b, 0) / round.times.length / 1000 : 0;
-  $('#stats').innerHTML = `<span>Streak <b>${streak}</b></span><span>First try <b>${round.res ? Math.round(round.clean / round.res * 100) + '%' : '–'}</b></span><span>Avg <b>${avg ? avg.toFixed(1) + ' s' : '–'}</b></span><span>Best streak <b>${round.best}</b></span>`;
-  $('#keysHelp').innerHTML = `<kbd>H</kbd> hint · <kbd>Enter</kbd> next${m === 'name' ? ' · <kbd>A</kbd>–<kbd>G</kbd> answer' : ''}${place ? ' · <kbd>↑</kbd><kbd>↓</kbd> move' : ''}`;
+  const sh = `<span>Streak <b${streak > shownStreak ? ' class="bump"' : ''}>${streak}</b></span><span>First try <b>${round.res ? Math.round(round.clean / round.res * 100) + '%' : '–'}</b></span><span>Avg <b>${avg ? avg.toFixed(1) + ' s' : '–'}</b></span><span>Best streak <b>${round.best}</b></span>`;
+  if (sh !== statsHTML) { $('#stats').innerHTML = statsHTML = sh; }
+  shownStreak = streak;
+  $('#keysHelp').innerHTML = `<kbd>H</kbd> hint · <kbd>Enter</kbd> next${m === 'name' ? ' · <kbd>A</kbd>–<kbd>G</kbd> answer' : ''}${place ? ' · <kbd>↑</kbd><kbd>↓</kbd> move' : ''}${m === 'line' ? ' · <kbd>R</kbd> again' : ''}${mel ? ` · <kbd>L</kbd> listen · <kbd>1</kbd>–<kbd>${line.nb}</kbd> loop a bar · <kbd>0</kbd> whole line` : ''}`;
+}
+// sight-read tools: play it again, listen, skip, and loop a bar
+let loopKey = '';
+function renderLoop() {
+  const isL = cfg.mode === 'line' && line, mel = isL && line.style !== 'classic';
+  $('#loopRow').hidden = !isL; if (!isL) { loopKey = ''; return; }
+  $('#listenBtn').hidden = $('#skipBtn').hidden = $('#barRow').hidden = !mel;
+  $('#listenBtn').textContent = lisT.length ? '■ Stop' : '▶ Listen';
+  $('#listenBtn').classList.toggle('on', !!lisT.length);
+  $('#skipBtn').textContent = line.style === 'tune' && !line.fin ? 'Next line ›' : line.style === 'tune' ? 'Next tune ›' : 'New melody ›';
+  if (!mel) { loopKey = ''; return; }
+  const L = line.loop, key = line.nb + ':' + (L ? L.join('-') : '');
+  if (key !== loopKey) {
+    loopKey = key;
+    $('#barSeg').innerHTML = `<button class="whole${L ? '' : ' on'}" data-b="-1" aria-pressed="${!L}">Whole</button>` + [...Array(line.nb).keys()].map(k => { const on = !!L && k >= L[0] && k <= L[1]; return `<button data-b="${k}" class="${on ? 'on' : ''}" aria-pressed="${on}" aria-label="Loop bar ${k + 1}">${k + 1}</button>`; }).join('');
+  }
+  $('#loopHint').textContent = L ? `Looping ${barName(L)}${line.pass ? ` · ${plural(line.pass, 'pass', 'passes')} done` : ''}. Tap Whole for the full line.` : 'Tap a bar number (or the bar itself) to repeat just that part. Tap a second bar to loop from one to the other.';
 }
 /* ---------- finger numbers ----------
-   A five-finger hand position covers 5 white keys from P. Right hand: thumb (1) on the lowest key;
-   left hand: pinky (5) on the lowest key. A single note gets the C or G position (the first ones beginner
-   books teach) nearest the hand's home: right thumb on middle C, left pinky on the C below it.
-   A sight-read line keeps one position while the notes fit and moves the hand only when it has to. */
+   Fingers are numbered the same on both hands: 1 thumb … 5 pinky. A five-finger hand position covers 5 white
+   keys from P: the right thumb (or the left pinky) sits on P. A single note uses the standard beginner positions
+   (as in Faber, Alfred and Bastien): right hand C position (thumb on middle C) and G position; left hand C position
+   (pinky on the C below middle C), G position and Middle C position (left thumb on middle C), whichever holding the
+   note sits nearest the hand's home. A sight-read line is fingered as a whole, the way a teacher would: one finger
+   per key wherever the notes allow, small stretches or a thumb-under when needed, and a hand move only when it must. */
 const HOME = { t: 28, b: 21 }, FNAME = ['', 'thumb', 'pointer finger', 'middle finger', 'ring finger', 'pinky'];
 const fingerOf = (c, d, P) => c === 't' ? d - P + 1 : P + 5 - d;
+const posOf = (c, d, f) => c === 't' ? d - f + 1 : d + f - 5;
+const stdPos = (c, P) => P % 7 === 0 || P % 7 === 4 || (c === 'b' && P === 24);
+function posName(c, P) { return c === 'b' && P === 24 ? 'Middle C position' : c === 't' && P === 28 ? 'C position' : LET[P % 7] + ' position'; }
 function homePos(c, d) {
   let best = null;
-  for (let P = d - 4; P <= d; P++) if (P % 7 === 0 || P % 7 === 4) { const k = Math.abs(P - HOME[c]); if (!best || k < best.k) best = { P, k }; }
+  for (let P = d - 4; P <= d; P++) if (stdPos(c, P)) { const k = Math.abs(P - HOME[c]); if (!best || k < best.k) best = { P, k }; }
   return best.P;
 }
-function lineFingers(c, ds) {
-  let P = null;
-  return ds.map((d, i) => {
-    let move = false;
-    if (P === null || d < P || d > P + 4) {
-      let best = null;
-      for (let q = d - 4; q <= d; q++) {
-        let run = 0; while (i + run < ds.length && ds[i + run] >= q && ds[i + run] <= q + 4) run++;
-        const sc = run * 1000 + (q % 7 === 0 || q % 7 === 4 ? 100 : 0) - Math.abs(q - (P === null ? homePos(c, d) : P));
-        if (!best || sc > best.sc) best = { q, sc };
-      }
-      move = P !== null; P = best.q;
-    }
-    return { f: fingerOf(c, d, P), P, move };
-  });
+// cost of playing note d1 with finger f1, then d2 with f2 (diatonic steps; one finger per white key is free)
+function fingMove(c, d1, f1, d2, f2) {
+  const R = c === 't' ? 1 : -1, dd = d2 - d1, s = (f2 - f1) * R;
+  if (!dd) return f1 === f2 ? 0 : 5;                                    // a repeated note: keep the finger
+  if (!s) return 2.3 + Math.abs(dd);                                   // same finger on another key: the hand shifts
+  if (Math.sign(dd) === Math.sign(s)) {
+    const k = Math.abs(dd) - Math.abs(s);
+    return k > 0 ? k * (f1 === 1 || f2 === 1 ? 1.2 : 2.5) : -k * 1.5;   // stretch (easiest from the thumb) or squeeze
+  }
+  // thumb under (or a finger over the thumb), as in scales: natural from fingers 2–4, but the pinky can't cross: that's a jump
+  const th = (dd * R > 0 && f2 === 1) || (dd * R < 0 && f1 === 1), o = f1 === 1 ? f2 : f1;
+  return th ? (o === 5 ? 7 + Math.abs(dd) : 3 + Math.abs(dd) * .5 + (o === 4 ? .4 : 0) + (Math.abs(dd) > 2 ? Math.abs(dd) : 0)) : 12;
 }
-function cardPos() { return cfg.mode === 'line' && line ? lineFingers(line.clef, line.notes.map(n => n.d))[line.idx].P : homePos(card.clef, card.d); }
+// br[i]: a bar line or a long note comes before note i, so the hand has time to lift and land somewhere new;
+// P0: where the hand was at the end of the tune's last phrase (it starts from there unless moving pays off)
+function lineFingers(c, ds, br, P0) {
+  const n = ds.length; if (!n) return [];
+  let cost = [Infinity]; for (let f = 1; f <= 5; f++) { const P = posOf(c, ds[0], f); cost[f] = (stdPos(c, P) ? 0 : .3) + (P0 != null && P !== P0 ? 1.2 : 0); }
+  const from = [null];
+  const mv = (i, g, f) => { const v = fingMove(c, ds[i - 1], g, ds[i], f); return br && br[i] ? Math.min(v, 3 + .25 * Math.abs(posOf(c, ds[i], f) - posOf(c, ds[i - 1], g))) : v; };
+  for (let i = 1; i < n; i++) {
+    const nc = [Infinity], fr = [0];
+    for (let f = 1; f <= 5; f++) { let b = Infinity, bg = 1; for (let g = 1; g <= 5; g++) { const v = cost[g] + mv(i, g, f); if (v < b - 1e-9) { b = v; bg = g; } } nc[f] = b; fr[f] = bg; }
+    cost = nc; from.push(fr);
+  }
+  let f = 1; for (let g = 2; g <= 5; g++) if (cost[g] < cost[f] - 1e-9) f = g;
+  const fs = [f]; for (let i = n - 1; i > 0; i--) { f = from[i][f]; fs.unshift(f); }
+  let prev = null;
+  return ds.map((d, i) => { const P = posOf(c, d, fs[i]), move = prev !== null && P !== prev; prev = P; return { f: fs[i], P, move }; });
+}
+// a line's fingering, worked out once: melodies and tunes know their bar lines and note lengths
+function lineFing(L) {
+  if (!L.fing) L.fing = L.style === 'classic' ? lineFingers(L.clef, L.notes.map(n => n.d)) : lineFingers(L.clef, L.notes.map(n => n.d), L.notes.map((n, i) => i > 0 && (n.bar !== L.notes[i - 1].bar || L.notes[i - 1].dur >= 2)), L.P0);
+  return L.fing;
+}
+function cardPos() { return cfg.mode === 'line' && line ? lineFing(line)[line.idx].P : homePos(card.clef, card.d); }
 function fingText(c, d, P) {
-  const f = fingerOf(c, d, P);
-  return `<b>${f}</b> (${FNAME[f]}, ${c === 't' ? 'right' : 'left'} hand). Hand over ${nm(P)}–${nm(P + 4)}${d !== P ? `, ${c === 't' ? 'thumb' : 'pinky'} on ${nm(P)}` : ''}.`;
+  const f = fingerOf(c, d, P), anchor = c === 't' ? 'thumb' : 'pinky';
+  return `<b>${f}</b> (${FNAME[f]}, ${c === 't' ? 'right' : 'left'} hand). ${posName(c, P)}: ${anchor} on ${nm(P)}, hand over ${nm(P)}–${nm(P + 4)}.`;
 }
 // after an answer (or in Learn): the whole hand position on the keyboard, numbered
 let fingKeys = new Set();
@@ -1017,8 +1650,11 @@ function kbFingers() {
   applyKeys();
 }
 
+let statsHTML = '', shownStreak = 0, howHTML = '';
+// only redraw the hint box when it says something new (so it can fade in once, not flicker)
+function setHow(h) { if (h === howHTML) return; const el = $('#how'); howHTML = el.innerHTML = h; el.classList.remove('anim'); void el.offsetWidth; el.classList.add('anim'); }
 function renderHow() {
-  const el = $('#how'), lvl = card.done || card.revealed ? 9 : card.hint, c = card.clef, d = card.d, place = cfg.mode === 'place';
+  const el = { set innerHTML(h) { setHow(h); } }, lvl = card.done || card.revealed ? 9 : card.hint, c = card.clef, d = card.d, place = cfg.mode === 'place';
   if (!lvl) { el.innerHTML = `<h3>Stuck?</h3><p>Tap Hint. Each tap shows a bit more: where it sits, a memory trick, then the key itself.</p>`; return; }
   const rows = [], acc = place ? 0 : card.acc, off = d - CLEF[c].bottom, trick = trickHTML(c, d);
   rows.push(['Where', place && lvl < 3 ? (off % 2 === 0 ? 'It sits on a line.' : 'It sits in a space.') : posText(c, d).replace(/^./, x => x.toUpperCase()) + '.']);
@@ -1032,8 +1668,10 @@ function renderHow() {
 
 /* ---------- keyboard ---------- */
 let kbRange = [48, 84], kbLay = null;
+const tuneMode = () => cfg.mode === 'line' && cfg.sr === 'tunes' && !drill;
+function tuneMidis() { const f = tunePick(), cl = cfg.clefs === 'both' ? ['t', 'b'] : [cfg.clefs]; return cl.flatMap(c => tuneNotes(c, f < 0 ? TUNES : [TUNES[f]]).map(n => natMidi(n.d))); }
 function poolRange() {
-  const ms = poolList().map(p => natMidi(p.d));
+  const ms = tuneMode() ? tuneMidis() : poolList().map(p => natMidi(p.d));
   let lo = Math.min(...ms) - (cfg.acc ? 1 : 0), hi = Math.max(...ms) + (cfg.acc ? 1 : 0);
   lo -= lo % 12; hi += (12 - hi % 12) % 12;
   while (hi - lo < 24) { if ((hi - lo) % 24 === 0) hi += 12; else lo -= 12; }
@@ -1075,7 +1713,7 @@ function ensureVisible(m) {
 }
 function centerKB(c) {
   const box = $('#kbs'); let t = 60;
-  if (view === 'practice') { const ms = poolList().filter(p => !c || p.clef === c).map(p => natMidi(p.d)); if (ms.length) t = Math.round((Math.min(...ms) + Math.max(...ms)) / 2); }
+  if (view === 'practice') { const ms = cfg.mode === 'line' && line && line.style === 'tune' ? line.notes.map(n => natMidi(n.d)) : poolList().filter(p => !c || p.clef === c).map(p => natMidi(p.d)); if (ms.length) t = Math.round((Math.min(...ms) + Math.max(...ms)) / 2); }
   const x = keyX(t); if (x == null) return;
   const left = Math.max(0, x - box.clientWidth / 2);
   if (Math.abs(kbLeft() - left) > 4) kbTo(left, !!c);
@@ -1240,7 +1878,8 @@ function renderInput() {
 function onKey(m, src) {
   bump();
   // round summary open: a note played on the piano starts the next round (after a moment, so the last note's ring can't skip it)
-  if (!$('#ovSum').hidden) { if (src !== 'tap' && performance.now() - sumAt > 2500) { closeOv('ovSum'); newRound(); } return; }
+  const sum = $('#ovSum');
+  if (!sum.hidden) { if (!sum.classList.contains('closing') && src !== 'tap' && performance.now() - sumAt > 2500) { closeOv('ovSum'); newRound(); } return; }
   if (src === 'mic' && view === 'practice' && (m < kbRange[0] - 12 || m > kbRange[1] + 12)) return;
   if (src !== 'midi') flashPress(m);
   if (view === 'learn') { learnAdd(m); ensureVisible(m); return; }
@@ -1292,7 +1931,7 @@ function playSeq(ds) {
 /* ---------- progress ---------- */
 function mastery(s) { if (!s || !s.n) return 'u'; if (s.box >= 4) return 'm'; if (s.box >= 2) return 'g'; if (s.box < 1 && s.ok / s.n < .6) return 'w'; return 'l'; }
 let psel = null;
-function renderProgress() {
+function renderProgress(anim) {
   const draw = (c, el) => {
     const R = RANGES.far[c], notes = [], hits = [];
     for (let d = R[0], i = 0; d <= R[1]; d++, i++) {
@@ -1312,7 +1951,8 @@ function renderProgress() {
     $('#plevel').innerHTML = `<b>Level ${i + 1} of ${L.length}</b> · ${levelSpan(ids)} · ${have} of ${ids.length} notes learned` + (i < L.length - 1 ? ` · ${Math.max(1, need - have)} more to unlock level ${i + 2}` : ' · every note unlocked'); }
   $('#ptitle').textContent = n ? `${mast} of 42 notes mastered` : 'Your note map';
   const ds = dayStreak();
-  $('#pnums').innerHTML = [[n, 'cards answered'], [n ? Math.round(ok / n * 100) + '%' : '–', 'right on the first try'], [avg ? avg.toFixed(1) + ' s' : '–', 'average time to answer'], [ds, ds === 1 ? 'day in a row' : 'days in a row'], [days[dayKey()] || 0, 'cards today']].map(([v, l]) => `<div class="pnum"><b>${v}</b><span>${l}</span></div>`).join('');
+  $('#pnums').innerHTML = [[numCell(n, 0, ''), 'cards answered'], [n ? numCell(Math.round(ok / n * 100), 0, '%') : '<b>–</b>', 'right on the first try'], [avg ? numCell(avg, 1, ' s') : '<b>–</b>', 'average time to answer'], [numCell(ds, 0, ''), ds === 1 ? 'day in a row' : 'days in a row'], [numCell(days[dayKey()] || 0, 0, ''), 'cards today']].map(([v, l]) => `<div class="pnum">${v}<span>${l}</span></div>`).join('');
+  if (anim) countAll($('#pnums'));
   const weak = all.filter(([, s]) => s.ok / s.n < .8 || s.t > 5000).sort((a, b) => (a[1].ok / a[1].n - b[1].ok / b[1].n) || (b[1].t - a[1].t)).slice(0, 8);
   $('#weakList').innerHTML = weak.length ? weak.map(([id]) => `<span>${nm(+id.slice(1))} <span style="border:0;padding:0;color:var(--mute);font-weight:500">${CLEF[id[0]].name.toLowerCase()}</span></span>`).join('') : `<p style="margin:0;color:var(--mute)">${all.length ? 'Nothing shaky right now. Notes you miss or answer slowly show up here.' : 'Nothing yet. Practice a round and your shaky notes show up here.'}</p>`;
   $('#drillBtn').hidden = !weak.length;
@@ -1329,7 +1969,13 @@ function showSummary() {
   clearTimeout(advT);
   const pct = round.res ? Math.round(round.clean / round.res * 100) : 0, avg = round.times.length ? round.times.reduce((a, b) => a + b, 0) / round.times.length / 1000 : 0;
   $('#sTitle').textContent = pct >= 90 ? 'Excellent round' : pct >= 70 ? 'Solid round' : 'Round done';
-  $('#snums').innerHTML = [[pct + '%', 'first try'], [avg ? avg.toFixed(1) + ' s' : '–', 'average time'], [round.best, 'best streak']].map(([v, l]) => `<div><b>${v}</b><span>${l}</span></div>`).join('');
+  // stars: one for finishing, two for 70% right first try, three for 90%
+  const nst = pct >= 90 ? 3 : pct >= 70 ? 2 : 1;
+  $('#stars').innerHTML = [0, 1, 2].map(i => `<span class="${i < nst ? 'on' : ''}" style="animation-delay:${(.12 + i * .16).toFixed(2)}s">★</span>`).join('');
+  $('#stars').setAttribute('aria-label', `${nst} of 3 stars`);
+  $('#snums').innerHTML = [[numCell(pct, 0, '%'), 'first try'], [avg ? numCell(avg, 1, ' s') : '<b>–</b>', 'average time'], [numCell(round.best, 0, ''), 'best streak']].map(([v, l]) => `<div>${v}<span>${l}</span></div>`).join('');
+  countAll($('#snums'));
+  if (nst === 3 && round.res >= 5) setTimeout(() => confetti(), 250);
   const miss = [...round.missed];
   $('#smiss').innerHTML = miss.length ? `<p style="margin:0 0 8px;color:var(--mute)">Missed or slipped on:</p><div class="wl">${miss.map(id => `<span>${nm(+id.slice(1))} · ${CLEF[id[0]].name.toLowerCase()}</span>`).join('')}</div>` : '<p style="margin:0;color:var(--mute)">No misses at all. Try a wider range in Settings.</p>';
   $('#sDrill').hidden = !miss.length;
@@ -1370,42 +2016,55 @@ let lvSeen = -1;
 function checkLevel() {
   if (cfg.range !== 'levels') { lvSeen = -1; return; }
   const { i, L } = levelNow();
-  if (lvSeen >= 0 && i > lvSeen) { toast(`Level ${i + 1} unlocked · now ${levelSpan(L[i].ids)} 🎉`); if (view === 'practice') { kbRange = poolRange(); buildKB(); centerKB(card && card.clef); } }
+  if (lvSeen >= 0 && i > lvSeen) { toast(`Level ${i + 1} unlocked · now ${levelSpan(L[i].ids)} 🎉`); confetti(60); if (view === 'practice') { kbRange = poolRange(); buildKB(); centerKB(card && card.clef); } }
   lvSeen = i;
 }
 
 /* ---------- save codes: all progress and settings as one short copy-paste code ---------- */
-// format 3, as bytes: 3 (format) · every setting, volume and mic sensitivity packed into one number (4) ·
-// which of the 42 notes have history (6) · for each of those: times seen, misses×11 + level×2, average ms ·
-// number of practice days, then the first day (offset from 2026-01-01) and its cards, each later day as
-// cards×2 + (gap>1) [+ gap−2] · CRC-16. Format 2 (v1.6) had no Levels choice; format 1 (v1.5) also no finger
+// format 4, as bytes: 4 (format) · every setting, volume and mic sensitivity packed into one number (4) ·
+// number of devices, then for each (this device first): id (4), kind (1), a note block and a day block. CRC-16 at the end.
+// note block: which of the 42 notes have history (6) · newest practice day (offset+1 from 2026-01-01, 0 = unknown) ·
+// for each note: times seen, misses×11 + level×2, average ms, days before the newest one it was last practised (+1, 0 = unknown)
+// day block: number of practice days, then the first day (offset from 2026-01-01) and its cards, each later day as
+// cards×2 + (gap>1) [+ gap−2].
+// Formats 1–3 (v1.5–1.7) had one device and no practice dates; format 2 had no Levels choice; format 1 also no finger
 // numbers, and its settings took 2 bytes, then volume, then sensitivity×10. New choices only ever go at the end.
 // Written in letters and digits only (base 62), so a double-tap selects all of it in Notes or Messages.
-const APP_VER = '1.7', B62 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', DAY0 = 20454;
+const APP_VER = '1.8', B62 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', DAY0 = 20454;
 const NOTE_IDS = ['t', 'b'].flatMap(c => { const r = RANGES.far[c], a = []; for (let d = r[0]; d <= r[1]; d++) a.push(c + d); return a; });
-const SAVE_ORDER = { range: ['landmarks', 'staff', 'near', 'far', 'levels'] };
-const SAVE_OPTS = OPTS.map(o => [o[0], SAVE_ORDER[o[0]] || o[2].map(c => c[0])]).concat([['names', [false, true]]]);
-const SAVE_V2 = SAVE_OPTS.map(([k, ch]) => [k, k === 'range' ? ch.slice(0, 4) : ch]), SAVE_V1 = SAVE_V2.filter(o => o[0] !== 'fing');
+const SAVE_ORDER = { range: ['landmarks', 'staff', 'near', 'far', 'levels', 'custom'] };
+// the picked tune gets 64 slots (Mix, then the tunes in list order; new tunes are only ever added at the end)
+const TUNE_SLOTS = ['mix', ...TUNES.map(T => T.t)]; while (TUNE_SLOTS.length < 64) TUNE_SLOTS.push(null);
+const SAVE_OPTS = OPTS.map(o => [o[0], o[0] === 'tune' ? TUNE_SLOTS : SAVE_ORDER[o[0]] || o[2].map(c => c[0])]).concat([['names', [false, true]]]);
+const SAVE_V3 = SAVE_OPTS.filter(o => !['sr', 'bars', 'tune'].includes(o[0])).map(([k, ch]) => [k, k === 'range' ? ch.slice(0, 5) : ch]);
+const SAVE_V2 = SAVE_V3.map(([k, ch]) => [k, k === 'range' ? ch.slice(0, 4) : ch]), SAVE_V1 = SAVE_V2.filter(o => o[0] !== 'fing');
 function crc16(B) { let c = 0xffff; for (const b of B) { c ^= b << 8; for (let k = 0; k < 8; k++) c = c & 0x8000 ? (c << 1 ^ 0x1021) & 0xffff : c << 1 & 0xffff; } return c; }
-const dayNum = k => { const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(k); return m ? Math.round(Date.UTC(+m[1], m[2] - 1, +m[3]) / 864e5) : null; };
-const dayStr = n => { const t = new Date(n * 864e5); return `${t.getUTCFullYear()}-${t.getUTCMonth() + 1}-${t.getUTCDate()}`; };
+const cardsIn = st => Object.values(st).reduce((a, v) => a + (v.n || 0), 0);
 function exportCode() {
-  const B = [3], put = x => { x = Math.max(0, Math.floor(x) || 0); while (x > 127) { B.push(x % 128 | 128); x = Math.floor(x / 128); } B.push(x); };
+  const B = [4], put = x => { x = Math.max(0, Math.floor(x) || 0); while (x > 127) { B.push(x % 128 | 128); x = Math.floor(x / 128); } B.push(x); };
   let o = 0, r = 1;
   for (const [k, ch] of SAVE_OPTS) { o += Math.max(0, ch.indexOf(cfg[k])) * r; r *= ch.length; }
   o += Math.min(100, Math.max(0, Math.round(cfg.vol))) * r; r *= 101;
   o += Math.min(25, Math.max(0, Math.round(cfg.sens * 10) - 5)) * r;
-  B.push(Math.floor(o / 16777216), Math.floor(o / 65536) % 256, Math.floor(o / 256) % 256, o % 256);
-  const have = NOTE_IDS.map(id => stats[id]), bm = [0, 0, 0, 0, 0, 0];
-  have.forEach((v, j) => { if (v) bm[j >> 3] |= 1 << (j & 7); }); B.push(...bm);
-  for (const v of have) if (v) { put(v.n); put(Math.max(0, v.n - v.ok) * 11 + Math.min(10, Math.max(0, Math.round(v.box * 2)))); put(v.t); }
-  const per = new Map(); for (const k of Object.keys(days)) { const n = dayNum(k); if (n !== null && days[k] > 0) per.set(n, (per.get(n) || 0) + days[k]); }
-  const ds = [...per].sort((a, b) => a[0] - b[0]);
-  put(ds.length);
-  ds.forEach(([n, c], j) => {
-    if (!j) { const z = n - DAY0; put(z >= 0 ? z * 2 : -z * 2 - 1); put(c); }
-    else { const g = n - ds[j - 1][0]; put(c * 2 + (g > 1 ? 1 : 0)); if (g > 1) put(g - 2); }
-  });
+  put(o);
+  const pm = [0, 0, 0, 0, 0, 0]; NOTE_IDS.forEach((id, j) => { if (cfg.pick.includes(id)) pm[j >> 3] |= 1 << (j & 7); }); B.push(...pm);
+  const secs = [[dev.id, dev.kind, ownStats, ownDays], ...Object.keys(others).map(id => [+id, others[id].kind, others[id].stats, others[id].days])];
+  put(secs.length);
+  for (const [id, kind, st, dy] of secs) {
+    B.push(id >>> 24 & 255, id >>> 16 & 255, id >>> 8 & 255, id & 255, kind & 255);
+    const have = NOTE_IDS.map(k => st[k]), bm = [0, 0, 0, 0, 0, 0];
+    have.forEach((v, j) => { if (v) bm[j >> 3] |= 1 << (j & 7); }); B.push(...bm);
+    let ref = 0; for (const v of have) if (v && v.last >= DAY0 && v.last > ref) ref = v.last;
+    put(ref ? ref - DAY0 + 1 : 0);
+    for (const v of have) if (v) { put(v.n); put(Math.max(0, v.n - v.ok) * 11 + Math.min(10, Math.max(0, Math.round(v.box * 2)))); put(v.t); put(ref && v.last >= DAY0 ? ref - v.last + 1 : 0); }
+    const per = new Map(); for (const k of Object.keys(dy)) { const n = dayNum(k); if (n !== null && dy[k] > 0) per.set(n, (per.get(n) || 0) + dy[k]); }
+    const ds = [...per].sort((a, b) => a[0] - b[0]);
+    put(ds.length);
+    ds.forEach(([n, c], j) => {
+      if (!j) { const z = n - DAY0; put(z >= 0 ? z * 2 : -z * 2 - 1); put(c); }
+      else { const g = n - ds[j - 1][0]; put(c * 2 + (g > 1 ? 1 : 0)); if (g > 1) put(g - 2); }
+    });
+  }
   const c = crc16(B); B.push(c >> 8, c & 255);
   let v = 0n; for (const b of B) v = v << 8n | BigInt(b);
   let out = ''; while (v) { out = B62[Number(v % 62n)] + out; v /= 62n; }
@@ -1414,56 +2073,102 @@ function exportCode() {
 function readCode(str) {
   let v = 0n; for (const ch of str) v = v * 62n + BigInt(B62.indexOf(ch));
   const B = []; while (v) { B.unshift(Number(v & 255n)); v >>= 8n; }
-  const n = B.length - 2;
-  if (n < 11 || !(B[0] >= 1 && B[0] <= 3) || crc16(B.slice(0, n)) !== (B[n] << 8 | B[n + 1])) return null;
-  let i = 11; const get = () => { let x = 0, m = 1, b; do { if (i >= n || m > 2 ** 42) throw 0; b = B[i++]; x += (b & 127) * m; m *= 128; } while (b & 128); return x; };
-  try {
-    const c = {}, v1 = B[0] === 1; let o = v1 ? B[1] << 8 | B[2] : ((B[1] * 256 + B[2]) * 256 + B[3]) * 256 + B[4];
-    for (const [k, ch] of v1 ? SAVE_V1 : B[0] === 2 ? SAVE_V2 : SAVE_OPTS) { c[k] = ch[o % ch.length]; o = Math.floor(o / ch.length); }
-    if (v1) { c.vol = Math.min(100, B[3]); c.sens = Math.min(3, Math.max(.5, B[4] / 10)); }
-    else { c.vol = o % 101; o = Math.floor(o / 101); c.sens = (o % 26 + 5) / 10; if (o >= 26) return null; }
-    const st = {};
-    NOTE_IDS.forEach((id, j) => { if (B[5 + (j >> 3)] >> (j & 7) & 1) { const nn = get(), mb = get(), t = get(); st[id] = { n: nn, ok: Math.max(0, nn - Math.floor(mb / 11)), box: mb % 11 / 2, t }; } });
+  const n = B.length - 2, F = B[0];
+  if (n < 6 || !(F >= 1 && F <= 4) || crc16(B.slice(0, n)) !== (B[n] << 8 | B[n + 1])) return null;
+  let i = F === 4 ? 1 : 5; const get = () => { let x = 0, m = 1, b; do { if (i >= n || m > 2 ** 42) throw 0; b = B[i++]; x += (b & 127) * m; m *= 128; } while (b & 128); return x; };
+  const raw = k => { if (i + k > n) throw 0; const out = B.slice(i, i + k); i += k; return out; };
+  const block = dated => {
+    const bm = raw(6), ref = dated ? get() : 0, st = {};
+    NOTE_IDS.forEach((id, j) => { if (bm[j >> 3] >> (j & 7) & 1) { const nn = get(), mb = get(), t = get(), l = dated ? get() : 0; st[id] = { n: nn, ok: Math.max(0, nn - Math.floor(mb / 11)), box: mb % 11 / 2, t }; if (ref && l) st[id].last = DAY0 + ref - 1 - (l - 1); } });
     const dy = {}; let dn = 0;
     for (let j = 0, cnt = get(); j < cnt; j++) {
       if (!j) { const z = get(); dn = DAY0 + (z % 2 ? -(z + 1) / 2 : z / 2); dy[dayStr(dn)] = get(); }
       else { const w = get(); dn += w % 2 ? get() + 2 : 1; dy[dayStr(dn)] = Math.floor(w / 2); }
     }
-    return i === n ? { cfg: c, stats: st, days: dy } : null;
+    return { stats: st, days: dy };
+  };
+  try {
+    const c = {}, v1 = F === 1; let o = F === 4 ? get() : v1 ? B[1] << 8 | B[2] : ((B[1] * 256 + B[2]) * 256 + B[3]) * 256 + B[4];
+    for (const [k, ch] of v1 ? SAVE_V1 : F === 2 ? SAVE_V2 : F === 3 ? SAVE_V3 : SAVE_OPTS) { c[k] = ch[o % ch.length]; o = Math.floor(o / ch.length); }
+    if (v1) { c.vol = Math.min(100, B[3]); c.sens = Math.min(3, Math.max(.5, B[4] / 10)); }
+    else { c.vol = o % 101; o = Math.floor(o / 101); c.sens = (o % 26 + 5) / 10; if (o >= 26) return null; }
+    if (F === 4) { const pm = raw(6); c.pick = NOTE_IDS.filter((id, j) => pm[j >> 3] >> (j & 7) & 1); if (!c.tune) c.tune = 'mix'; }
+    const secs = [];
+    if (F === 4) { for (let k = 0, cnt = get(); k < cnt; k++) { const h = raw(5); secs.push({ id: (h[0] * 16777216 + h[1] * 65536 + h[2] * 256 + h[3]), kind: h[4] < KINDS.length ? h[4] : 6, ...block(true) }); } }
+    else { // an older one-device save: give it an id made from the code itself, so loading the same code twice can't count it twice
+      let h = 2166136261; for (const b of B) { h ^= b; h = Math.imul(h, 16777619) >>> 0; }
+      secs.push({ id: h || 1, kind: 0, ...block(false) });
+    }
+    if (i !== n || !secs.length) return null;
+    return { cfg: c, secs };
   } catch (e) { return null; }
 }
 // find the code in whatever was pasted: the longest run of letters and digits, or all runs joined if it got split by line breaks
 function parseCode(txt) {
   const runs = String(txt || '').match(/[0-9A-Za-z]+/g) || [], long = runs.slice().sort((a, b) => b.length - a.length)[0] || '';
-  for (const cand of [long, runs.join('')]) if (cand.length >= 16 && cand.length <= 20000) { const d = readCode(cand); if (d) return d; }
+  for (const cand of [long, runs.join('')]) if (cand.length >= 12 && cand.length <= 40000) { const d = readCode(cand); if (d) return d; }
   return null;
 }
-const cardsIn = st => Object.values(st).reduce((a, v) => a + (v.n || 0), 0);
-let pendingLoad = null, undoSave = null;
-function saveMsg(html, kind) { const m = $('#saveMsg'); m.className = 'smsg' + (kind ? ' ' + kind : ''); m.innerHTML = html; m.hidden = !html; }
-function resetSaveUI() { $('#saveCode').hidden = $('#loadIn').hidden = $('#loadAsk').hidden = true; pendingLoad = null; saveMsg(''); }
-function askLoad(d) {
-  pendingLoad = d; $('#loadIn').hidden = true; saveMsg('');
-  const last = Object.keys(d.days).map(dayNum).sort((a, b) => b - a)[0];
-  const when = last != null ? ' · last practiced ' + new Date(last * 864e5).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : '';
-  const mast = Object.values(d.stats).filter(v => v.box >= 4).length, here = cardsIn(stats);
-  $('#loadInfo').innerHTML = `<b>${plural(cardsIn(d.stats), 'card')} · ${mast} of 42 mastered</b>${when}<br><span style="color:var(--mute)">Loading replaces the progress and settings on this device${here ? ` (${plural(here, 'card')} here now)` : ''}.</span>`;
-  $('#loadAsk').hidden = false;
+// what combining a code would leave you with (devices keyed by id: a newer copy of the same device replaces the older one)
+function mergedOthers(d) {
+  const o = { ...others };
+  for (const s of d.secs) { if (s.id === dev.id) continue; const cur = o[s.id]; if (!cur || cardsIn(s.stats) > cardsIn(cur.stats)) o[s.id] = { kind: s.kind, stats: s.stats, days: s.days }; }
+  return o;
 }
-function applySave(d) {
-  stats = d.stats; days = d.days; cfg = { ...DEF, ...d.cfg, input: cfg.input }; save(); lvForget(); lvSeen = -1; checkLevel();
+const totalCards = (own, ot) => cardsIn(own) + Object.values(ot).reduce((a, x) => a + cardsIn(x.stats), 0);
+// undo / redo for anything that swaps out progress (combine, replace, reset); kept on the device so it survives a reload
+const UNDO = 'noteDojo.undo', REDO = 'noteDojo.redo';
+const loadHist = k => { try { const a = JSON.parse(localStorage.getItem(k) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } };
+let undoStack = loadHist(UNDO), redoStack = loadHist(REDO);
+const snap = label => ({ label, d: JSON.parse(JSON.stringify({ cfg, stats: ownStats, days: ownDays, others })) });
+function keepHist() { try { localStorage.setItem(UNDO, JSON.stringify(undoStack.slice(-6))); localStorage.setItem(REDO, JSON.stringify(redoStack.slice(-6))); } catch (e) {} }
+function remember(label) { undoStack.push(snap(label)); undoStack = undoStack.slice(-6); redoStack = []; keepHist(); }
+function restoreSnap(x) { const d = x.d || {}; cfg = { ...DEF, ...(d.cfg || {}), input: cfg.input }; ownStats = cleanStats(d.stats); ownDays = cleanDays(d.days); others = cleanOthers(d.others); afterData(); }
+function undoRedo(from, to, verb) {
+  const x = from.pop(); if (!x) return;
+  to.push(snap(x.label)); restoreSnap(x); keepHist(); renderHist();
+  flashMsg(`${verb}: ${x.label}`);
+}
+function renderHist() {
+  const u = undoStack[undoStack.length - 1], r = redoStack[redoStack.length - 1];
+  $('#histRow').hidden = !u && !r;
+  $('#undoBtn').disabled = !u; $('#redoBtn').disabled = !r;
+  $('#undoBtn').title = u ? 'Undo: ' + u.label : ''; $('#redoBtn').title = r ? 'Redo: ' + r.label : '';
+  $('#histNote').textContent = u ? 'Last change: ' + u.label : r ? 'Undone: ' + r.label : '';
+}
+function afterData() {
+  recombine(); save(); lvForget(); lvSeen = -1; checkLevel();
   drill = null; psel = null; renderSettings(); $('#sens').value = cfg.sens; if (listener) listener.sens = cfg.sens;
   $('#vol').value = cfg.vol; setVol();
   if (view === 'practice') kbRange = poolRange();
   buildKB(); newRound();
   if (view === 'progress') renderProgress(); else if (view === 'learn') renderLearn();
 }
+let pendingLoad = null;
+function saveMsg(html, kind) { const m = $('#saveMsg'); m.className = 'smsg' + (kind ? ' ' + kind : ''); m.innerHTML = html; m.hidden = !html; }
+function flashMsg(t) { saveMsg(t + ' ✓', 'ok'); }
+function resetSaveUI() { $('#saveCode').hidden = $('#loadIn').hidden = $('#loadAsk').hidden = true; pendingLoad = null; saveMsg(''); }
+const fmtDay = n => new Date(n * 864e5).toLocaleDateString(undefined, { month: 'short', day: 'numeric', timeZone: 'UTC' });
+const devList = secs => { const names = []; for (const x of secs) { const nm2 = x.id === dev.id ? 'this ' + KINDS[x.kind] : KINDS[x.kind]; if (!names.includes(nm2)) names.push(nm2); } return names.join(' + '); };
+function askLoad(d) {
+  pendingLoad = d; $('#loadIn').hidden = true; saveMsg('');
+  const all = {}; for (const x of d.secs) for (const id of Object.keys(x.stats)) all[id] = [...(all[id] || []), x.stats[id]];
+  const cards = d.secs.reduce((a, x) => a + cardsIn(x.stats), 0);
+  const last = d.secs.flatMap(x => Object.keys(x.days).map(dayNum)).sort((a, b) => b - a)[0];
+  const here = totalCards(ownStats, others), comb = totalCards(d.secs.some(x => x.id === dev.id) ? ownStats : ownStats, mergedOthers(d));
+  const me = d.secs.find(x => x.id === dev.id), rep = d.secs.reduce((a, x) => a + cardsIn(x.stats), 0);
+  $('#loadInfo').innerHTML = `<b>${plural(cards, 'card')}</b> from ${devList(d.secs)}${last != null ? ` · last practised ${fmtDay(last)}` : ''}`;
+  $('#loadCombHint').innerHTML = comb === here ? 'Nothing new to add: this device already has all of it.' : `Adds it to what's here: <b>${plural(comb, 'card')}</b> in total (now ${here}). Each device's practice counts once, even if you combine again later. Keeps this device's settings.`;
+  $('#loadRepHint').innerHTML = `This device becomes exactly the code: <b>${plural(rep, 'card')}</b> and its settings.`;
+  $('#loadMerge').disabled = comb === here;
+  $('#loadAsk').hidden = false;
+}
 $('#appVer').textContent = 'Note Dojo ' + APP_VER;
-checkLevel();
+checkLevel(); renderHist();
 $('#saveCopy').onclick = () => {
   resetSaveUI();
-  const code = exportCode(), box = $('#saveCode'); box.textContent = code; box.hidden = false;
-  const done = ok => saveMsg(ok ? `Copied ✓ · ${code.length} characters` : 'Copying didn\'t work here. Tap the code to select it, then copy it.', ok ? 'ok' : '');
+  const code = exportCode(), box = $('#saveCode'), n = 1 + Object.keys(others).length; box.textContent = code; box.hidden = false;
+  const done = ok => saveMsg(ok ? `Copied ✓ · ${code.length} characters${n > 1 ? ` · ${n} devices' practice` : ''}` : 'Copying didn\'t work here. Tap the code to select it, then copy it.', ok ? 'ok' : '');
   try { navigator.clipboard.writeText(code).then(() => done(true), () => done(false)); } catch (e) { done(false); }
 };
 $('#saveLoad').onclick = async () => {
@@ -1478,32 +2183,93 @@ $('#loadIn').oninput = () => {
   const d = parseCode(t); if (d) askLoad(d); else saveMsg('That code looks incomplete or mistyped.', 'err');
 };
 $('#loadNo').onclick = resetSaveUI;
-$('#loadYes').onclick = () => {
-  if (!pendingLoad) return;
-  undoSave = { cfg: { ...cfg }, stats, days }; applySave(pendingLoad); resetSaveUI();
-  saveMsg('Loaded ✓ <button class="btn" id="loadUndo">Undo</button>', 'ok');
-  $('#loadUndo').onclick = () => { if (undoSave) { applySave(undoSave); undoSave = null; saveMsg('Back to how it was.'); } };
+$('#loadMerge').onclick = () => {
+  const d = pendingLoad; if (!d) return;
+  remember('Combine with ' + devList(d.secs.filter(x => x.id !== dev.id)));
+  others = mergedOthers(d); afterData(); resetSaveUI(); renderHist();
+  flashMsg(`Combined · ${plural(totalCards(ownStats, others), 'card')} in total`);
 };
+$('#loadYes').onclick = () => {
+  const d = pendingLoad; if (!d) return;
+  remember('Replace with ' + devList(d.secs));
+  cfg = { ...DEF, ...d.cfg, input: cfg.input };
+  const me = d.secs.find(x => x.id === dev.id); ownStats = me ? me.stats : {}; ownDays = me ? me.days : {};
+  others = {}; for (const x of d.secs) if (x.id !== dev.id) others[x.id] = { kind: x.kind, stats: x.stats, days: x.days };
+  afterData(); resetSaveUI(); renderHist(); flashMsg('Replaced');
+};
+$('#undoBtn').onclick = () => undoRedo(undoStack, redoStack, 'Undone');
+$('#redoBtn').onclick = () => undoRedo(redoStack, undoStack, 'Redone');
 
 /* ---------- overlays, settings, routing ---------- */
-const overlayOpen = () => $$('.ov').some(o => !o.hidden);
+const overlayOpen = () => $$('.ov').some(o => !o.hidden && !o.classList.contains('closing'));
 const ovFrom = {};
 let kbUser = false; // last input came from the keyboard: then (and only then) hand focus back after a dialog
 document.addEventListener('keydown', () => { kbUser = true; }, true);
 document.addEventListener('pointerdown', () => { kbUser = false; }, true);
-function openOv(id) { if ($('#' + id).hidden) ovFrom[id] = document.activeElement; $('#' + id).hidden = false; }
+const ovT = {};
+function openOv(id) { const o = $('#' + id); clearTimeout(ovT[id]); if (o.hidden) ovFrom[id] = document.activeElement; o.classList.remove('closing'); o.hidden = false; }
 function closeOv(id) {
-  $('#' + id).hidden = true;
+  const o = $('#' + id); if (o.hidden) return;
+  if (!calm()) { o.classList.add('closing'); clearTimeout(ovT[id]); ovT[id] = setTimeout(() => { o.hidden = true; o.classList.remove('closing'); }, 210); }
+  else o.hidden = true;
   const el = ovFrom[id]; ovFrom[id] = null;
   if (kbUser && el && el !== document.body && el.isConnected && !el.closest('[hidden]')) try { el.focus({ preventScroll: true }); } catch (e) {}
 }
 let toastT = 0;
-function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 6500); }
+function toast(msg, act) { const t = $('#toast'); t.textContent = msg; t.hidden = true; void t.offsetWidth; t.hidden = false; t.onclick = act ? () => { t.hidden = true; act(); } : null; t.classList.toggle('act', !!act); clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, act ? 9000 : 6500); }
+const RANGE_DESC = {
+  levels: 'Starts small and grows with you: C4–C5 first, then the left hand\'s C3–C4, then both whole staves, then ledger lines. Each level opens when you know 80% of its notes.',
+  landmarks: '9 anchor notes to find your way from: Middle C, Treble G, Bass F and friends. Learn these first, then read other notes as steps from them.',
+  staff: 'Every line and space on the staff, no ledger lines: E4–F5 in treble, G2–A3 in bass.',
+  near: 'The staff plus 1 ledger line above and below: C4–A5 in treble, E2–C4 in bass.',
+  far: 'Everything, up to 3 ledger lines: F3–E6 in treble, A1–G4 in bass.',
+  custom: 'Exactly the notes you pick: tap them on the staffs under “Lines or spaces”.'
+};
+const SR_DESC = {
+  classic: 'The original: 5 random notes in a row, all whole notes. Good for finding notes fast.',
+  melody: 'Made-up tunes that move like real music: mostly steps, a few leaps, bar lines, and an ending that sounds finished.',
+  tunes: 'Real melodies everyone knows (folk songs and classics), a phrase at a time. They use their own notes, so your note range doesn\'t apply.'
+};
+const GRP_DESC = { range: () => (tuneMode() ? 'Real tunes use their own notes, so this applies to the other modes. ' : '') + RANGE_DESC[cfg.range], sr: () => SR_DESC[cfg.sr] + ' Any line can be played again, and in Melodies and Real tunes you can loop just the hard bar.', tune: () => cfg.tune === 'mix' ? 'A different tune each time one ends.' : 'This tune, a phrase at a time, then from the top again.' };
+const OPT_IF = { bars: () => cfg.sr === 'melody', tune: () => cfg.sr === 'tunes' };
+function notePickHTML() {
+  const cl = cfg.clefs === 'both' ? ['t', 'b'] : [cfg.clefs], custom = cfg.range === 'custom';
+  const empty = custom && !cfg.pick.some(id => cl.includes(id[0]));
+  const pool = new Set(empty ? [] : poolList().map(p => p.clef + p.d));
+  const staff = c => {
+    const R = RANGES.far[c], notes = [], hits = [], off = !cl.includes(c);
+    for (let d = R[0], i = 0; d <= R[1]; d++, i++) {
+      const id = c + d, x = 52 + i * 15;
+      notes.push({ d, x, w: 9, cls: pool.has(id) ? 'pk-on' : custom && cfg.pick.includes(id) ? 'pk-half' : 'pk-off' });
+      hits.push(`<rect x="${x - 7.5}" y="0" width="15" height="150" fill="transparent" data-pk="${id}"><title>${nm(d)}</title></rect>`);
+    }
+    return `<div class="pkst${off ? ' dim' : ''}"><div class="pkh">${CLEF[c].name} clef <span>· ${CLEF[c].hand}${off ? ' · off (Staff setting)' : ''}</span></div><svg class="staff" viewBox="0 0 366 150">${single(c, notes, 366)}${hits.join('')}</svg></div>`;
+  };
+  return `<div class="npick" id="npick"><h4>What you'll practise <span class="pkn">${empty ? 'none picked yet' : plural(pool.size, 'note')}</span></h4>${staff('t')}${staff('b')}` +
+    (custom ? `<div class="pkq"><button class="btn" data-pq="staff">All staff notes</button><button class="btn" data-pq="lines">Lines</button><button class="btn" data-pq="spaces">Spaces</button><button class="btn" data-pq="none">Clear</button></div>` : '') +
+    `<p class="pkhint">${empty ? 'No notes picked yet, so for now you get the staff notes. Tap notes to pick them.' : custom ? 'Tap a note to add or remove it.' : 'Tap any note to make your own set (Custom).'}</p></div>`;
+}
+function togglePick(id) {
+  const set = new Set(cfg.range === 'custom' ? cfg.pick : poolList().map(p => p.clef + p.d));
+  set.has(id) ? set.delete(id) : set.add(id);
+  if (cfg.clefs !== 'both' && id[0] !== cfg.clefs) cfg.clefs = 'both';
+  cfg.pick = NOTE_IDS.filter(x => set.has(x)); cfg.focus = 'all';
+  setCfg('range', 'custom');
+}
+function quickPick(kind) {
+  const ids = [];
+  for (const c of ['t', 'b']) { const R = RANGES.staff[c]; for (let d = R[0]; d <= R[1]; d++) { const ln = (d - CLEF[c].bottom) % 2 === 0; if (kind === 'staff' || (kind === 'lines' && ln) || (kind === 'spaces' && !ln)) ids.push(c + d); } }
+  cfg.pick = kind === 'none' ? [] : ids; cfg.focus = 'all';
+  setCfg('range', 'custom');
+}
 function renderSettings() {
-  $('#optGroups').innerHTML = SECTIONS.map(([title, keys]) => `<h3>${title}</h3>` + keys.map(k => {
+  const sc = $('#setBody') ? $('#setBody').scrollTop : 0;
+  $('#optGroups').innerHTML = SECTIONS.map(([title, keys]) => `<h3>${title}</h3>` + keys.filter(k => !OPT_IF[k] || OPT_IF[k]()).map(k => {
     const [, label, ch] = OPTS.find(o => o[0] === k), cols = ch.length <= 3 ? ch.length : ch.every(c => c[1].length <= 7) ? 4 : 2;
-    return `<div class="grp"><h4 id="lbl-${k}">${label}</h4><div class="seg2" style="--c:${cols}" role="radiogroup" aria-labelledby="lbl-${k}">${ch.map((c, i) => `<button role="radio" aria-checked="${cfg[k] === c[0]}" data-k="${k}" data-i="${i}" class="${cfg[k] === c[0] ? 'on' : ''}">${c[1]}${c[2] ? `<small>${c[2]}</small>` : ''}</button>`).join('')}</div></div>`;
+    const desc = GRP_DESC[k] ? GRP_DESC[k]() : '';
+    return `<div class="grp" id="grp-${k}"><h4 id="lbl-${k}">${label}</h4><div class="seg2" style="--c:${cols}" role="radiogroup" aria-labelledby="lbl-${k}">${ch.map((c, i) => `<button role="radio" aria-checked="${cfg[k] === c[0]}" data-k="${k}" data-i="${i}" class="${cfg[k] === c[0] ? 'on' : ''}">${c[1]}${c[2] ? `<small>${c[2]}</small>` : ''}</button>`).join('')}</div>${desc ? `<p class="odesc">${desc}</p>` : ''}</div>` + (k === 'focus' ? notePickHTML() : '');
   }).join('')).join('');
+  if ($('#setBody')) $('#setBody').scrollTop = sc;
 }
 // open the sheet scrolled to a section; scroll only the sheet itself (scrollIntoView can shift the whole page on iOS)
 function openSettings(sel) {
@@ -1512,9 +2278,16 @@ function openSettings(sel) {
   body.scrollTop = t ? Math.max(0, t.offsetTop - 6) : 0;
   try { $('#setClose').focus({ preventScroll: true }); } catch (e) {}
 }
+function newsSR() {
+  if (cfg.mode !== 'line' || cfg.sr !== 'classic') return;
+  try { if (localStorage.getItem('noteDojo.new18')) return; localStorage.setItem('noteDojo.new18', '1'); } catch (e) { return; }
+  setTimeout(() => toast('New in Sight-read: real tunes, melodies, loops', () => { openSettings('#grp-sr'); const g = $('#grp-sr'); g.classList.remove('hl'); void g.offsetWidth; g.classList.add('hl'); }), 700);
+}
 function setCfg(k, v) {
-  cfg[k] = v; save(); renderSettings(); if (k === 'range' || k === 'clefs') { lvSeen = -1; checkLevel(); }
-  if (['mode', 'clefs', 'range', 'focus', 'acc', 'round'].includes(k)) { drill = null; if (view === 'practice') { kbRange = poolRange(); buildKB(); } newRound(); }
+  cfg[k] = v; save(); renderSettings();
+  const nb = $(`#optGroups button[data-k="${k}"].on`); if (nb && !calm()) nb.classList.add('just'); if (k === 'range' || k === 'clefs') { lvSeen = -1; checkLevel(); }
+  if (['sr', 'bars', 'tune'].includes(k)) { tuneAt = null; if (cfg.mode === 'line') { if (view === 'practice') { kbRange = poolRange(); buildKB(); } newRound(); } }
+  else if (['mode', 'clefs', 'range', 'focus', 'acc', 'round'].includes(k)) { drill = null; if (view === 'practice') { kbRange = poolRange(); buildKB(); } newRound(); if (k === 'mode') newsSR(); }
   else if (k === 'labels') buildKB();
   else if (k === 'fing') { if (card) renderAll(); if (view === 'learn') renderLearn(); }
   else if (card) renderSide();
@@ -1522,11 +2295,12 @@ function setCfg(k, v) {
 function go(v) { if (location.hash !== '#' + v) location.hash = v; else setView(v); }
 function setView(v) {
   if (!['practice', 'learn', 'progress'].includes(v)) v = 'practice';
+  if (v !== 'practice') stopListen();
   view = v; $('main').scrollTop = 0; howScroll = null;
   $$('.view').forEach(s => s.classList.toggle('on', s.id === 'v-' + v));
-  $$('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  $$('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === v)); slide($('#tabs'));
   $('#kbband').hidden = v === 'progress';
-  if (v === 'progress') { renderProgress(); return; }
+  if (v === 'progress') { renderProgress(true); return; }
   kbRange = v === 'learn' ? [21, 108] : poolRange();
   if (v === 'learn') renderLearn();
   else if (pendingNext) { pendingNext = false; if (card && card.done) next(); }
@@ -1546,12 +2320,19 @@ function nudge(dir) { if (!card || card.done || cfg.mode !== 'place') return; co
 $('#upBtn').onclick = () => nudge(1);
 $('#downBtn').onclick = () => nudge(-1);
 $('#hearBtn').onclick = () => { const s = cfg.sound; cfg.sound = true; tone(card.midi); cfg.sound = s; };
-$('#sumChip').onclick = () => openSettings('#optGroups');
+$('#sumChip').onclick = () => { const id = tuneMode() ? '#grp-tune' : '#grp-range'; openSettings(id); const g = $(id); if (!g) return; g.classList.remove('hl'); void g.offsetWidth; g.classList.add('hl'); };
+$('#againBtn').onclick = again;
+$('#listenBtn').onclick = listen;
+$('#skipBtn').onclick = skipLine;
+$('#barSeg').addEventListener('click', e => { const b = e.target.closest('button[data-b]'); if (!b) return; const k = +b.dataset.b; if (k >= 0) tapBar(k); else if (line && line.loop) setLoop(null); });
 $('#gear').onclick = () => openSettings();
 $('#inChip').onclick = () => openSettings('#inputGrp');
 $('#setClose').onclick = () => closeOv('ovSet');
 $$('.ov').forEach(o => o.addEventListener('click', e => { if (e.target === o && o.id !== 'ovStart') closeOv(o.id); }));
-$('#optGroups').addEventListener('click', e => { const b = e.target.closest('button[data-k]'); if (!b) return; const k = b.dataset.k, v = OPTS.find(o => o[0] === k)[2][+b.dataset.i][0]; setCfg(k, v); });
+$('#optGroups').addEventListener('click', e => {
+  const pk = e.target.closest('[data-pk]'); if (pk) return togglePick(pk.dataset.pk);
+  const pq = e.target.closest('[data-pq]'); if (pq) return quickPick(pq.dataset.pq);
+  const b = e.target.closest('button[data-k]'); if (!b) return; const k = b.dataset.k, v = OPTS.find(o => o[0] === k)[2][+b.dataset.i][0]; setCfg(k, v); });
 $('#midiBtn').onclick = () => { getAC(); if (midiS.on && midiS.acc) { bindMidi(); if (!midiS.names.length) toast('Still no piano found. Check the cable and that the piano is on.'); } else startMidi(false); };
 $('#micBtn').onclick = () => { getAC(); mic.paused = false; mic.on ? stopMic() : startMic(false); };
 $('#sens').oninput = e => { cfg.sens = +e.target.value; if (listener) listener.sens = cfg.sens; save(); };
@@ -1583,6 +2364,10 @@ function placeAt(e) { const c = CLEF[card.clef], y = svgY(stEl, e); return Math.
 stEl.addEventListener('pointerdown', e => { if (!card || cfg.mode !== 'place' || card.done || view !== 'practice') return; drag = true; try { stEl.setPointerCapture(e.pointerId); } catch (x) {} const d = placeAt(e); if (d !== card.pend) { card.pend = d; card.pendBad = false; card.ghost = null; renderCard(); renderSide(); } e.preventDefault(); });
 stEl.addEventListener('pointermove', e => { if (!card || cfg.mode !== 'place' || card.done) return; const d = placeAt(e); if (drag) { if (d !== card.pend) { card.pend = d; card.pendBad = false; renderCard(); } } else if (e.pointerType === 'mouse' && card.pend == null && d !== card.hover) { card.hover = d; renderCard(); } });
 stEl.addEventListener('pointerup', () => { drag = false; });
+stEl.addEventListener('click', e => { if (cfg.mode !== 'line' || !line || line.style === 'classic' || view !== 'practice') return; const r = e.target.closest('[data-bar]'); if (r) tapBar(+r.dataset.bar); });
+// the card changed width (phone turned, window resized): a melody may fit better on one staff or two
+const cardObs = new ResizeObserver(() => { const w = stEl.parentElement.clientWidth; if (w === cardObs.w) return; cardObs.w = w; if (card && cfg.mode === 'line' && line && line.style !== 'classic' && view === 'practice') renderCard(); });
+cardObs.observe(stEl.parentElement);
 stEl.addEventListener('pointerleave', () => { if (card && card.hover != null) { card.hover = null; renderCard(); } });
 $('#gstaff').addEventListener('click', e => { const y = svgY($('#gstaff'), e), t = y <= (GTB + yB(26)) / 2; const d = Math.max(10, Math.min(46, t ? 30 + Math.round((GTB - y) / 5) : 18 + Math.round((GBB - y) / 5))), m = natMidi(d); lseq++; tone(m); learnAdd(m, { d, acc: 0 }, t ? 't' : 'b'); ensureVisible(m); });
 $('#namesTgl').onclick = () => { cfg.names = !cfg.names; save(); renderLearn(); };
@@ -1594,7 +2379,7 @@ $('#lms').addEventListener('click', e => { const b = e.target.closest('button');
 [$('#ptreble'), $('#pbass')].forEach(el => el.addEventListener('click', e => { const r = e.target.closest('[data-id]'); if (r) pDetail(r.dataset.id); }));
 $('#resetBtn').onclick = () => { $('#resetAsk').hidden = false; $('#resetBtn').hidden = true; };
 $('#resetNo').onclick = () => { $('#resetAsk').hidden = true; $('#resetBtn').hidden = false; };
-$('#resetYes').onclick = () => { stats = {}; days = {}; save(); lvForget(); lvSeen = -1; psel = null; $('#pdetail').textContent = 'Progress cleared.'; $('#resetAsk').hidden = true; $('#resetBtn').hidden = false; renderProgress(); };
+$('#resetYes').onclick = () => { remember('Reset progress'); ownStats = {}; ownDays = {}; others = {}; recombine(); save(); renderHist(); lvForget(); lvSeen = -1; psel = null; $('#pdetail').textContent = 'Progress cleared.'; $('#resetAsk').hidden = true; $('#resetBtn').hidden = false; renderProgress(); };
 document.addEventListener('keydown', e => {
   bump(); resumeIfPaused();
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.metaKey || e.ctrlKey || e.altKey) return;
@@ -1607,6 +2392,9 @@ document.addEventListener('keydown', e => {
   else if (cfg.mode === 'name' && cfg.acc && (e.key === '#' || e.key === '=')) { accMod = accMod === 1 ? 0 : 1; renderSide(); }
   else if (cfg.mode === 'name' && cfg.acc && e.key === '-') { accMod = accMod === -1 ? 0 : -1; renderSide(); }
   else if (cfg.mode === 'place' && !card.done && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) { e.preventDefault(); nudge(e.key === 'ArrowUp' ? 1 : -1); }
+  else if (cfg.mode === 'line' && line && k === 'r') again();
+  else if (cfg.mode === 'line' && line && line.style !== 'classic' && k === 'l') listen();
+  else if (cfg.mode === 'line' && line && line.style !== 'classic' && /^[0-9]$/.test(k)) { const b = +k - 1; if (b >= 0) tapBar(b); else if (line.loop) setLoop(null); }
 });
 // keyboard resized (e.g. the phone turned): rebuild it and bring the right notes back into view
 const kbObs = new ResizeObserver(() => {
@@ -1615,6 +2403,9 @@ const kbObs = new ResizeObserver(() => {
   if (view === 'learn') centerKB(); else if (view === 'practice' && card) { if (cfg.mode === 'place' || card.hint >= 3) ensureVisible(card.midi); else centerKB(card.clef); }
 });
 kbObs.observe($('#kbs'));
+// the tab bar and mode switcher change size (phone turned): keep their highlight under the right button
+const segObs = new ResizeObserver(es => es.forEach(e => slide(e.target)));
+segObs.observe($('#tabs')); segObs.observe($('#modeSeg'));
 
 /* ---------- boot ---------- */
 renderSettings();
@@ -1627,10 +2418,12 @@ if (!hasMidi) {
   mp.querySelector('b').textContent = 'My piano';
   mp.querySelector('span').textContent = 'I\'ll listen through the microphone. Works with acoustic and digital pianos. Play one note at a time, pedal up.';
 }
+document.addEventListener('touchstart', () => {}, { passive: true });
+if (cfg.input) newsSR();
 if (!cfg.input) openOv('ovStart');
 else if (cfg.input === 'midi') startMidi(true);
 else if (cfg.input === 'mic') startMic(true);
-window.__dojo = { idle: () => { lastAct = -1e9; checkIdle(); }, get ac() { return ac; }, tone, outNode, exportCode, parseCode, get days() { return days; }, homePos, lineFingers, fingerOf, get line() { return line; }, mic: () => ({ on: mic.on, paused: !!mic.paused, err: mic.err, ctx: ac && ac.state, healed: micHealed }), force: f => { forced = { acc: 0, ...f }; newCard(); }, onKey, get card() { return card; }, get cfg() { return cfg; }, answerLetter, setCfg, next, reveal, hint, checkPlace, stats: () => stats, spell, natMidi, nm };
+window.__dojo = { idle: () => { lastAct = -1e9; checkIdle(); }, get ac() { return ac; }, tone, outNode, exportCode, parseCode, get days() { return days; }, get own() { return { stats: ownStats, days: ownDays }; }, get others() { return others; }, get dev() { return dev; }, recombine, homePos, lineFingers, fingerOf, get line() { return line; }, TUNES, parseBars, makeMelody, makeTune, again, tapBar, setLoop, skipLine, listen, stopListen, get tuneAt() { return tuneAt; }, get drill() { return drill; }, get lisAt() { return lisAt; }, renderCard, mic: () => ({ on: mic.on, paused: !!mic.paused, err: mic.err, ctx: ac && ac.state, healed: micHealed }), force: f => { forced = { acc: 0, ...f }; newCard(); }, onKey, get card() { return card; }, get cfg() { return cfg; }, answerLetter, setCfg, next, reveal, hint, checkPlace, stats: () => stats, spell, natMidi, nm };
 }
 </script>
 </body>
