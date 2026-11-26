@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-/zNpTrWE5ZnTjBvht5gBAWNXqSUrRWnl/CeO4DZA7sc='; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-dRY8s9N7C6UGjLkVNEixXRAQaVEbXfgqtUMhnuFp4+w='; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Note Dojo</title>
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
@@ -223,6 +223,8 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
 .sens input{flex:1;accent-color:var(--felt);min-height:30px}
 .sens.vol{padding:0 0 4px}
 .vol output{flex:none;min-width:3.2em;text-align:right;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.plevel{margin:4px 0 14px;font-size:15px;color:var(--mute)}
+.plevel b{color:var(--ink)}
 .fnote{font-size:14px;color:var(--mute);background:var(--panel);border-radius:12px;padding:10px 12px;margin-top:12px}
 .sdesc{margin:2px 0 10px;font-size:14px;color:var(--mute)}
 .srow{display:flex;gap:8px;flex-wrap:wrap}
@@ -321,6 +323,7 @@ g.hint .kw,g.hint .kb{fill:var(--hl);animation:glow .9s ease-in-out infinite alt
   <section class="view" id="v-progress">
     <div class="wrap">
       <h1 class="ptitle" id="ptitle">Your note map</h1>
+      <p class="plevel" id="plevel" hidden></p>
       <div class="pnums" id="pnums"></div>
       <div class="pstaves">
         <div class="card"><div class="cardtop"><span>Treble clef · right hand</span></div><svg class="staff" id="ptreble" viewBox="0 0 366 150"></svg></div>
@@ -435,6 +438,29 @@ function yinPitch(buf, sr, opts) {
 
 function freqToMidi(f) { return 69 + 12 * Math.log2(f / 440); }
 
+/* High notes (A#4 and up): piano strings there are stiff, so their overtones run sharp. The waveform is less
+   periodic, which pulls YIN's answer sharp and its confidence down. Settle these by the fundamental itself:
+   Goertzel power at each candidate semitone (a few cents either side, for stretch tuning). */
+const HI = 70, hannCache = {};
+function hann(n) { return hannCache[n] || (hannCache[n] = Float32Array.from({ length: n }, (_, i) => 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (n - 1)))); }
+function gpow(buf, sr, f, win) {
+  const w = 2 * Math.cos(2 * Math.PI * f / sr); let s1 = 0, s2 = 0;
+  for (let i = 0; i < buf.length; i++) { const s0 = buf[i] * win[i] + w * s1 - s2; s2 = s1; s1 = s0; }
+  return s1 * s1 + s2 * s2 - w * s1 * s2;
+}
+function highPitch(buf, sr, near) {
+  const win = hann(buf.length), N = buf.length, pw = {};
+  let ew = 0; for (let i = 0; i < N; i++) { const v = buf[i] * win[i]; ew += v * v; }
+  if (!ew) return null;
+  const P = k => { if (k in pw) return pw[k]; let v = 0; for (const c of [-0.22, 0, 0.22]) { const f = 440 * 2 ** ((k + c - 69) / 12); if (f < sr / 2.2) v = Math.max(v, gpow(buf, sr, f, win)); } return (pw[k] = v / (ew * N / 3)); };
+  const ks = []; if (near) { for (let k = near - 1; k <= near + 1; k++) if (k >= HI && k <= 108) ks.push(k); } else for (let k = HI; k <= 108; k++) ks.push(k);
+  let bk = 0, best = 0; for (const k of ks) if (P(k) > best) { best = P(k); bk = k; }
+  // a real high note: its fundamental holds a good share of the sound, beats the semitones either side,
+  // and no louder note sits an octave below (that would make this an overtone of a lower note)
+  if (!bk || best < (near ? 0.18 : 0.3) || best < 3 * Math.max(P(bk - 1), P(bk + 1)) || P(bk - 12) > best * 0.5) return null;
+  return { f: 440 * 2 ** ((bk - 69) / 12), conf: 0.9 };
+}
+
 function rmsOf(buf) { let s = 0; for (let i = 0; i < buf.length; i++) s += buf[i] * buf[i]; return Math.sqrt(s / buf.length); }
 
 /* Turns a stream of analysis frames (~30 per second) into discrete "key pressed" events.
@@ -442,9 +468,14 @@ function rmsOf(buf) { let s = 0; for (let i = 0; i < buf.length; i++) s += buf[i
    Path 2 (legato): the pitch moves to a new, strong, steady note without a clear energy jump. */
 function makeNoteListener(onNote, onLive) {
   const st = { hist: [], onsetAt: -1, emitted: true, rmsHist: [], lowHist: [], hfHist: [], hfLow: [], floor: 0.002, muteUntil: 0, sens: 1, ratio: 1.2,
-    lastLive: null, liveHist: [], preMidi: null, preR: 0, runMidi: null, runStrong: 0, runR0: 0, runPk: 0, lastEmit: null, lastEmitAt: -1e9, recent: [] };
+    lastLive: null, liveHist: [], preMidi: null, preR: 0, runMidi: null, runStrong: 0, runR0: 0, runPk: 0, lastEmit: null, lastEmitAt: -1e9, recent: [],
+    held: null, heldOff: 0 };
   const harm = d => d === 12 || d === 19 || d === 24;
-  function emit(m, now) {
+  function emit(m, now, strike) {
+    // the key that was just played is still sounding (held down or ringing): hearing it again is not a new press,
+    // unless it was clearly struck again. It counts again once it has gone quiet (let go) or another note took over.
+    if (m === st.held && !strike) return;
+    st.held = m; st.heldOff = 0;
     st.lastEmit = m; st.lastEmitAt = now;
     st.recent.push([m, now]); if (st.recent.length > 8) st.recent.shift();
     if (now >= st.muteUntil) onNote(m);
@@ -474,13 +505,16 @@ function makeNoteListener(onNote, onLive) {
     }
     let midi = null, f = null, conf = 0;
     if (r > gate * 0.6) {
-      const p = yinPitch(buf, sr);
+      let p = yinPitch(buf, sr);
+      const kY = p ? Math.round(freqToMidi(p.f)) : 0;
+      if (!p || p.conf <= 0.72 || kY >= HI) { const h = highPitch(buf, sr, p && kY >= HI - 1 ? kY : 0); p = h || (p && p.conf > 0.72 && kY < HI ? p : null); }
       if (p && p.conf > 0.72) { const m = freqToMidi(p.f), k = Math.round(m); if (Math.abs(m - k) < 0.42 && k >= 21 && k <= 108) { midi = k; f = p.f; conf = p.conf; } }
     }
     const strong = midi !== null && conf > 0.85 && r > gate * 1.5;
     if (midi !== null && midi === st.runMidi) { st.runStrong = strong ? st.runStrong + 1 : 0; if (r > st.runPk) st.runPk = r; }
     else { st.runMidi = midi; st.runStrong = strong ? 1 : 0; st.runR0 = n >= 2 ? rh[n - 2] : 0; st.runPk = r; }
     st.lastLive = midi; st.liveHist.push(midi); if (st.liveHist.length > 6) st.liveHist.shift();
+    if (st.held !== null) { if (r < gate * 0.8 || (midi !== null && midi !== st.held)) { if (++st.heldOff >= 3) st.held = null; } else st.heldOff = 0; }
     if (onLive) onLive(midi, r, f);
     if (!st.emitted && st.onsetAt >= 0) {
       if (now - st.onsetAt > 600) st.emitted = true;
@@ -494,7 +528,7 @@ function makeNoteListener(onNote, onLive) {
           const rS = Math.max(rh[n - 1], n > 1 ? rh[n - 2] : 0, n > 2 ? rh[n - 3] : 0);
           const ringing = (midi === st.preMidi || midi === st.lastEmit) && rS < Math.max(st.preR, gate * 0.5) * 1.8;
           const dup = midi === st.lastEmit && now - st.lastEmitAt < 400;
-          if (!ringing && !dup) emit(midi, now);
+          if (!ringing && !dup) emit(midi, now, rS > Math.max(st.preR, gate * 0.5) * 2.5);
         }
         return;
       }
@@ -542,7 +576,7 @@ const RANGES = { landmarks: { list: 1, t: [28,32,35,38,42], b: [14,18,21,24,28] 
 const OPTS = [
   ['mode', 'Mode', [['play', 'Play it', 'find the key'], ['name', 'Name it', 'say the letter'], ['place', 'Place it', 'put it on the staff'], ['line', 'Sight-read', '5 notes in a row']]],
   ['clefs', 'Staff', [['t', 'Treble', 'right hand'], ['b', 'Bass', 'left hand'], ['both', 'Both']]],
-  ['range', 'Which notes', [['landmarks', 'Landmarks', '9 anchor notes'], ['staff', 'On the staff'], ['near', '+ 1 ledger line'], ['far', '+ 3 ledger lines']]],
+  ['range', 'Which notes', [['levels', 'Levels', 'grow as you learn'], ['landmarks', 'Landmarks', '9 anchor notes'], ['staff', 'On the staff'], ['near', '+ 1 ledger line'], ['far', '+ 3 ledger lines']]],
   ['focus', 'Lines or spaces', [['all', 'Both'], ['lines', 'Lines only'], ['spaces', 'Spaces only']]],
   ['acc', 'Sharps and flats', [[false, 'Off'], [true, 'Mix some in']]],
   ['round', 'Cards per round', [[10, '10'], [20, '20'], [30, '30'], [0, 'Endless']]],
@@ -552,7 +586,7 @@ const OPTS = [
   ['fing', 'Finger numbers', [['off', 'Off'], ['start', 'First note', '+ hand moves'], ['all', 'Every note']]]
 ];
 const SECTIONS = [['Practice', ['mode', 'clefs', 'range', 'focus', 'acc', 'round', 'auto']], ['Display and sound', ['fing', 'labels', 'sound']]];
-const LABEL = { t: 'Treble', b: 'Bass', both: 'Treble + bass', landmarks: 'landmarks', staff: 'on the staff', near: '+ 1 ledger', far: '+ 3 ledgers' };
+const LABEL = { t: 'Treble', b: 'Bass', both: 'Treble + bass', levels: 'levels', landmarks: 'landmarks', staff: 'on the staff', near: '+ 1 ledger', far: '+ 3 ledgers' };
 const DEF = { mode: 'play', clefs: 'both', range: 'staff', focus: 'all', acc: false, round: 20, auto: true, labels: 'c', sound: true, fing: 'start', vol: 75, input: null, sens: 1.2, names: false };
 const LS = 'noteDojo.v1';
 let cfg = { ...DEF }, stats = {}, days = {};
@@ -649,8 +683,11 @@ let marks = {}; const pressed = new Set();
 function poolList() {
   if (drill && drill.length) return drill.map(id => ({ clef: id[0], d: +id.slice(1) }));
   const clefs = cfg.clefs === 'both' ? ['t', 'b'] : [cfg.clefs], R = RANGES[cfg.range], out = [];
+  const lv = cfg.range === 'levels' ? levelNow() : null;
   for (const c of clefs) {
-    const ds = R.list ? R[c].slice() : []; if (!R.list) for (let d = R[c][0]; d <= R[c][1]; d++) ds.push(d);
+    let ds;
+    if (lv) { ds = lv.L[lv.i].ids.filter(id => id[0] === c).map(id => +id.slice(1)); if (!ds.length) continue; }
+    else { ds = R.list ? R[c].slice() : []; if (!R.list) for (let d = R[c][0]; d <= R[c][1]; d++) ds.push(d); }
     let f = ds;
     if (cfg.focus !== 'all') f = ds.filter(d => ((d - CLEF[c].bottom) % 2 === 0) === (cfg.focus === 'lines'));
     (f.length ? f : ds).forEach(d => out.push({ clef: c, d }));
@@ -698,7 +735,7 @@ function record(ok, hinted) {
   round.res++;
   const dk = dayKey(); days[dk] = (days[dk] || 0) + 1;
   if (ok && !hinted) { round.clean++; round.times.push(ms); streak++; round.best = Math.max(round.best, streak); } else { streak = 0; if (!ok) round.missed.add(id); }
-  save();
+  save(); checkLevel();
 }
 function newRound() {
   round = { n: 0, res: 0, clean: 0, times: [], best: 0, missed: new Set() }; streak = 0; line = null; pendingNext = false;
@@ -803,8 +840,14 @@ function showHow() {
 }
 
 /* answers */
+let lastMic = { m: null, t: -1e9 };
 function answerKey(m, src) {
   if (!card || overlayOpen()) return;
+  if (src === 'mic') {
+    const now = performance.now(), right = !card.done && cfg.mode !== 'place' && (cfg.mode === 'name' ? (m - card.midi) % 12 === 0 : m === card.midi);
+    const again = m === lastMic.m && now - lastMic.t < 1200; lastMic = { m, t: now };
+    if (again && !right) return;
+  }
   if (card.done) {
     const waiting = !(cfg.auto && card.tries === 0 && card.hint === 0 && !card.revealed);
     if (src !== 'tap' && waiting && performance.now() - lastResolve > 450) next();
@@ -894,7 +937,8 @@ function hasPiano() { return mic.on || midiS.names.length > 0; }
 function renderSide() {
   const m = cfg.mode, place = m === 'place';
   $$('#modeSeg button').forEach(b => b.classList.toggle('on', b.dataset.mode === m));
-  $('#sumChip').textContent = `${LABEL[cfg.clefs]} · ${LABEL[cfg.range]}${cfg.focus !== 'all' ? ' · ' + cfg.focus + ' only' : ''}${cfg.acc && (m === 'play' || m === 'name') ? ' · ♯♭' : ''}${drill ? ' · drill' : ''}`;
+  const lvc = cfg.range === 'levels' && !drill ? levelNow() : null;
+  $('#sumChip').textContent = `${lvc ? `Level ${lvc.i + 1} · ${levelSpan(lvc.L[lvc.i].ids)}` : LABEL[cfg.clefs] + ' · ' + LABEL[cfg.range]}${cfg.focus !== 'all' ? ' · ' + cfg.focus + ' only' : ''}${cfg.acc && (m === 'play' || m === 'name') ? ' · ♯♭' : ''}${drill ? ' · drill' : ''}`;
   if (m === 'play') { $('#prompt').textContent = 'Play this note'; $('#promptSub').textContent = hasPiano() ? 'Find the exact key on your piano. The octave counts.' : 'Tap the exact key on the keyboard below. The octave counts.'; }
   else if (m === 'name') { $('#prompt').textContent = 'Name this note'; $('#promptSub').textContent = (hasPiano() ? 'Tap the letter, or play it anywhere on your piano.' : 'Tap the letter, or any matching key below.') + (cfg.acc ? ' For a sharp or flat, tap the sign first, then the letter.' : ''); }
   else if (m === 'line') { $('#prompt').textContent = 'Sight-read this line'; $('#promptSub').textContent = hasPiano() ? 'Play the notes left to right on your piano. The blue one is next.' : 'Tap the keys below, left to right. The blue note is next.'; }
@@ -1263,6 +1307,9 @@ function renderProgress() {
   const n = all.reduce((a, [, s]) => a + s.n, 0), ok = all.reduce((a, [, s]) => a + s.ok, 0);
   const mast = all.filter(([, s]) => s.box >= 4).length;
   const tv = all.filter(([, s]) => s.t).map(([, s]) => s.t), avg = tv.length ? tv.reduce((a, b) => a + b, 0) / tv.length / 1000 : 0;
+  const lvp = cfg.range === 'levels' ? levelNow() : null; $('#plevel').hidden = !lvp;
+  if (lvp) { const { i, L } = lvp, ids = L[i].ids, have = ids.filter(learned).length, need = Math.ceil(ids.length * .8);
+    $('#plevel').innerHTML = `<b>Level ${i + 1} of ${L.length}</b> · ${levelSpan(ids)} · ${have} of ${ids.length} notes learned` + (i < L.length - 1 ? ` · ${Math.max(1, need - have)} more to unlock level ${i + 2}` : ' · every note unlocked'); }
   $('#ptitle').textContent = n ? `${mast} of 42 notes mastered` : 'Your note map';
   const ds = dayStreak();
   $('#pnums').innerHTML = [[n, 'cards answered'], [n ? Math.round(ok / n * 100) + '%' : '–', 'right on the first try'], [avg ? avg.toFixed(1) + ' s' : '–', 'average time to answer'], [ds, ds === 1 ? 'day in a row' : 'days in a row'], [days[dayKey()] || 0, 'cards today']].map(([v, l]) => `<div class="pnum"><b>${v}</b><span>${l}</span></div>`).join('');
@@ -1294,20 +1341,56 @@ function showSummary() {
 }
 let sumAt = 0;
 
+/* ---------- levels (optional): start small, unlock more notes as you learn them ----------
+   Each level is a set of notes; it unlocks the next once 80% of its notes are learned (Good or better,
+   or right on the first try at least 3 times in 4). Worked out from your note history, so it needs no
+   extra saving and travels with save codes. */
+const LEVELS = [{ t: [28, 35] }, { t: [28, 35], b: [21, 28] }, { t: [28, 38], b: [18, 28] }, { t: [28, 40], b: [16, 28] }, { t: [24, 44], b: [12, 32] }];
+const learned = id => { const s = stats[id]; return !!s && (s.box >= 3 || (s.ok >= 4 && s.ok / s.n >= .75)); };
+function ladder() {
+  const cl = cfg.clefs === 'both' ? ['t', 'b'] : [cfg.clefs], out = [];
+  for (const L of LEVELS) {
+    const ids = []; for (const c of cl) if (L[c]) for (let d = L[c][0]; d <= L[c][1]; d++) ids.push(c + d);
+    if (ids.length && (!out.length || ids.length > out[out.length - 1].ids.length)) out.push({ ids });
+  }
+  return out;
+}
+// a level you've reached stays open even if a few notes slip later (remembered per hand choice on this device)
+let lvBest = {}; try { lvBest = JSON.parse(localStorage.getItem('noteDojo.lv')) || {}; } catch (e) {}
+function lvForget() { lvBest = {}; try { localStorage.removeItem('noteDojo.lv'); } catch (e) {} }
+function levelNow() {
+  const L = ladder(); let i = 0;
+  while (i < L.length - 1 && L[i].ids.filter(learned).length >= Math.ceil(L[i].ids.length * .8)) i++;
+  const b = Math.min(L.length - 1, lvBest[cfg.clefs] | 0);
+  if (i > b) { lvBest[cfg.clefs] = i; try { localStorage.setItem('noteDojo.lv', JSON.stringify(lvBest)); } catch (e) {} }
+  return { i: Math.max(i, b), L };
+}
+const levelSpan = ids => { const ds = ids.map(id => +id.slice(1)); return nm(Math.min(...ds)) + '–' + nm(Math.max(...ds)); };
+let lvSeen = -1;
+function checkLevel() {
+  if (cfg.range !== 'levels') { lvSeen = -1; return; }
+  const { i, L } = levelNow();
+  if (lvSeen >= 0 && i > lvSeen) { toast(`Level ${i + 1} unlocked · now ${levelSpan(L[i].ids)} 🎉`); if (view === 'practice') { kbRange = poolRange(); buildKB(); centerKB(card && card.clef); } }
+  lvSeen = i;
+}
+
 /* ---------- save codes: all progress and settings as one short copy-paste code ---------- */
-// format 2, as bytes: 2 (format) · every setting, volume and mic sensitivity packed into one number (4) ·
+// format 3, as bytes: 3 (format) · every setting, volume and mic sensitivity packed into one number (4) ·
 // which of the 42 notes have history (6) · for each of those: times seen, misses×11 + level×2, average ms ·
 // number of practice days, then the first day (offset from 2026-01-01) and its cards, each later day as
-// cards×2 + (gap>1) [+ gap−2] · CRC-16. Format 1 (v1.5) was the same except settings (2), volume, sensitivity×10.
+// cards×2 + (gap>1) [+ gap−2] · CRC-16. Format 2 (v1.6) had no Levels choice; format 1 (v1.5) also no finger
+// numbers, and its settings took 2 bytes, then volume, then sensitivity×10. New choices only ever go at the end.
 // Written in letters and digits only (base 62), so a double-tap selects all of it in Notes or Messages.
-const APP_VER = '1.6', B62 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', DAY0 = 20454;
+const APP_VER = '1.7', B62 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', DAY0 = 20454;
 const NOTE_IDS = ['t', 'b'].flatMap(c => { const r = RANGES.far[c], a = []; for (let d = r[0]; d <= r[1]; d++) a.push(c + d); return a; });
-const SAVE_OPTS = OPTS.map(o => [o[0], o[2].map(c => c[0])]).concat([['names', [false, true]]]), SAVE_V1 = SAVE_OPTS.filter(o => o[0] !== 'fing');
+const SAVE_ORDER = { range: ['landmarks', 'staff', 'near', 'far', 'levels'] };
+const SAVE_OPTS = OPTS.map(o => [o[0], SAVE_ORDER[o[0]] || o[2].map(c => c[0])]).concat([['names', [false, true]]]);
+const SAVE_V2 = SAVE_OPTS.map(([k, ch]) => [k, k === 'range' ? ch.slice(0, 4) : ch]), SAVE_V1 = SAVE_V2.filter(o => o[0] !== 'fing');
 function crc16(B) { let c = 0xffff; for (const b of B) { c ^= b << 8; for (let k = 0; k < 8; k++) c = c & 0x8000 ? (c << 1 ^ 0x1021) & 0xffff : c << 1 & 0xffff; } return c; }
 const dayNum = k => { const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(k); return m ? Math.round(Date.UTC(+m[1], m[2] - 1, +m[3]) / 864e5) : null; };
 const dayStr = n => { const t = new Date(n * 864e5); return `${t.getUTCFullYear()}-${t.getUTCMonth() + 1}-${t.getUTCDate()}`; };
 function exportCode() {
-  const B = [2], put = x => { x = Math.max(0, Math.floor(x) || 0); while (x > 127) { B.push(x % 128 | 128); x = Math.floor(x / 128); } B.push(x); };
+  const B = [3], put = x => { x = Math.max(0, Math.floor(x) || 0); while (x > 127) { B.push(x % 128 | 128); x = Math.floor(x / 128); } B.push(x); };
   let o = 0, r = 1;
   for (const [k, ch] of SAVE_OPTS) { o += Math.max(0, ch.indexOf(cfg[k])) * r; r *= ch.length; }
   o += Math.min(100, Math.max(0, Math.round(cfg.vol))) * r; r *= 101;
@@ -1332,11 +1415,11 @@ function readCode(str) {
   let v = 0n; for (const ch of str) v = v * 62n + BigInt(B62.indexOf(ch));
   const B = []; while (v) { B.unshift(Number(v & 255n)); v >>= 8n; }
   const n = B.length - 2;
-  if (n < 11 || (B[0] !== 1 && B[0] !== 2) || crc16(B.slice(0, n)) !== (B[n] << 8 | B[n + 1])) return null;
+  if (n < 11 || !(B[0] >= 1 && B[0] <= 3) || crc16(B.slice(0, n)) !== (B[n] << 8 | B[n + 1])) return null;
   let i = 11; const get = () => { let x = 0, m = 1, b; do { if (i >= n || m > 2 ** 42) throw 0; b = B[i++]; x += (b & 127) * m; m *= 128; } while (b & 128); return x; };
   try {
     const c = {}, v1 = B[0] === 1; let o = v1 ? B[1] << 8 | B[2] : ((B[1] * 256 + B[2]) * 256 + B[3]) * 256 + B[4];
-    for (const [k, ch] of v1 ? SAVE_V1 : SAVE_OPTS) { c[k] = ch[o % ch.length]; o = Math.floor(o / ch.length); }
+    for (const [k, ch] of v1 ? SAVE_V1 : B[0] === 2 ? SAVE_V2 : SAVE_OPTS) { c[k] = ch[o % ch.length]; o = Math.floor(o / ch.length); }
     if (v1) { c.vol = Math.min(100, B[3]); c.sens = Math.min(3, Math.max(.5, B[4] / 10)); }
     else { c.vol = o % 101; o = Math.floor(o / 101); c.sens = (o % 26 + 5) / 10; if (o >= 26) return null; }
     const st = {};
@@ -1368,7 +1451,7 @@ function askLoad(d) {
   $('#loadAsk').hidden = false;
 }
 function applySave(d) {
-  stats = d.stats; days = d.days; cfg = { ...DEF, ...d.cfg, input: cfg.input }; save();
+  stats = d.stats; days = d.days; cfg = { ...DEF, ...d.cfg, input: cfg.input }; save(); lvForget(); lvSeen = -1; checkLevel();
   drill = null; psel = null; renderSettings(); $('#sens').value = cfg.sens; if (listener) listener.sens = cfg.sens;
   $('#vol').value = cfg.vol; setVol();
   if (view === 'practice') kbRange = poolRange();
@@ -1376,6 +1459,7 @@ function applySave(d) {
   if (view === 'progress') renderProgress(); else if (view === 'learn') renderLearn();
 }
 $('#appVer').textContent = 'Note Dojo ' + APP_VER;
+checkLevel();
 $('#saveCopy').onclick = () => {
   resetSaveUI();
   const code = exportCode(), box = $('#saveCode'); box.textContent = code; box.hidden = false;
@@ -1429,7 +1513,7 @@ function openSettings(sel) {
   try { $('#setClose').focus({ preventScroll: true }); } catch (e) {}
 }
 function setCfg(k, v) {
-  cfg[k] = v; save(); renderSettings();
+  cfg[k] = v; save(); renderSettings(); if (k === 'range' || k === 'clefs') { lvSeen = -1; checkLevel(); }
   if (['mode', 'clefs', 'range', 'focus', 'acc', 'round'].includes(k)) { drill = null; if (view === 'practice') { kbRange = poolRange(); buildKB(); } newRound(); }
   else if (k === 'labels') buildKB();
   else if (k === 'fing') { if (card) renderAll(); if (view === 'learn') renderLearn(); }
@@ -1510,7 +1594,7 @@ $('#lms').addEventListener('click', e => { const b = e.target.closest('button');
 [$('#ptreble'), $('#pbass')].forEach(el => el.addEventListener('click', e => { const r = e.target.closest('[data-id]'); if (r) pDetail(r.dataset.id); }));
 $('#resetBtn').onclick = () => { $('#resetAsk').hidden = false; $('#resetBtn').hidden = true; };
 $('#resetNo').onclick = () => { $('#resetAsk').hidden = true; $('#resetBtn').hidden = false; };
-$('#resetYes').onclick = () => { stats = {}; days = {}; save(); psel = null; $('#pdetail').textContent = 'Progress cleared.'; $('#resetAsk').hidden = true; $('#resetBtn').hidden = false; renderProgress(); };
+$('#resetYes').onclick = () => { stats = {}; days = {}; save(); lvForget(); lvSeen = -1; psel = null; $('#pdetail').textContent = 'Progress cleared.'; $('#resetAsk').hidden = true; $('#resetBtn').hidden = false; renderProgress(); };
 document.addEventListener('keydown', e => {
   bump(); resumeIfPaused();
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.metaKey || e.ctrlKey || e.altKey) return;
